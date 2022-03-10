@@ -10,5 +10,11 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - mongodbdata:/data/db
+      - mongodbconfig:/data/configdb
     ports:
       - "8001:27017"
+volumes:
+  mongodbdata:
+  mongodbconfig:
