@@ -1,9 +1,13 @@
-version: "1.0"
+version: "3"
 services:
-  web:
-    build: .
+  loadbalancer:
+    build: ./load_balancer/
     ports:
-      - "8000:8000"
+      - "8000:80"
+
+  backend:
+    build: ./backend/
+
   mongodb:
     image: mongo:5.0.6
     restart: always
@@ -15,6 +19,7 @@ services:
       - mongodbconfig:/data/configdb
     ports:
       - "8001:27017"
+
 volumes:
   mongodbdata:
   mongodbconfig:
