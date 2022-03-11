@@ -1,6 +1,6 @@
-from app.models.project_models import Project, ProjectData
+from app.models.project_models import Project
 from app.models.user_models import User
-from app.security import get_current_active_user
+from app.utility.security import get_current_active_user
 from fastapi import APIRouter, Depends, Form, HTTPException
 from passlib.hash import sha256_crypt
 
@@ -26,8 +26,7 @@ async def create_project(name: str = Form(...), user: User = Depends(get_current
             status_code=409,
             detail="You already have a project with that name"
         )
-    project = Project(name=name, owner=str(user.id),
-                      data=ProjectData(texts=list(), tags=list()))
+    project = Project(name=name, owner=str(user.id))
     await project.insert()
     hash = str(sha256_crypt.hash(str(project.id)))
     hash = hash.split("=")[1]

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.database import init_db
+from app.utility.database import init_db
 from app.routers import projects, projects_data, users
 
 tags_metadata = [

@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from app.models.user_models import Token, User
-from app.security import (authenticate_user, create_access_token,
+from app.utility.security import (authenticate_user, create_access_token,
                           get_current_active_user, register_user)
 from fastapi import APIRouter, Depends, Form, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm

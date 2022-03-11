@@ -8,6 +8,7 @@ from passlib.context import CryptContext
 
 from app.models.project_models import Project
 from app.models.user_models import TokenData, User
+from bson.objectid import ObjectId
 
 SECRET_KEY = "80c3327f78d73bc932a28aa87d484e20e3a1999a2fd1f8e133abf81f924ec8c0"
 ALGORITHM = "HS256"
@@ -17,11 +18,11 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login/")
 
 
-def verify_password(plain_password, hashed_password):
+def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def get_password_hash(password):
+def get_password_hash(password: str):
     return pwd_context.hash(password)
 
 
@@ -80,6 +81,14 @@ async def get_current_active_user(token: str = Depends(oauth2_scheme)):
         raise credentials_exception
     return user
 
-async def get_current_user_projects(user: User = Depends(get_current_active_user)):
-    projects = await Project.find(Project.owner == str(user.id)).to_list()
-    return projects
+
+async def check_for_project_ownership(project_id: str, user: User = Depends(get_current_active_user)) -> Project:
+    project = await Project.find_one(Project.owner == str(user.id), Project.id == ObjectId(project_id))
+    if(project):
+        return project
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
