@@ -1,20 +1,20 @@
-from fastapi import APIRouter, Depends, Form,HTTPException
-from app.models.project_models import Project
+from app.models.project_models import Project, ProjectData
 from app.models.user_models import User
-
 from app.security import get_current_active_user
-
+from fastapi import APIRouter, Depends, Form, HTTPException
+from passlib.hash import sha256_crypt
 
 router = APIRouter(
-    prefix="/projects",
+    prefix="/project",
     tags=["Projects"]
 )
 
+
 @router.get("/")
-async def get_user_projects( user: User = Depends(get_current_active_user)):
+async def get_user_projects(user: User = Depends(get_current_active_user)):
     user_projects = await Project.find(Project.owner == str(user.id)).to_list()
     for project in user_projects:
-        delattr(project,"owner")
+        delattr(project, "owner")
     return user_projects
 
 
@@ -26,6 +26,11 @@ async def create_project(name: str = Form(...), user: User = Depends(get_current
             status_code=409,
             detail="You already have a project with that name"
         )
-    project = Project(name=name, owner=str(user.id))
+    project = Project(name=name, owner=str(user.id),
+                      data=ProjectData(texts=list(), tags=list()))
     await project.insert()
+    hash = str(sha256_crypt.hash(str(project.id)))
+    hash = hash.split("=")[1]
+    project.data.invite_url_postfix = hash
+    await project.save()
     return project
