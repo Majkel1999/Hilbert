@@ -2,11 +2,18 @@ version: "3"
 services:
   loadbalancer:
     build: ./load_balancer/
+    image: hilbert_loadbalancer
     ports:
-      - "8000:80"
+      - "8080:80"
+      - "8001:8001"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
 
   backend:
     build: ./backend/
+    image: hilbert_backend
 
   mongodb:
     image: mongo:5.0.6
@@ -17,8 +24,6 @@ services:
     volumes:
       - mongodbdata:/data/db
       - mongodbconfig:/data/configdb
-    ports:
-      - "8001:27017"
 
 volumes:
   mongodbdata:
