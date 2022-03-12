@@ -7,7 +7,7 @@ from pydantic import BaseModel
 class TextDocument(Document):
     name: str
     value: str
-    tags: Dict[str, int] = dict()
+    tag: Optional[str] = None
 
 
 class MLModel(Document):
@@ -16,7 +16,7 @@ class MLModel(Document):
 
 class ProjectData(BaseModel):
     tags: List[str] = list()
-    invite_url_postfix: Optional[str]
+    invite_url_postfix: Optional[str] = None
 
 
 class Project(Document):

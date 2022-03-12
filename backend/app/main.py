@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.utility.database import init_db
-from app.routers import projects, projects_data, users
+from app.routers import projects, projects_data, users, tag
 
 tags_metadata = [
     {
@@ -28,6 +28,7 @@ app = FastAPI(
 app.include_router(users.router)
 app.include_router(projects.router)
 app.include_router(projects_data.router)
+app.include_router(tag.router)
 
 
 @app.on_event("startup")

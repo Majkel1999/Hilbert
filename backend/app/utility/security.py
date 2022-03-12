@@ -92,3 +92,7 @@ async def check_for_project_ownership(project_id: str, user: User = Depends(get_
             detail="Forbidden",
             headers={"WWW-Authenticate": "Bearer"}
         )
+
+
+async def check_invite_url(invite_url: str):
+    return await Project.find_one(Project.data.invite_url_postfix == invite_url, fetch_links=True)
