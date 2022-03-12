@@ -1,3 +1,4 @@
+import base64
 from app.models.project_models import Project
 from app.models.user_models import User
 from app.utility.security import get_current_active_user
@@ -28,8 +29,8 @@ async def create_project(name: str = Form(...), user: User = Depends(get_current
         )
     project = Project(name=name, owner=str(user.id))
     await project.insert()
-    hash = str(sha256_crypt.hash(str(project.id)))
-    hash = hash.split("=")[1]
-    project.data.invite_url_postfix = hash
+    hash = sha256_crypt.hash(str(project.id))
+    hashbytes = bytes(hash, 'utf-8')
+    project.data.invite_url_postfix=base64.urlsafe_b64encode(hashbytes).decode('utf-8')
     await project.save()
     return project

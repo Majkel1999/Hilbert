@@ -17,7 +17,6 @@ router = APIRouter(
 @router.get("/")
 async def get_user_info(current_user: User = Depends(get_current_active_user)):
     delattr(current_user,"hashed_password")
-    delattr(current_user,"disabled")
     delattr(current_user,"id")
     return current_user
 
