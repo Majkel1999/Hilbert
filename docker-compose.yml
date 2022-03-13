@@ -24,6 +24,22 @@ services:
     volumes:
       - mongodbdata:/data/db
       - mongodbconfig:/data/configdb
+  
+  # mongoexpress:
+  #   image: mongo-express
+  #   environment:
+  #     - ME_CONFIG_MONGODB_SERVER=mongodb
+  #     - ME_CONFIG_MONGODB_PORT=27017
+  #     - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+  #     - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+  #     - ME_CONFIG_MONGODB_AUTH_USERNAME=root
+  #     - ME_CONFIG_MONGODB_AUTH_PASSWORD=root
+  #     - ME_CONFIG_BASICAUTH_USERNAME=admin
+  #     - ME_CONFIG_BASICAUTH_PASSWORD=admin
+  #   depends_on:
+  #     - mongodb
+  #   ports:
+  #     - "8888:8081"
 
 volumes:
   mongodbdata:
