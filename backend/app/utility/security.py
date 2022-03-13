@@ -2,12 +2,13 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from fastapi import Depends, HTTPException, status
-from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
+from app.models.project_models import Project
 from app.models.user_models import TokenData, User
+from bson.objectid import ObjectId
 
 SECRET_KEY = "80c3327f78d73bc932a28aa87d484e20e3a1999a2fd1f8e133abf81f924ec8c0"
 ALGORITHM = "HS256"
@@ -17,27 +18,16 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login/")
 
 
-def verify_password(plain_password, hashed_password):
+def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def get_password_hash(password):
+def get_password_hash(password: str):
     return pwd_context.hash(password)
 
 
 async def get_user(username: str):
     return await User.find_one(User.username == username)
-
-async def register_user(username: str, password: str, email=None, fullname=None):
-    hashed_pw = get_password_hash(password)
-    result = await User.find_one({"username": username})
-    print(result)
-    if(result is not None):
-        return False
-    user = User(username=username, email=email,
-                    full_name=fullname, hashed_password=hashed_pw)
-    await user.insert()
-    return True
 
 
 async def authenticate_user(username: str, password: str):
@@ -60,7 +50,19 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def register_user(username: str, password: str, email=None, fullname=None):
+    hashed_pw = get_password_hash(password)
+    result = await User.find_one({"username": username})
+    print(result)
+    if(result is not None):
+        return False
+    user = User(username=username, email=email,
+                full_name=fullname, hashed_password=hashed_pw)
+    await user.insert()
+    return True
+
+
+async def get_current_active_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -80,7 +82,17 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     return user
 
 
-async def get_current_active_user(current_user: User = Depends(get_current_user)):
-    if current_user.disabled:
-        raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user
+async def check_for_project_ownership(project_id: str, user: User = Depends(get_current_active_user)) -> Project:
+    project = await Project.find_one(Project.owner == str(user.id), Project.id == ObjectId(project_id))
+    if(project):
+        return project
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+
+async def check_invite_url(invite_url: str):
+    return await Project.find_one(Project.data.invite_url_postfix == invite_url, fetch_links=True)

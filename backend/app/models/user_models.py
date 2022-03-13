@@ -1,14 +1,16 @@
 from typing import Optional
-from pydantic import BaseModel, EmailStr
+
 from beanie import Document
+from pydantic import BaseModel, EmailStr
+
 
 class UserOut(Document):
     username: str
     email: Optional[EmailStr] = None
     full_name: Optional[str] = None
 
+
 class User(UserOut):
-    disabled: Optional[bool] = None
     hashed_password: str
 
 
