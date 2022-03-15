@@ -4,10 +4,10 @@ services:
     image: traefik:2.6.1
     ports:
       - "8000:3000"
-      - "8080:8080"
       - "8888:8081"
+    #  - "8080:8080"
     command:
-      - "--api.insecure=true"
+    #  - "--api.insecure=true"
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.api.address=:3000"
