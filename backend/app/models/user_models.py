@@ -4,13 +4,13 @@ from beanie import Document
 from pydantic import BaseModel, EmailStr
 
 
-class UserOut(Document):
+class UserOut(BaseModel):
     username: str
     email: Optional[EmailStr] = None
     full_name: Optional[str] = None
 
 
-class User(UserOut):
+class User(Document, UserOut):
     hashed_password: str
 
 
