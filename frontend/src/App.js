@@ -1,12 +1,12 @@
 import React from 'react';
-import { Router, Switch, Route } from 'react-router-dom';
+import { Router, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
     <Router>
-      <Switch>
-        <Route path='examplePath' component={'exampleImportedComponent'} />
-      </Switch>
+      <Routes>
+        <Route path="examplePath" component="exampleImportedComponent" />
+      </Routes>
     </Router>
   );
 }
