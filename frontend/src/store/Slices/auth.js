@@ -1,16 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 const initialAuthState = {
   token: '',
   isLoggedIn: false,
-  login: (token) => {},
-  logout: () => {},
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: initialAuthState,
-  reducers: {},
+  reducers: {
+    logIn(state) {},
+    logOut(state) {},
+  },
 });
 
 export const authActions = authSlice.actions;
