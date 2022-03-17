@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
 
 const initialAuthState = {
   token: '',
@@ -10,10 +9,16 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: initialAuthState,
   reducers: {
-    logIn(state) {},
-    logOut(state) {},
+    logIn(state, action) {
+      state.token = action.payload.token;
+      localStorage.setItem('token', token);
+    },
+    logOut(state) {
+      state.token = null;
+      localStorage.removeItem('token');
+    },
   },
 });
 
 export const authActions = authSlice.actions;
-export default coordSlice.reducer;
+export default authSlice.reducer;
