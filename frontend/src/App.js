@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { authActions } from './store/Slices/auth';
+import Login from './components/Auth/Login';
 
 function App() {
   const dispatch = useDispatch();
@@ -12,11 +13,9 @@ function App() {
   }, [auth]);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="examplePath" component="exampleImportedComponent" />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/examplePath" element={<Login />} />
+    </Routes>
   );
 }
 
