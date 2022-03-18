@@ -5,15 +5,25 @@ services:
     ports:
       - "8000:3000"
       - "8888:8081"
+      - "80:80"
     #  - "8080:8080"
     command:
     #  - "--api.insecure=true"
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.frontend.address=:80"
       - "--entrypoints.api.address=:3000"
       - "--entrypoints.mongoexpress.address=:8081"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  
+  frontend:
+    build: ./frontend/
+    image: hilbert_frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
+      - "traefik.http.routers.frontend.entrypoints=frontend"
 
   backend:
     build: ./backend/
