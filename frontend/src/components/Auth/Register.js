@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import axios from '../../api/axios';
 import { authActions } from '../../store/Slices/auth';
 
@@ -19,5 +20,9 @@ export default function Register() {
       console.log(error);
     }
   };
-  return <div>Register</div>;
+  return (
+    <button type="button" onClick={register}>
+      Register
+    </button>
+  );
 }

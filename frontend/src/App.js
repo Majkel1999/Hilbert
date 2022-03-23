@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import { authActions } from './store/Slices/auth';
 import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
 import Layout from './components/Layout/Layout';
-import RequireAuth from '/components/Auth/RequireAuth';
+import RequireAuth from './components/Auth/RequireAuth';
 
 function App() {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         {/* Available for everyone */}
         <Route path="login" element={<Login />} />
-
+        <Route path="register" element={<Register />} />
         {/* protected routes */}
         <Route element={<RequireAuth />}>
           {/* <Route path="protectedRoute" element={<protectedComponent />} /> */}
