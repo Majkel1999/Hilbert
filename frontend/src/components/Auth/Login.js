@@ -33,7 +33,7 @@ export default function Login() {
   };
 
   return (
-    <section>
+    <>
       <h1>Login</h1>
       <form onSubmit={login}>
         <label htmlFor="username">Username: </label>
@@ -54,7 +54,8 @@ export default function Login() {
           value={password}
           required
         />
+        <button type="button">Login</button>
       </form>
-    </section>
+    </>
   );
 }
