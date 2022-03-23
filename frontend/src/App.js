@@ -17,6 +17,9 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="login" element={<Login />} />
+
+        {/* if none of routes above --> create notFound page */}
+        {/* <Route path="*" element={<NotFound />} /> */}
       </Route>
     </Routes>
   );
