@@ -19,9 +19,11 @@ class ProjectData(BaseModel):
     invite_url_postfix: Optional[str] = None
 
 
-class Project(Document):
+class ProjectOut(BaseModel):
     name: str
-    owner: str
     texts: List[Link[TextDocument]] = list()
-    model: Optional[Link[MLModel]]
     data: ProjectData = ProjectData()
+
+class Project(Document, ProjectOut):
+    owner: str
+    model: Optional[Link[MLModel]]

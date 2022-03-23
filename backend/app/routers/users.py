@@ -1,8 +1,8 @@
 from datetime import timedelta
 
-from app.models.user_models import Token, User
+from app.models.user_models import Token, User, UserOut
 from app.utility.security import (authenticate_user, create_access_token,
-                          get_current_active_user, register_user)
+                                  get_current_active_user, register_user)
 from fastapi import APIRouter, Depends, Form, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -14,10 +14,8 @@ router = APIRouter(
 )
 
 
-@router.get("/")
+@router.get("/", response_model=UserOut)
 async def get_user_info(current_user: User = Depends(get_current_active_user)):
-    delattr(current_user,"hashed_password")
-    delattr(current_user,"id")
     return current_user
 
 
@@ -35,13 +33,14 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return Token(access_token=access_token, token_type="bearer")
 
 
-@router.post("/register", status_code=201)
+@router.post("/register", status_code=201, response_model=UserOut)
 async def register(username: str = Form(...), password: str = Form(...)):
-    if(await register_user(username, password)):
-        return username
+    registeredUser = await register_user(username, password)
+    if(registeredUser):
+        return registeredUser
     else:
         raise HTTPException(
             status_code=409,

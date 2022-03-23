@@ -1,5 +1,7 @@
 import base64
-from app.models.project_models import Project
+from typing import List
+
+from app.models.project_models import Project, ProjectOut
 from app.models.user_models import User
 from app.utility.security import get_current_active_user
 from fastapi import APIRouter, Depends, Form, HTTPException
@@ -11,17 +13,15 @@ router = APIRouter(
 )
 
 
-@router.get("/")
+@router.get("/", response_model=List[ProjectOut])
 async def get_user_projects(user: User = Depends(get_current_active_user)):
-    user_projects = await Project.find(Project.owner == str(user.id)).to_list()
-    for project in user_projects:
-        delattr(project, "owner")
-    return user_projects
+    userprojects = await Project.find(Project.owner == str(user.id), fetch_links=True).to_list()
+    return userprojects
 
 
-@router.post("/create")
+@router.post("/create", response_model=ProjectOut)
 async def create_project(name: str = Form(...), user: User = Depends(get_current_active_user)):
-    project = await Project.find_one(Project.owner == str(user.id), Project.name == name)
+    project = await Project.find_one(Project.owner == str(user.id), Project.name == name, fetch_links=True)
     if(project is not None):
         raise HTTPException(
             status_code=409,
@@ -31,6 +31,7 @@ async def create_project(name: str = Form(...), user: User = Depends(get_current
     await project.insert()
     hash = sha256_crypt.hash(str(project.id))
     hashbytes = bytes(hash, 'utf-8')
-    project.data.invite_url_postfix=base64.urlsafe_b64encode(hashbytes).decode('utf-8')
+    project.data.invite_url_postfix = base64.urlsafe_b64encode(
+        hashbytes).decode('utf-8')
     await project.save()
     return project
