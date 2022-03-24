@@ -36,12 +36,14 @@ GenericForm.propTypes = {
   header: PropTypes.string,
   buttonText: PropTypes.string,
   onSubmitHandler: PropTypes.func,
-  formInputArray: PropTypes.arrayOf({
-    label: PropTypes.string,
-    inputType: PropTypes.string,
-    setValue: PropTypes.func,
-    value: PropTypes.string || PropTypes.number,
-  }),
+  formInputArray: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      inputType: PropTypes.string,
+      setValue: PropTypes.func,
+      value: PropTypes.string || PropTypes.number,
+    }),
+  ),
 };
 GenericForm.defaultProps = {
   header: '',
