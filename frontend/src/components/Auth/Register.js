@@ -21,7 +21,7 @@ export default function Register() {
   };
   return (
     <>
-      <h1>Login</h1>
+      <h1>Register</h1>
       <form onSubmit={register}>
         <label htmlFor="username">Username: </label>
         <input
@@ -41,7 +41,7 @@ export default function Register() {
           value={password}
           required
         />
-        <button type="button">Register</button>
+        <button type="submit">Register</button>
       </form>
     </>
   );
