@@ -54,7 +54,7 @@ export default function Login() {
           value={password}
           required
         />
-        <button type="button">Login</button>
+        <button type="submit">Login</button>
       </form>
     </>
   );
