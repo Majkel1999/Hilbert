@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';

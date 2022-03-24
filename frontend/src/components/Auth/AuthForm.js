@@ -1,5 +1,3 @@
-import React from 'react';
-
-export default function authForm() {
+export default function AuthForm() {
   return <div>authForm</div>;
 }

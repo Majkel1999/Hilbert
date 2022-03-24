@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from '../../api/axios';
 
 const REGISTER_URL = '/user/register';
