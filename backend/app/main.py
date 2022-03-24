@@ -22,7 +22,17 @@ app = FastAPI(
     title="HIL BERT Trainer API",
     description="*TODO",
     version="0.0.1",
-    openapi_tags=tags_metadata
+    openapi_tags=tags_metadata,
+    root_path="/api/v1",
+    servers=[{"url": "/api/v1"}]
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(users.router)
