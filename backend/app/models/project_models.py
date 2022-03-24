@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 from beanie import Document, Link
 from pydantic import BaseModel
