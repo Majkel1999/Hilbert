@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from '../../api/axios';
-import GenericForm from '../GenericForm';
+import GenericForm from '../GenericForm/GenericForm';
 
 const REGISTER_URL = '/user/register';
 

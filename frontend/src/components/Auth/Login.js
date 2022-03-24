@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from '../../api/axios';
 import { authActions } from '../../store/Slices/auth';
-import GenericForm from '../GenericForm';
+import GenericForm from '../GenericForm/GenericForm';
 
 const LOGIN_URL = '/user/login';
 
