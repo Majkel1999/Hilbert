@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from '../../api/axios';
 import { authActions } from '../../store/Slices/auth';
+import GenericForm from '../GenericForm/GenericForm';
 
 const LOGIN_URL = '/user/login';
 
@@ -13,6 +14,20 @@ export default function Login() {
   const location = useLocation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const inputArray = [
+    {
+      label: 'username',
+      inputType: 'text',
+      setValue: setUsername,
+      inputValue: username,
+    },
+    {
+      label: 'password',
+      inputType: 'password',
+      setValue: setPassword,
+      inputValue: password,
+    },
+  ];
 
   const previousPage = location?.state?.from?.pathname || '/';
 
@@ -33,29 +48,11 @@ export default function Login() {
   };
 
   return (
-    <>
-      <h1>Login</h1>
-      <form onSubmit={login}>
-        <label htmlFor="username">Username: </label>
-        <input
-          type="text"
-          id="username"
-          autoComplete="off"
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-          required
-        />
-        <label htmlFor="password">Password: </label>
-        <input
-          type="password"
-          id="password"
-          autoComplete="off"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          required
-        />
-        <button type="button">Login</button>
-      </form>
-    </>
+    <GenericForm
+      header="Login"
+      onSubmitHandler={login}
+      formInputArray={inputArray}
+      buttonText="Login"
+    />
   );
 }

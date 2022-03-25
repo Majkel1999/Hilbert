@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from '../../api/axios';
+import GenericForm from '../GenericForm/GenericForm';
 
 const REGISTER_URL = '/user/register';
 
 export default function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  const inputArray = [
+    {
+      label: 'username',
+      inputType: 'text',
+      setValue: setUsername,
+      inputValue: username,
+    },
+    {
+      label: 'password',
+      inputType: 'password',
+      setValue: setPassword,
+      inputValue: password,
+    },
+  ];
   const register = async (e) => {
     e.preventDefault();
     try {
@@ -19,30 +33,13 @@ export default function Register() {
       console.log(error);
     }
   };
+
   return (
-    <>
-      <h1>Login</h1>
-      <form onSubmit={register}>
-        <label htmlFor="username">Username: </label>
-        <input
-          type="text"
-          id="username"
-          autoComplete="off"
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-          required
-        />
-        <label htmlFor="password">Password: </label>
-        <input
-          type="password"
-          id="password"
-          autoComplete="off"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          required
-        />
-        <button type="button">Register</button>
-      </form>
-    </>
+    <GenericForm
+      header="Register"
+      onSubmitHandler={register}
+      formInputArray={inputArray}
+      buttonText="Register"
+    />
   );
 }
