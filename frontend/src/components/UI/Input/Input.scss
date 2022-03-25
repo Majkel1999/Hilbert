@@ -2,15 +2,16 @@
   display: flex;
   flex-direction: column;
   margin-top: 14px;
+  width: 90%;
 
   .input {
     font-family: 'Roboto', sans-serif;
     color: #333;
-    font-size: 1.4rem;
-    padding: 4px 20px;
+    font-size: 18px;
+    padding: 8px 10px;
     border-radius: 0.2rem;
     border: 1px solid lightblue;
-    width: 200px;
+    width: 100%;
   }
   .label {
     color: #333;

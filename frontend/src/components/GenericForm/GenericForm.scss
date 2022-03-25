@@ -1,7 +1,8 @@
 .formContainer {
-  width: 25vw;
-  border: 1px solid lightblue;
+  width: 20vw;
   border-radius: 5px;
+  background: white;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
   .formContent {
     width: 80%;
     display: flex;
