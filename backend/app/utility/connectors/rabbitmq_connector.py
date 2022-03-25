@@ -1,3 +1,4 @@
+import asyncio
 import aio_pika
 
 
@@ -10,9 +11,15 @@ class RabbitMQHandler:
         self._channel = None
 
     async def init(self):
-        self._connection = await aio_pika.connect(host=self.RABBIT_HOST)
-        self._channel = await self._connection.channel()
-        await self._channel.declare_queue(self.QUEUE_NAME)
+        while(True):
+            try:
+                self._connection = await aio_pika.connect_robust(host=self.RABBIT_HOST)
+                self._channel = await self._connection.channel()
+                await self._channel.declare_queue(self.QUEUE_NAME)
+                return
+            except:
+                print('RabbitMQ connection failed. Retrying in 5s...')
+                await asyncio.sleep(5)
 
     async def sendMessage(self, body: str):
         await self._channel.default_exchange.publish(
