@@ -1,17 +1,27 @@
-version: "3"
+version: '3'
 services:
   loadbalancer:
     image: traefik:2.6.1
     ports:
       - "8000:80"
-      - "8080:8080"
+      # - "8080:8080"
     command:
-      - "--api.insecure=true"
+      # - "--api.insecure=true"
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  frontend:
+    build: ./frontend/
+    image: hilbert_frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.services.frontend-service.loadBalancer.sticky.cookie=true"
+      - "traefik.http.services.frontend-service.loadBalancer.sticky.cookie.name=UjFyHvjMxzVCF48BgE0A"
 
   backend:
     build: ./backend/
@@ -24,23 +34,12 @@ services:
       - "traefik.http.middlewares.backend-stripprefix.stripprefix.prefixes=/api/v1"
     environment:
       - DB_CONN_STRING=mongodb://root:root@mongodb:27017
-    depends_on:
-      - rabbitmq
-      - mongodb
-    links:
-      - rabbitmq
-      - mongodb
     restart: always
 
-  frontend:
-    build: ./frontend/
-    image: hilbert_frontend
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
-      - "traefik.http.routers.frontend.entrypoints=web"
-      - "traefik.http.services.frontend-service.loadBalancer.sticky.cookie=true"
-      - "traefik.http.services.frontend-service.loadBalancer.sticky.cookie.name=UjFyHvjMxzVCF48BgE0A"
+  # mlService:
+  #   build: ./mlService/
+  #   image: hilbert_mlservice
+  #   restart: always
 
   rabbitmq:
     image: rabbitmq:3-management
