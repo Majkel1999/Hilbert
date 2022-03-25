@@ -36,10 +36,10 @@ services:
       - DB_CONN_STRING=mongodb://root:root@mongodb:27017
     restart: always
 
-  # mlService:
-  #   build: ./mlService/
-  #   image: hilbert_mlservice
-  #   restart: always
+  mlService:
+    build: ./mlService/
+    image: hilbert_mlservice
+    restart: always
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -55,6 +55,7 @@ services:
     volumes:
       - mongodbdata:/data/db
       - mongodbconfig:/data/configdb
+    command: mongod --quiet --logpath /dev/null 
     # ports:
     #   - "27017:27017"
 
