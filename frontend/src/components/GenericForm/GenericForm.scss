@@ -1,15 +1,20 @@
 .formContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 30vw;
-  .formName {
-    text-align: center;
-    margin: 0;
-  }
-  .form {
+  width: 25vw;
+  border: 1px solid lightblue;
+  border-radius: 5px;
+  .formContent {
+    width: 80%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    padding: 20px 40px;
+    margin: 0 auto;
+    .formName {
+      margin: 0 auto 10px;
+    }
+    .form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 }

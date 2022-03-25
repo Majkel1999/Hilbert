@@ -8,29 +8,33 @@ export default function GenericForm({
   onSubmitHandler,
   formInputArray,
   buttonText,
+  customClass,
 }) {
   return (
-    <div className="formContainer">
-      <h1 className="formName">{header}</h1>
-      <form className="form" onSubmit={onSubmitHandler}>
-        {formInputArray.map((item) => (
-          <Input
-            key={item.label}
-            labelName={item.label}
-            type={item.inputType}
-            id={item.label}
-            onChange={(e) => item.setValue(e.target.value)}
-            value={item.inputValue}
-          />
-        ))}
-        <Button type="submit">{buttonText}</Button>
-      </form>
+    <div className={`formContainer ${customClass}`}>
+      <div className="formContent">
+        <h1 className="formName">{header}</h1>
+        <form className="form" onSubmit={onSubmitHandler}>
+          {formInputArray.map((item) => (
+            <Input
+              key={item.label}
+              labelName={item.label}
+              type={item.inputType}
+              id={item.label}
+              onChange={(e) => item.setValue(e.target.value)}
+              value={item.inputValue}
+            />
+          ))}
+          <Button type="submit">{buttonText}</Button>
+        </form>
+      </div>
     </div>
   );
 }
 GenericForm.propTypes = {
   header: PropTypes.string,
   buttonText: PropTypes.string,
+  customClass: PropTypes.string,
   onSubmitHandler: PropTypes.func,
   formInputArray: PropTypes.arrayOf(
     PropTypes.shape({
@@ -44,6 +48,7 @@ GenericForm.propTypes = {
 GenericForm.defaultProps = {
   header: '',
   buttonText: '',
+  customClass: '',
   onSubmitHandler: () => {},
   formInputArray: [],
 };
