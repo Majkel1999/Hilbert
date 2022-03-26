@@ -54,7 +54,6 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 async def register_user(username: str, password: str, email=None, fullname=None) -> User:
     hashed_pw = get_password_hash(password)
     result = await User.find_one({"username": username})
-    print(result)
     if(result is not None):
         return None
     user = User(username=username, email=email,

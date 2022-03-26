@@ -1,7 +1,9 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-from app.utility.database import init_db
-from app.routers import projects, projects_data, users, tag
+from app.routers import projects, projects_data, tag, users
+from app.utility.connectors.database_connector import close_db, init_db
+from app.utility.connectors.rabbitmq_connector import rabbitBroker
 
 tags_metadata = [
     {
@@ -22,7 +24,17 @@ app = FastAPI(
     title="HIL BERT Trainer API",
     description="*TODO",
     version="0.0.1",
-    openapi_tags=tags_metadata
+    openapi_tags=tags_metadata,
+    root_path="/api/v1",
+    servers=[{"url": "/api/v1"}]
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(users.router)
@@ -34,3 +46,10 @@ app.include_router(tag.router)
 @app.on_event("startup")
 async def app_init():
     await init_db()
+    await rabbitBroker.init()
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    await close_db()
+    await rabbitBroker.closeConnection()

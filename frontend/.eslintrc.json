@@ -13,11 +13,11 @@
   },
   "plugins": ["react"],
   "rules": {
-    "react/jsx-filename-extension": [
-      2,
-      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
-    ],
+    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx"] }],
     "no-param-reassign": 0,
-    "no-console": "off"
+    "no-console": "off",
+    "react/react-in-jsx-scope": "off",
+    "no-shadow": "off",
+    "jsx-a11y/label-has-associated-control": 0
   }
 }

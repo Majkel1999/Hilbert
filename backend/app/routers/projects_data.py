@@ -5,14 +5,19 @@ from beanie import WriteRules
 from app.models.project_models import Project
 from app.utility.file_helper import handleFile
 from app.utility.security import check_for_project_ownership
+from app.utility.connectors.rabbitmq_connector import rabbitBroker
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
-
 
 router = APIRouter(
     prefix="/project/data",
     tags=["Project Data"]
 )
+
+
+@router.post("/train/{project_id}")
+async def queue_model_training(project: Project = Depends(check_for_project_ownership)):
+    return await rabbitBroker.sendMessage(str(project.id))
 
 
 @router.post("/upload/{project_id}")
