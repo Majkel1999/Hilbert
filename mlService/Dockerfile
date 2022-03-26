@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM tensorflow/tensorflow:2.8.0-gpu
 #Install missing packages to alpine image
 #RUN apk add gcc musl-dev libffi-dev
 WORKDIR /app

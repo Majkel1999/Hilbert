@@ -40,6 +40,12 @@ services:
     build: ./mlService/
     image: hilbert_mlservice
     restart: always
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - "gpu"
 
   rabbitmq:
     image: rabbitmq:3-management
