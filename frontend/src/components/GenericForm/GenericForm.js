@@ -1,40 +1,40 @@
 import PropTypes from 'prop-types';
-import { capitalizeFirstLetter } from '../../utils/utils';
-import Button from '../UI/Button';
+import Button from '../UI/Button/Button';
+import Input from '../UI/Input/Input';
+import './GenericForm.scss';
 
 export default function GenericForm({
   header,
   onSubmitHandler,
   formInputArray,
   buttonText,
+  customClass,
 }) {
   return (
-    <div className="formContainer">
-      <h1 className="formName">{header}</h1>
-      <form onSubmit={onSubmitHandler}>
-        {formInputArray.map((item) => (
-          <div className="inputContainer" key={item.label}>
-            <label htmlFor={item.label}>
-              {capitalizeFirstLetter(item.label)}:
-            </label>
-            <input
+    <div className={`formContainer ${customClass}`}>
+      <div className="formContent">
+        <h1 className="formName">{header}</h1>
+        <form className="form" onSubmit={onSubmitHandler}>
+          {formInputArray.map((item) => (
+            <Input
+              key={item.label}
+              labelName={item.label}
               type={item.inputType}
               id={item.label}
-              autoComplete="off"
               onChange={(e) => item.setValue(e.target.value)}
               value={item.inputValue}
-              required
             />
-          </div>
-        ))}
-        <Button type="submit">{buttonText}</Button>
-      </form>
+          ))}
+          <Button type="submit">{buttonText}</Button>
+        </form>
+      </div>
     </div>
   );
 }
 GenericForm.propTypes = {
   header: PropTypes.string,
   buttonText: PropTypes.string,
+  customClass: PropTypes.string,
   onSubmitHandler: PropTypes.func,
   formInputArray: PropTypes.arrayOf(
     PropTypes.shape({
@@ -48,6 +48,7 @@ GenericForm.propTypes = {
 GenericForm.defaultProps = {
   header: '',
   buttonText: '',
+  customClass: '',
   onSubmitHandler: () => {},
   formInputArray: [],
 };
