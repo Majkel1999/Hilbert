@@ -9,6 +9,7 @@ export default function GenericForm({
   formInputArray,
   buttonText,
   customClass,
+  redirectComponent,
 }) {
   return (
     <div className={`formContainer ${customClass}`}>
@@ -25,7 +26,8 @@ export default function GenericForm({
               value={item.inputValue}
             />
           ))}
-          <Button type="submit">{buttonText}</Button>
+          <Button type="submit" text={buttonText} />
+          {redirectComponent}
         </form>
       </div>
     </div>
@@ -36,6 +38,7 @@ GenericForm.propTypes = {
   buttonText: PropTypes.string,
   customClass: PropTypes.string,
   onSubmitHandler: PropTypes.func,
+  redirectComponent: PropTypes.elementType,
   formInputArray: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -51,4 +54,5 @@ GenericForm.defaultProps = {
   customClass: '',
   onSubmitHandler: () => {},
   formInputArray: [],
+  redirectComponent: null,
 };

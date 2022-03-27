@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from '../../api/axios';
 import GenericForm from '../GenericForm/GenericForm';
+import * as routes from '../../constants/routes';
 
 const REGISTER_URL = '/user/register';
 
@@ -35,11 +37,14 @@ export default function Register() {
   };
 
   return (
-    <GenericForm
-      header="Register"
-      onSubmitHandler={register}
-      formInputArray={inputArray}
-      buttonText="Register"
-    />
+    <div className="registerFormContainer">
+      <GenericForm
+        header="Register"
+        onSubmitHandler={register}
+        formInputArray={inputArray}
+        buttonText="Register"
+        redirectComponent={<Link to={routes.LOGIN}>I have an account</Link>}
+      />
+    </div>
   );
 }

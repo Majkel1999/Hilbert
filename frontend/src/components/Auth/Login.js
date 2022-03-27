@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axios from '../../api/axios';
 import { authActions } from '../../store/Slices/auth';
 import GenericForm from '../GenericForm/GenericForm';
+import * as routes from '../../constants/routes';
 
 const LOGIN_URL = '/user/login';
 
@@ -46,11 +47,14 @@ export default function Login() {
   };
 
   return (
-    <GenericForm
-      header="Login"
-      onSubmitHandler={login}
-      formInputArray={inputArray}
-      buttonText="Login"
-    />
+    <div className="loginFormContainer">
+      <GenericForm
+        header="Login"
+        onSubmitHandler={login}
+        formInputArray={inputArray}
+        buttonText="Login"
+        redirectComponent={<Link to={routes.REGISTER}>Create new account</Link>}
+      />
+    </div>
   );
 }
