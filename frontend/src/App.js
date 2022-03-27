@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Login from './components/Auth/Login';
-import Register from './components/Auth/Register';
+import Auth from './pages/Auth/Auth';
 import Layout from './components/Layout/Layout';
 import RequireAuth from './components/Auth/RequireAuth';
 import AdminBoard from './pages/AdminBoard/AdminBoard';
@@ -14,8 +13,8 @@ function App() {
       <Route path="/" element={<Layout />}>
         {/* Available for everyone */}
         <Route path="/" element={<Home />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        <Route path="login" element={<Auth />} />
+        <Route path="register" element={<Auth />} />
         {/* protected routes */}
         <Route element={<RequireAuth />}>
           <Route path="/" element={<AdminBoard />} />
