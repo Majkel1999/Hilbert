@@ -1,17 +1,17 @@
 import { useLocation } from 'react-router-dom';
 import Login from '../../components/Auth/Login';
 import Register from '../../components/Auth/Register';
-
+import * as routes from '../../constants/routes';
 import './Auth.scss';
 
 const AuthComponents = [
   {
     component: <Login />,
-    path: '/login',
+    path: routes.LOGIN,
   },
   {
     component: <Register />,
-    path: '/register',
+    path: routes.REGISTER,
   },
 ];
 
