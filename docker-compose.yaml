@@ -3,54 +3,54 @@ services:
   loadbalancer:
     image: traefik:2.6.1
     ports:
-      - "8000:80"
+      - '8000:80'
       # - "8080:8080"
     command:
       # - "--api.insecure=true"
-      - "--providers.docker"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
+      - '--providers.docker'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
   frontend:
     build: ./frontend/
     image: hilbert_frontend
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
-      - "traefik.http.routers.frontend.entrypoints=web"
-      - "traefik.http.services.frontend-service.loadBalancer.sticky.cookie=true"
-      - "traefik.http.services.frontend-service.loadBalancer.sticky.cookie.name=UjFyHvjMxzVCF48BgE0A"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.frontend.rule=PathPrefix(`/`)'
+      - 'traefik.http.routers.frontend.entrypoints=web'
+      - 'traefik.http.services.frontend-service.loadBalancer.sticky.cookie=true'
+      - 'traefik.http.services.frontend-service.loadBalancer.sticky.cookie.name=UjFyHvjMxzVCF48BgE0A'
 
   backend:
     build: ./backend/
     image: hilbert_backend
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=PathPrefix(`/api/v1`)"
-      - "traefik.http.routers.backend.entrypoints=web"
-      - "traefik.http.routers.backend.middlewares=backend-stripprefix"
-      - "traefik.http.middlewares.backend-stripprefix.stripprefix.prefixes=/api/v1"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.backend.rule=PathPrefix(`/api/v1`)'
+      - 'traefik.http.routers.backend.entrypoints=web'
+      - 'traefik.http.routers.backend.middlewares=backend-stripprefix'
+      - 'traefik.http.middlewares.backend-stripprefix.stripprefix.prefixes=/api/v1'
     environment:
       - DB_CONN_STRING=mongodb://root:root@mongodb:27017
     restart: always
 
-  mlService:
-    build: ./mlService/
-    image: hilbert_mlservice
-    restart: always
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities:
-                - "gpu"
+  # mlService:
+  #   build: ./mlService/
+  #   image: hilbert_mlservice
+  #   restart: always
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - capabilities:
+  #               - "gpu"
 
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "15672:15672"
+      - '15672:15672'
 
   mongodb:
     image: mongo:5.0.6
@@ -61,9 +61,9 @@ services:
     volumes:
       - mongodbdata:/data/db
       - mongodbconfig:/data/configdb
-    command: mongod --quiet --logpath /dev/null 
-    # ports:
-    #   - "27017:27017"
+    command: mongod --quiet --logpath /dev/null
+    ports:
+      - '27017:27017'
 
 volumes:
   mongodbdata:
