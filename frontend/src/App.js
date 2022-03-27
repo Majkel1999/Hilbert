@@ -1,20 +1,11 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { authActions } from './store/Slices/auth';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Layout from './components/Layout/Layout';
 import RequireAuth from './components/Auth/RequireAuth';
 
 function App() {
-  const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth.isLoggedIn);
-
-  useEffect(() => {
-    dispatch(authActions.retrieveStoredToken());
-  }, [auth]);
-
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

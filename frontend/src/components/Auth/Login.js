@@ -33,15 +33,13 @@ export default function Login() {
 
   const login = async (e) => {
     e.preventDefault();
+    const loginFormData = new FormData();
+    loginFormData.set('username', username);
+    loginFormData.set('password', password);
     try {
-      const response = await axios.post(LOGIN_URL, {
-        username,
-        password,
-      });
-      dispatch(authActions.login());
+      const response = await axios.post(LOGIN_URL, loginFormData);
+      dispatch(authActions.login({ token: response.data.access_token }));
       navigate(previousPage, { replace: true });
-
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
