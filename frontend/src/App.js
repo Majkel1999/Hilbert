@@ -6,6 +6,7 @@ import Layout from './components/Layout/Layout';
 import RequireAuth from './components/Auth/RequireAuth';
 import AdminBoard from './pages/AdminBoard/AdminBoard';
 import Home from './pages/Home/Home';
+import OpenedProject from './pages/OpenedProject/OpenedProject';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         {/* protected routes */}
         <Route element={<RequireAuth />}>
           <Route path="/" element={<AdminBoard />} />
+          <Route path="/project/:id" element={<OpenedProject />} />
           {/* <Route path="protectedRoute" element={<protectedComponent />} /> */}
         </Route>
         {/* if none of routes above --> create notFound page */}
