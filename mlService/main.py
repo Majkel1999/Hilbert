@@ -1,4 +1,7 @@
 import asyncio
+from cgi import test
+from distutils.command.config import config
+import tensorflow
 
 from aio_pika.abc import AbstractIncomingMessage
 
@@ -12,6 +15,7 @@ async def on_message(message: AbstractIncomingMessage) -> None:
 
 
 async def main() -> None:
+    print(f'GPU avability: {tensorflow.test.is_gpu_available()}')
     await rabbitBroker.init()
     await rabbitBroker.consumeMessages(on_message)
 
