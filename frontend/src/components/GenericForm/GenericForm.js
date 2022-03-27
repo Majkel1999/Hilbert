@@ -21,7 +21,7 @@ export default function GenericForm({
               labelName={item.label}
               type={item.inputType}
               id={item.label}
-              onChange={(e) => item.setValue(e.target.value)}
+              onChangeHandler={(e) => item.setValue(e.target.value)}
               value={item.inputValue}
             />
           ))}

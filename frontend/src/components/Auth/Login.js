@@ -34,8 +34,8 @@ export default function Login() {
   const login = async (e) => {
     e.preventDefault();
     const loginFormData = new FormData();
-    loginFormData.append('username', username);
-    loginFormData.append('password', password);
+    loginFormData.set('username', username);
+    loginFormData.set('password', password);
     try {
       const response = await axios.post(LOGIN_URL, loginFormData);
       dispatch(authActions.login());

@@ -24,8 +24,8 @@ export default function Register() {
   const register = async (e) => {
     e.preventDefault();
     const registerFormData = new FormData();
-    registerFormData.append('username', username);
-    registerFormData.append('password', password);
+    registerFormData.set('username', username);
+    registerFormData.set('password', password);
     try {
       const response = await axios.post(REGISTER_URL, registerFormData);
       console.log(response);
