@@ -17,7 +17,14 @@ const AuthComponents = [
 
 export default function Auth() {
   const location = useLocation();
-  return AuthComponents.find(
-    (authObject) => authObject.path === location.pathname,
-  ).component;
+  return (
+    <div className="authContainer">
+      {
+        AuthComponents.find(
+          (authObject) => authObject.path === location.pathname,
+        ).component
+      }
+      ;
+    </div>
+  );
 }
