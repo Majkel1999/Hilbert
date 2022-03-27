@@ -38,10 +38,9 @@ export default function Login() {
     loginFormData.set('password', password);
     try {
       const response = await axios.post(LOGIN_URL, loginFormData);
-      dispatch(authActions.login());
-      navigate(previousPage, { replace: true });
-
       console.log(response);
+      dispatch(authActions.login({ token: response.data.access_token }));
+      navigate(previousPage, { replace: true });
     } catch (error) {
       console.log(error);
     }
