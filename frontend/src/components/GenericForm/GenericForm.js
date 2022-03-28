@@ -38,7 +38,7 @@ GenericForm.propTypes = {
   buttonText: PropTypes.string,
   customClass: PropTypes.string,
   onSubmitHandler: PropTypes.func,
-  redirectComponent: PropTypes.elementType,
+  redirectComponent: PropTypes.node,
   formInputArray: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
