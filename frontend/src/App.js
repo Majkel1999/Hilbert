@@ -20,7 +20,6 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path={routes.HOME} element={<AdminBoard />} />
           <Route path={routes.PROJECT_ITEM} element={<OpenedProject />} />
-          {/* <Route path="protectedRoute" element={<protectedComponent />} /> */}
         </Route>
         {/* if none of routes above --> create notFound page */}
         {/* <Route path="*" element={<NotFound />} /> */}
