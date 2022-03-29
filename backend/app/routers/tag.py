@@ -1,6 +1,8 @@
 import random
+from unicodedata import name
 
-from app.models.project_models import ProjectOut, Project, TextDocument
+from app.models.project_models import (Project, ProjectOut, TextDocument,
+                                       TextOut)
 from app.models.request_models import TagRequest
 from app.utility.security import check_invite_url
 from bson.objectid import ObjectId
@@ -17,12 +19,17 @@ async def get_project_info(project: Project = Depends(check_invite_url)):
     return project
 
 
-@router.get("/{invite_url}/text", response_model=TextDocument)
+@router.get("/{invite_url}/text", response_model=TextOut)
 async def get_random_text(project: Project = Depends(check_invite_url)):
     try:
-        return random.choice([x for x in project.texts if x.tag is None])
+        texts = [x for x in project.texts if x.tag is None]
+        document: TextDocument = random.choice(texts)
+        return TextOut(id=document.id, name=document.name, value=document.value, tags=project.data.tags)
     except:
-        return "All texts have been tagged"
+        raise HTTPException(
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            detail="All texts have been tagged"
+        )
 
 
 @router.post("/{invite_url}/tag", response_model=str)
@@ -31,6 +38,11 @@ async def tag_text(request: TagRequest, project: Project = Depends(check_invite_
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invite link not matching document"
+        )
+    elif(not any(tag == request.tag for tag in project.data.tags)):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Tag doesn't exist in project"
         )
     else:
         text = await TextDocument.find_one(TextDocument.id == ObjectId(request.text_id))

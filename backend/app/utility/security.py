@@ -95,4 +95,11 @@ async def check_for_project_ownership(project_id: str, user: User = Depends(get_
 
 
 async def check_invite_url(invite_url: str) -> Project:
-    return await Project.find_one(Project.data.invite_url_postfix == invite_url, fetch_links=True)
+    project = await Project.find_one(Project.data.invite_url_postfix == invite_url, fetch_links=True)
+    if(project):
+        return project
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Invite link not matching any project"
+        )
