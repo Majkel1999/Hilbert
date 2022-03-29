@@ -100,6 +100,6 @@ async def check_invite_url(invite_url: str) -> Project:
         return project
     else:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail="Invite link not matching any project"
         )

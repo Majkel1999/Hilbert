@@ -11,7 +11,12 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
 
 router = APIRouter(
     prefix="/project/data",
-    tags=["Project Data"]
+    tags=["Project Data"],
+    responses={
+        status.HTTP_401_UNAUTHORIZED: {"description": "User not authenticated"},
+        status.HTTP_403_FORBIDDEN: {
+            "description": "User not authorized for specific project"}
+    }
 )
 
 
@@ -33,7 +38,9 @@ async def upload_file(files: List[UploadFile], project: Project = Depends(check_
     return response
 
 
-@router.post("/tag/{project_id}", status_code=201)
+@router.post("/tag/{project_id}", responses={
+    status.HTTP_409_CONFLICT: {"description": "Duplicate tag"}
+})
 async def add_tag(tag: str,  project: Project = Depends(check_for_project_ownership)):
     tag = tag.casefold()
     if(any(x == tag for x in project.data.tags)):
@@ -46,7 +53,9 @@ async def add_tag(tag: str,  project: Project = Depends(check_for_project_owners
         return f"Tag created: {tag}"
 
 
-@router.delete("/tag/{project_id}", status_code=204)
+@router.delete("/tag/{project_id}", responses={
+    status.HTTP_404_NOT_FOUND: {"description": "Tag not present in list"}
+})
 async def delete_tag(tag: str,  project: Project = Depends(check_for_project_ownership)):
     tag = tag.casefold()
     if(any(x == tag for x in project.data.tags)):
