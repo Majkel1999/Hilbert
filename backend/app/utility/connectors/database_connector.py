@@ -14,7 +14,7 @@ class Database:
 DB_CONN_STRING = os.environ.get('DB_CONN_STRING', False)
 
 if DB_CONN_STRING is False:
-    DB_CONN_STRING = "mongodb://root:root@localhost:8001"
+    DB_CONN_STRING = "mongodb://root:root@localhost:27017"
 
 db = Database()
 
