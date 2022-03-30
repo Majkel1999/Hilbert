@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <div className="headerContainer">
       <div className="appName">
-        <h5>Hibler App</h5>
+        <h5>Hilbert App</h5>
       </div>
       <div className="authButtons">
         {!isLoggedIn ? (
