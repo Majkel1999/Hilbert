@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Auth from './pages/Auth/Auth';
 import Layout from './components/Layout/Layout';
 import RequireAuth from './components/Auth/RequireAuth';
+import ProtectedRoute from './components/Auth/ProtectedRoute';
 import AdminBoard from './pages/AdminBoard/AdminBoard';
 import Home from './pages/Home/Home';
 import OpenedProject from './pages/OpenedProject/OpenedProject';
@@ -17,10 +18,12 @@ function App() {
       <Route path={routes.HOME} element={<Layout />}>
         {/* Available for everyone */}
         {!isLoggedIn && <Route path={routes.HOME} element={<Home />} />}
-        <Route path={routes.LOGIN} element={<Auth />} />
-        <Route path={routes.REGISTER} element={<Auth />} />
-        {/* protected routes */}
-
+        {/* Not acces when user logged in */}
+        <Route element={<ProtectedRoute />}>
+          <Route path={routes.LOGIN} element={<Auth />} />
+          <Route path={routes.REGISTER} element={<Auth />} />
+        </Route>
+        {/* Requiring to be logged in */}
         <Route element={<RequireAuth />}>
           <Route path={routes.HOME} element={<AdminBoard />} />
           <Route path={routes.PROJECT_ITEM} element={<OpenedProject />} />
