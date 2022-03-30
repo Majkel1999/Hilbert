@@ -7,7 +7,11 @@ from pydantic import BaseModel
 class TextDocument(Document):
     name: str
     value: str
-    tag: Optional[str] = None
+    tag: Optional[str]
+
+class TextOut(TextDocument):
+    tags: List[str]
+    preferredTag: Optional[str] = None
 
 
 class MLModel(Document):
@@ -24,6 +28,12 @@ class ProjectOut(BaseModel):
     texts: List[Link[TextDocument]] = list()
     data: ProjectData = ProjectData()
 
+
 class Project(Document, ProjectOut):
     owner: str
     model: Optional[Link[MLModel]]
+
+
+class ProjectCreationData(BaseModel):
+    name: str
+    tags: List[str]

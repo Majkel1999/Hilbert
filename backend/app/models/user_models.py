@@ -13,6 +13,9 @@ class UserOut(BaseModel):
 class User(Document, UserOut):
     hashed_password: str
 
+class UserForm(BaseModel):
+    username:str
+    password:str
 
 class Token(BaseModel):
     access_token: str

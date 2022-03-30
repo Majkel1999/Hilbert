@@ -14,12 +14,17 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=UserOut)
+@router.get("/", response_model=UserOut, responses={
+    status.HTTP_401_UNAUTHORIZED: {"description": "User not authenticated"}
+})
 async def get_user_info(current_user: User = Depends(get_current_active_user)):
     return current_user
 
 
-@router.post("/login", response_model=Token)
+@router.post("/login", response_model=Token, responses={
+    status.HTTP_401_UNAUTHORIZED: {
+        "description": "Incorrect username or password"}
+})
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     user = await authenticate_user(
         form_data.username, form_data.password)
@@ -36,13 +41,15 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     return Token(access_token=access_token, token_type="bearer")
 
 
-@router.post("/register", status_code=201, response_model=UserOut)
+@router.post("/register", response_model=UserOut, responses={
+    status.HTTP_409_CONFLICT: {"description": "Username already exists"}
+})
 async def register(username: str = Form(...), password: str = Form(...)):
     registeredUser = await register_user(username, password)
     if(registeredUser):
         return registeredUser
     else:
         raise HTTPException(
-            status_code=409,
+            status_code=status.HTTP_409_CONFLICT,
             detail="Username exists"
         )
