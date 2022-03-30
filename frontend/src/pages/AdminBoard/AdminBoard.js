@@ -1,5 +1,5 @@
 import './AdminBoard.scss';
 
 export default function AdminBoard() {
-  return <div>AdminBoard</div>;
+  return <div className="adminBoardContainer"> </div>;
 }
