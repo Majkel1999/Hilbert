@@ -16,7 +16,7 @@ const Input = ({ type, id, onChangeHandler, labelName, showLabel }) => (
       onChange={onChangeHandler}
       autoComplete="off"
       required
-      placeholder={`Enter ${labelName}`}
+      placeholder={`${labelName}`}
     />
   </div>
 );
@@ -32,7 +32,7 @@ Input.propTypes = {
 };
 
 Input.defaultProps = {
-  type: 'button',
+  type: 'text',
   id: '',
   labelName: '',
   onChangeHandler: () => {},
