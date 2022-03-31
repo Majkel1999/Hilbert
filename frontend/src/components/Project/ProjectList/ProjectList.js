@@ -6,7 +6,7 @@ export default function ProjectList({ items }) {
   return (
     <div className="tableContainer">
       {items.map((projectItem) => (
-        <ProjectItem name={projectItem.name} />
+        <ProjectItem name={projectItem.name} key={`${projectItem.name}key`} />
       ))}
     </div>
   );
