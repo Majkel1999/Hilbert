@@ -1,27 +1,37 @@
 import PropTypes from 'prop-types';
 import ProjectItem from '../ProjectItem/ProjectItem';
+import Button from '../../UI/Button/Button';
+import Input from '../../UI/Input/Input';
 import './ProjectList.scss';
 
 export default function ProjectList({ items }) {
   return (
-    <table className="tableContainer">
-      <thead className="tableHeader">
-        <th className="head">#</th>
-        <tr>
-          <th>Project name</th>
-        </tr>
-      </thead>
-      <tbody className="tableContent">
-        {items.map((projectItem, index) => (
-          <tr className="contentWrapper" key={`${projectItem.name}key`}>
-            <th className="head">{index}</th>
-            <td>
-              <ProjectItem name={projectItem.name} />
-            </td>
+    <div className="tableWrapper">
+      <div className="header">
+        <Input showLabel={false} />
+        <Button text="Add new project" />
+      </div>
+      <table className="tableContainer">
+        <thead className="tableHeader">
+          <tr className="head">
+            <th>#</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+          <tr>
+            <th>Project name</th>
+          </tr>
+        </thead>
+        <tbody className="tableContent">
+          {items.map((projectItem, index) => (
+            <tr className="contentWrapper" key={`${projectItem.name}key`}>
+              <th className="head">{index}</th>
+              <td>
+                <ProjectItem name={projectItem.name} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
