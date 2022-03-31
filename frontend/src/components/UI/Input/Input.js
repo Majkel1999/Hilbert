@@ -2,11 +2,13 @@ import PropTypes from 'prop-types';
 import { capitalizeFirstLetter } from '../../../utils/utils';
 import './Input.scss';
 
-const Input = ({ type, id, onChangeHandler, labelName }) => (
+const Input = ({ type, id, onChangeHandler, labelName, showLabel }) => (
   <div className="inputContainer">
-    <label className="label" htmlFor={labelName}>
-      {capitalizeFirstLetter(labelName)}:
-    </label>
+    {showLabel && (
+      <label className="label" htmlFor={labelName}>
+        {capitalizeFirstLetter(labelName)}:
+      </label>
+    )}
     <input
       className="input"
       type={type}
@@ -26,6 +28,7 @@ Input.propTypes = {
   id: PropTypes.string,
   labelName: PropTypes.string,
   onChangeHandler: PropTypes.func,
+  showLabel: PropTypes.bool,
 };
 
 Input.defaultProps = {
@@ -33,4 +36,5 @@ Input.defaultProps = {
   id: '',
   labelName: '',
   onChangeHandler: () => {},
+  showLabel: true,
 };
