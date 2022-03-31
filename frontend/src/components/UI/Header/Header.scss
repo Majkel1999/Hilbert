@@ -3,12 +3,14 @@
   background-color: #364958;
   display: flex;
   justify-content: space-between;
-  .appName {
+  a {
     display: flex;
     align-items: center;
     font-size: 3.2rem;
     color: #c9e4ca;
     margin-left: 3rem;
+    height: 100%;
+    text-decoration: none;
   }
   .authButtons {
     display: flex;
