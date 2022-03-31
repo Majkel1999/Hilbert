@@ -8,7 +8,7 @@ export default function ProjectList({ items }) {
   return (
     <div className="tableWrapper">
       <div className="header">
-        <Input showLabel={false} />
+        <Input showLabel={false} labelName="Project name" />
         <Button text="Add new project" />
       </div>
       <table className="tableContainer">
