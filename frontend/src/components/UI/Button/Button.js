@@ -4,7 +4,7 @@ import './Button.scss';
 const Button = ({ type, onClick, text }) => (
   // eslint-disable-next-line react/button-has-type
   <button type={type} className="button" onClick={onClick}>
-    {text}
+    <span>{text}</span>
   </button>
 );
 
