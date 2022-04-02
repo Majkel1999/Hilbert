@@ -2,6 +2,7 @@ import axios from '../../api/axios';
 import { authActions } from './auth-slice';
 
 const LOGIN_URL = '/user/login';
+const REGISTER_URL = '/user/register';
 
 export const login = (loginData) => async (dispatch) => {
   try {
@@ -16,6 +17,17 @@ export const login = (loginData) => async (dispatch) => {
   }
 };
 
+export const register = async (registerData) => async () => {
+  try {
+    const response = await axios.post(REGISTER_URL, registerData);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
 export default {
   login,
+  register,
 };

@@ -36,6 +36,7 @@ export default function Login() {
     loginFormData.set('password', password);
     dispatch(login(loginFormData));
   };
+
   useEffect(() => {
     if (isLoggedIn) navigate(previousPage, { replace: true }); // need to fix
   }, [isLoggedIn]);
