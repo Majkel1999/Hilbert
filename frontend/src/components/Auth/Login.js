@@ -1,14 +1,12 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import axios from '../../api/axios';
-import { authActions } from '../../store/Slices/auth';
+import { login } from '../../store/auth/auth-actions';
 import GenericForm from '../GenericForm/GenericForm';
 import * as routes from '../../constants/routes';
 
-const LOGIN_URL = '/user/login';
-
 export default function Login() {
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,25 +29,22 @@ export default function Login() {
 
   const previousPage = location?.state?.from?.pathname || '/';
 
-  const login = async (e) => {
+  const loginHandler = (e) => {
     e.preventDefault();
     const loginFormData = new FormData();
     loginFormData.set('username', username);
     loginFormData.set('password', password);
-    try {
-      const response = await axios.post(LOGIN_URL, loginFormData);
-      dispatch(authActions.login({ token: response.data.access_token }));
-      navigate(previousPage, { replace: true });
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(login(loginFormData));
   };
+  useEffect(() => {
+    if (isLoggedIn) navigate(previousPage, { replace: true }); // need to fix
+  }, [isLoggedIn]);
 
   return (
     <div className="loginFormContainer">
       <GenericForm
         header="Login"
-        onSubmitHandler={login}
+        onSubmitHandler={loginHandler}
         formInputArray={inputArray}
         buttonText="Login"
         redirectComponent={<Link to={routes.REGISTER}>Create new account</Link>}

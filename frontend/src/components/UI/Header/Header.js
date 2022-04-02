@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { authActions } from '../../../store/Slices/auth';
+import { authActions } from '../../../store/auth/auth-slice';
 
 import * as routes from '../../../constants/routes';
 import './Header.scss';
