@@ -17,7 +17,7 @@ export const login = (loginData) => async (dispatch) => {
   }
 };
 
-export const register = async (registerData) => async () => {
+export const register = (registerData) => async () => {
   try {
     const response = await axios.post(REGISTER_URL, registerData);
     return response;
