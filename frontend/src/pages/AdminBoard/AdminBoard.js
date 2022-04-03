@@ -7,6 +7,7 @@ import {
 } from '../../store/projects/project-actions';
 import ProjectList from '../../components/Project/ProjectList/ProjectList';
 
+// eslint-disable-next-line no-unused-vars
 const MOCKED_PROJECTS = [
   {
     name: 'Project 1',
@@ -41,7 +42,7 @@ export default function AdminBoard() {
 
   return (
     <div className="adminBoardContainer">
-      <ProjectList items={MOCKED_PROJECTS}> </ProjectList>
+      <ProjectList items={projects.items}> </ProjectList>
     </div>
   );
 }

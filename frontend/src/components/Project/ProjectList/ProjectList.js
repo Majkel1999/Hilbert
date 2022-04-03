@@ -39,14 +39,15 @@ export default function ProjectList({ items }) {
           </tr>
         </thead>
         <tbody className="tableContent">
-          {items.map((projectItem, index) => (
-            <tr className="contentWrapper" key={`${projectItem.name}key`}>
-              <th className="head">{index}</th>
-              <td>
-                <ProjectItem name={projectItem.name} />
-              </td>
-            </tr>
-          ))}
+          {items &&
+            items.map((projectItem, index) => (
+              <tr className="contentWrapper" key={`${projectItem.name}key`}>
+                <th className="head">{index}</th>
+                <td>
+                  <ProjectItem name={projectItem.name} />
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
