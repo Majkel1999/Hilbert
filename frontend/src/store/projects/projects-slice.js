@@ -34,6 +34,10 @@ const projectsSlice = createSlice({
       state.changed = true;
       if (projectToRemoveIndex) state.items.splice(projectToRemoveIndex, 1);
     },
+    replaceProjectList(state, action) {
+      state.totalQuantity = action.payload.totalQuantity;
+      state.items = action.payload.items;
+    },
   },
 });
 
