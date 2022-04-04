@@ -15,9 +15,7 @@ const projectsSlice = createSlice({
       );
 
       if (!existingProject) {
-        state.items.push({
-          name: newProject.title,
-        });
+        state.items.push(newProject);
       }
     },
     removeProject(state, action) {
