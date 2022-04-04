@@ -3,21 +3,17 @@ import { useDispatch } from 'react-redux';
 import ProjectItem from '../ProjectItem/ProjectItem';
 import Button from '../../UI/Button/Button';
 import Input from '../../UI/Input/Input';
-import { projectsActions } from '../../../store/projects/projects-slice';
 import './ProjectList.scss';
+import { sendProjectsData } from '../../../store/projects/project-actions';
 
 export default function ProjectList({ items }) {
   const dispatch = useDispatch();
-  const title = 'test';
-  const id = 'testId';
 
   const createNewProjectHandler = () => {
-    dispatch(
-      projectsActions.createNewProject({
-        id,
-        title,
-      }),
-    );
+    const project = {
+      name: 'test',
+    };
+    dispatch(sendProjectsData(project));
   };
 
   return (

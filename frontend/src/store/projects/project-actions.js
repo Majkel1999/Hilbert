@@ -19,10 +19,12 @@ export const fetchProjectsData = () => async (dispatch) => {
   }
 };
 
-export const sendProjectsData = (project) => async () => {
+export const sendProjectsData = (project) => async (dispatch) => {
   try {
     const response = await axios.post(CREATE_PROJECT_URL, project);
     console.log(response);
+    if (response.status === 200)
+      dispatch(projectsActions.createNewProject({ project }));
   } catch (error) {
     console.log(error);
   }

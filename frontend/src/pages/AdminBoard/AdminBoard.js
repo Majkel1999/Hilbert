@@ -22,7 +22,6 @@ const MOCKED_PROJECTS = [
     name: 'Project 5',
   },
 ];
-let isInitial = true;
 
 export default function AdminBoard() {
   const dispatch = useDispatch();
@@ -31,11 +30,6 @@ export default function AdminBoard() {
   useEffect(() => {
     dispatch(projectActions.fetchProjectsData);
   }, [dispatch]);
-
-  useEffect(() => {
-    if (isInitial) isInitial = false;
-    if (projects.changed) dispatch(projectActions.sendProjectsData(projects));
-  }, [projects, dispatch]);
 
   return (
     <div className="adminBoardContainer">
