@@ -1,10 +1,7 @@
 import './AdminBoard.scss';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  sendProjectsData,
-  fetchProjectsData,
-} from '../../store/projects/project-actions';
+import * as projectActions from '../../store/projects/project-actions';
 import ProjectList from '../../components/Project/ProjectList/ProjectList';
 
 // eslint-disable-next-line no-unused-vars
@@ -32,12 +29,12 @@ export default function AdminBoard() {
   const projects = useSelector((state) => state.projects);
 
   useEffect(() => {
-    dispatch(fetchProjectsData);
+    dispatch(projectActions.fetchProjectsData);
   }, [dispatch]);
 
   useEffect(() => {
     if (isInitial) isInitial = false;
-    if (projects.changed) dispatch(sendProjectsData(projects));
+    if (projects.changed) dispatch(projectActions.sendProjectsData(projects));
   }, [projects, dispatch]);
 
   return (

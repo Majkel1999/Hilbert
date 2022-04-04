@@ -27,7 +27,3 @@ export const sendProjectsData = (project) => async () => {
     console.log(error);
   }
 };
-
-export default {
-  fetchProjectsData,
-};
