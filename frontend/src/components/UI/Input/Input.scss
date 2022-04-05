@@ -12,6 +12,9 @@
     border-radius: 0.2rem;
     border: 1px solid lightblue;
     width: 100%;
+    &::placeholder {
+      padding-left: 14px;
+    }
   }
   .label {
     color: #333;
