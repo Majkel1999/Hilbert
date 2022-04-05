@@ -21,8 +21,8 @@ tags_metadata = [
 ]
 
 app = FastAPI(
-    title="HIL BERT Trainer API",
-    description="*TODO",
+    title="HilBERT Trainer API",
+    description="""API for HilBERT application. Project description and source code is avalible at [GitHub](https://github.com/Majkel1999/Hilbert/)""",
     version="0.0.1",
     openapi_tags=tags_metadata,
     root_path="/api/v1",
