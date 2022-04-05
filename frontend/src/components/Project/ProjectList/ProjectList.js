@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import ProjectItem from '../ProjectItem/ProjectItem';
@@ -7,19 +8,23 @@ import './ProjectList.scss';
 import { sendProjectsData } from '../../../store/projects/project-actions';
 
 export default function ProjectList({ items }) {
+  const [projectName, setProjectName] = useState();
   const dispatch = useDispatch();
 
   const createNewProjectHandler = () => {
-    const project = {
-      name: 'test',
-    };
-    dispatch(sendProjectsData(project));
+    dispatch(sendProjectsData({ name: projectName }));
   };
 
   return (
     <div className="tableWrapper">
       <div className="header">
-        <Input showLabel={false} labelName="Project name" />
+        <Input
+          showLabel={false}
+          labelName="Project name"
+          onChangeHandler={(e) => setProjectName(e.target.value)}
+          value={projectName}
+          type="text"
+        />
         <Button
           text="Add new project"
           onClickHandler={createNewProjectHandler}
