@@ -4,12 +4,13 @@ services:
     image: traefik:2.6.1
     ports:
       - '8000:80'
-      # - "8080:8080"
+      - "8080:8080"
     command:
-      # - "--api.insecure=true"
+      - "--api.insecure=true"
       - '--providers.docker'
       - '--providers.docker.exposedbydefault=false'
       - '--entrypoints.web.address=:80'
+      - '--metrics.prometheus=true'
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
@@ -50,7 +51,9 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - '15672:15672'
+      - "15672:15672"
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
 
   mongodb:
     image: mongo:5.0.6
@@ -65,6 +68,28 @@ services:
     ports:
       - '27017:27017'
 
+  prometheus:
+    image: prom/prometheus:v2.34.0
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+    profiles:
+      - "production"
+
+  grafana:
+    image: grafana/grafana-oss:8.4.4
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana:/etc/grafana/provisioning/datasources
+    profiles:
+      - "production"
+
 volumes:
   mongodbdata:
   mongodbconfig:
+  rabbitmq:
+  prometheus-data:
+  grafana-data:
