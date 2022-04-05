@@ -9,7 +9,7 @@ export default function AdminBoard() {
   const projects = useSelector((state) => state.projects);
 
   useEffect(() => {
-    dispatch(projectActions.fetchProjectsData);
+    dispatch(projectActions.fetchProjectsData());
   }, [dispatch]);
 
   return (

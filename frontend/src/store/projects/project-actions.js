@@ -9,8 +9,8 @@ export const fetchProjectsData = () => async (dispatch) => {
     const projectsData = await axios.get(FETCH_PROJECTS_URL);
     dispatch(
       projectsActions.replaceProjectList({
-        items: projectsData.items || [],
-        totalQuantity: projectsData.items.length(),
+        items: projectsData.data || [],
+        totalQuantity: projectsData.data.length,
       }),
     );
   } catch (error) {
