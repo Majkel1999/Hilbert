@@ -21,13 +21,7 @@ export const fetchProjectsData = () => async (dispatch) => {
 
 export const sendProjectsData = (project) => async (dispatch) => {
   try {
-    const token = localStorage.getItem('token');
-    const options = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const response = await axios.post(CREATE_PROJECT_URL, project, options);
+    const response = await axios.post(CREATE_PROJECT_URL, project);
     console.log(response);
     if (response.status === 200)
       dispatch(projectsActions.createNewProject(project));

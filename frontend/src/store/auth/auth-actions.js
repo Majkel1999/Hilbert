@@ -7,9 +7,10 @@ const REGISTER_URL = '/user/register';
 export const login = (loginData) => async (dispatch) => {
   try {
     const response = await axios.post(LOGIN_URL, loginData);
+
     dispatch(
       authActions.login({
-        token: response.data.access_token,
+        token: response.data,
       }),
     );
   } catch (error) {
