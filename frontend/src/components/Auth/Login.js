@@ -27,7 +27,7 @@ export default function Login() {
     },
   ];
 
-  const previousPage = location?.state?.from?.pathname || '/';
+  const previousPage = location?.state?.from?.pathname || routes.HOME;
 
   const loginHandler = (e) => {
     e.preventDefault();
