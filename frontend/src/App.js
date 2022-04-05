@@ -15,15 +15,12 @@ function App() {
   return (
     <Routes>
       <Route path={routes.HOME} element={<Layout />}>
-        {/* Available for everyone */}
         {!isLoggedIn && <Route path={routes.HOME} element={<Home />} />}
-        {/* Not acces when user logged in */}
-        <Route element={<ProtectedRoute />}>
-          <Route path={routes.LOGIN} element={<Auth />} />
-          <Route path={routes.REGISTER} element={<Auth />} />
-        </Route>
+        {/* Available for everyone */}
+        <Route path={routes.LOGIN} element={<Auth />} />
+        <Route path={routes.REGISTER} element={<Auth />} />
         {/* Requiring to be logged in */}
-        <Route element={<ProtectedRoute requireLogin />}>
+        <Route element={<ProtectedRoute />}>
           <Route path={routes.HOME} element={<AdminBoard />} />
           <Route path={routes.PROJECT_ITEM} element={<OpenedProject />} />
         </Route>

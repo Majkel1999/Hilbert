@@ -38,7 +38,7 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (isLoggedIn) navigate(previousPage, { replace: true }); // need to fix
+    if (isLoggedIn) navigate(previousPage, { replace: true });
   }, [isLoggedIn]);
 
   return (
