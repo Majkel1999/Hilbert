@@ -11,20 +11,18 @@ const projectsSlice = createSlice({
     createNewProject(state, action) {
       const newProject = action.payload;
       const existingProject = state.items.find(
-        (item) => item.name === newProject.name,
+        (item) => item.id === newProject.id,
       );
-
       if (!existingProject) {
         state.items.push(newProject);
       }
     },
     removeProject(state, action) {
-      const projectName = action.payload;
+      const projectId = action.payload;
       const projectToRemoveIndex = state.items.findIndex(
-        (item) => item.name === projectName,
+        (item) => item.id === projectId,
       );
-
-      if (projectToRemoveIndex) {
+      if (projectToRemoveIndex >= 0) {
         state.items.splice(projectToRemoveIndex, 1);
       }
     },
