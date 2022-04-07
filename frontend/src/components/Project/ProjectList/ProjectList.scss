@@ -73,6 +73,21 @@
         width: 3%;
         margin-right: 15px;
       }
+      td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        i {
+          display: block;
+          width: 50px;
+          height: 10px;
+          font-size: 20px;
+          &:hover {
+            opacity: 0.5;
+          }
+        }
+      }
     }
   }
 }

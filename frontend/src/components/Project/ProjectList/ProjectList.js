@@ -5,7 +5,11 @@ import ProjectItem from '../ProjectItem/ProjectItem';
 import Button from '../../UI/Button/Button';
 import Input from '../../UI/Input/Input';
 import './ProjectList.scss';
-import { sendProjectsData } from '../../../store/projects/project-actions';
+import {
+  // eslint-disable-next-line no-unused-vars
+  deleteProject,
+  sendProjectsData,
+} from '../../../store/projects/project-actions';
 
 export default function ProjectList({ items }) {
   const [projectName, setProjectName] = useState();
@@ -13,6 +17,11 @@ export default function ProjectList({ items }) {
 
   const createNewProjectHandler = () => {
     dispatch(sendProjectsData({ name: projectName }));
+  };
+
+  const removeProjectHandler = (projectItem) => {
+    console.log(projectItem);
+    dispatch(deleteProject(projectItem.id));
   };
 
   return (
@@ -46,6 +55,11 @@ export default function ProjectList({ items }) {
                 <th className="head">{index}</th>
                 <td>
                   <ProjectItem name={projectItem.name} />
+                  <i
+                    className="fa fa-minus"
+                    onClick={() => removeProjectHandler(projectItem)}
+                    aria-hidden="true"
+                  />
                 </td>
               </tr>
             ))}
