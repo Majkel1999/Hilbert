@@ -61,6 +61,10 @@
         display: flex;
         width: 100%;
         border-bottom: 1px solid rgba(0, 255, 255, 0.4);
+        &:hover {
+          background-color: rgba(24, 181, 181, 0.1);
+          cursor: pointer;
+        }
       }
       .head {
         display: flex;
