@@ -11,7 +11,7 @@ export default function Chip({ chipText, displayDeleteIcon }) {
 }
 
 Chip.propTypes = {
-  chipText: PropTypes.string || PropTypes.object,
+  chipText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   displayDeleteIcon: PropTypes.bool,
 };
 
