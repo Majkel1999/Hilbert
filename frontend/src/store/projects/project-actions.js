@@ -61,3 +61,14 @@ export const addTagToProject = (projectId, tag) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
+  try {
+    const response = await axios.delete(TAG_OPERATION_URL(projectId), {
+      tag,
+    });
+    if (response.status === 200) dispatch(fetchProjectsData());
+  } catch (error) {
+    console.log(error);
+  }
+};

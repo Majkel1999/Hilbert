@@ -1,11 +1,24 @@
 import PropTypes from 'prop-types';
 import './Chip.scss';
 
-export default function Chip({ chipText, displayDeleteIcon, onClickHandler }) {
+export default function Chip({
+  chipText,
+  displayDeleteIcon,
+  onChipClickHandler,
+  removeTagHandler,
+}) {
   return (
-    <div className="chipContainer" onClick={onClickHandler} aria-hidden="true">
-      <span>{chipText}</span>
-      {displayDeleteIcon && <i className="fa fa-close" aria-hidden="true" />}
+    <div className="chipContainer">
+      <span onClick={onChipClickHandler} aria-hidden="true">
+        {chipText}
+      </span>
+      {displayDeleteIcon && (
+        <i
+          className="fa fa-close"
+          aria-hidden="true"
+          onClick={removeTagHandler}
+        />
+      )}
     </div>
   );
 }
@@ -13,11 +26,13 @@ export default function Chip({ chipText, displayDeleteIcon, onClickHandler }) {
 Chip.propTypes = {
   chipText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   displayDeleteIcon: PropTypes.bool,
-  onClickHandler: PropTypes.func,
+  removeTagHandler: PropTypes.func,
+  onChipClickHandler: PropTypes.func,
 };
 
 Chip.defaultProps = {
   chipText: '',
   displayDeleteIcon: false,
-  onClickHandler: () => {},
+  removeTagHandler: () => {},
+  onChipClickHandler: () => {},
 };
