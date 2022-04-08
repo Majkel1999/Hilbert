@@ -8,6 +8,12 @@
   justify-content: space-between;
   align-items: center;
   span {
-    margin: 0 10px 0 5px;
+    margin: 0 5px;
+  }
+  i {
+    cursor: pointer;
+    &:hover {
+      opacity: 0.5;
+    }
   }
 }

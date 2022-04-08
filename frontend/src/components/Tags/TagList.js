@@ -7,7 +7,7 @@ export default function TagList({ tags }) {
     <div className="tagList">
       {tags &&
         tags.map((tag) => <Chip chipText={tag} displayDeleteIcon="true" />)}
-      <i className="fa fa-plus" aria-hidden="true" />
+      <Chip chipText={<i className="fa fa-plus" aria-hidden="true" />} />
     </div>
   );
 }
