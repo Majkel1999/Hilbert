@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
 import { uuid } from '../../utils/utils';
 import Chip from '../UI/Chip/Chip';
 import { addTagToProject } from '../../store/projects/project-actions';
@@ -7,8 +9,9 @@ import './TagList.scss';
 
 export default function TagList({ tags }) {
   const dispatch = useDispatch();
+  const params = useParams();
   const addNewTag = () => {
-    dispatch(addTagToProject({ projectID: 'test', tag: 'testTag' }));
+    dispatch(addTagToProject({ projectId: params.id, tag: 'testTag' }));
   };
   return (
     <div className="tagList">
