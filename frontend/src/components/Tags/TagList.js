@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
-import './TagList.scss';
+import { useDispatch } from 'react-redux';
 import { uuid } from '../../utils/utils';
 import Chip from '../UI/Chip/Chip';
+import { addTagToProject } from '../../store/projects/project-actions';
+import './TagList.scss';
 
 export default function TagList({ tags }) {
+  const dispatch = useDispatch();
   const addNewTag = () => {
-    console.log('newTag');
+    dispatch(addTagToProject({ projectID: 'test', tag: 'testTag' }));
   };
   return (
     <div className="tagList">
@@ -15,7 +18,7 @@ export default function TagList({ tags }) {
         ))}
       <Chip
         chipText={<i className="fa fa-plus" aria-hidden="true" />}
-        onClick={addNewTag}
+        onClickHandler={addNewTag}
       />
     </div>
   );

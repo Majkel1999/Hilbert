@@ -4,6 +4,7 @@ import { projectsActions } from './projects-slice';
 const FETCH_PROJECTS_URL = '/project';
 const CREATE_PROJECT_URL = 'project/create';
 const DELETE_PROJECT_URL = (id) => `project/delete/${id}`;
+const TAG_OPERATION_URL = (projectId) => `/project/data/tag/${projectId}`;
 
 export const fetchProjectsData = () => async (dispatch) => {
   try {
@@ -45,6 +46,17 @@ export const deleteProject = (projectId) => async (dispatch) => {
     const response = await axios.delete(DELETE_PROJECT_URL(projectId));
     if (response.status === 200)
       dispatch(projectsActions.removeProject(projectId));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addTagToProject = (projectId, tag) => async (dispatch) => {
+  try {
+    const response = await axios.post(TAG_OPERATION_URL(projectId), {
+      tag,
+    });
+    if (response.status === 200) dispatch(fetchProjectsData());
   } catch (error) {
     console.log(error);
   }
