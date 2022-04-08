@@ -1,11 +1,13 @@
 .chipContainer {
+  margin: 3px 0;
   padding: 5px 10px;
   background-color: #caf0f8;
   font-size: 1.3rem;
   border-radius: 10px;
-  min-width: 80px;
-  max-width: 120px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  span {
+    margin: 0 10px 0 5px;
+  }
 }

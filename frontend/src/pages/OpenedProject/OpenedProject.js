@@ -1,6 +1,8 @@
+import TagList from '../../components/Tags/TagList';
 import './OpenedProject.scss';
-import Chip from '../../components/UI/Chip/Chip';
+
+const MOCKED_TAGS = ['name1', 'name2', 'name3', 'name4', 'name5', 'name6'];
 
 export default function OpenedProject() {
-  return <Chip chipText="test" />;
+  return <TagList tags={MOCKED_TAGS} />;
 }
