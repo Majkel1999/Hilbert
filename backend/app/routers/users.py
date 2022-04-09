@@ -1,5 +1,7 @@
+from app.models.project_models import Project
 from app.models.user_models import (AccessToken, RefreshToken, TokensSet, User,
                                     UserOut)
+from app.routers.projects import delete_project, removeProject
 from app.utility.security import (authenticate_user, get_current_active_user,
                                   register_user)
 from fastapi import APIRouter, Depends, Form, HTTPException, status
@@ -62,3 +64,12 @@ async def register(username: str = Form(...), password: str = Form(...)):
             status_code=status.HTTP_409_CONFLICT,
             detail="Username exists"
         )
+
+
+@router.delete("/")
+async def delete_user(user: User = Depends(get_current_active_user)):
+    userprojects = await Project.find(Project.owner == str(user.id), fetch_links=True).to_list()
+    for project in userprojects:
+        await removeProject(project)
+    await user.delete()
+    return 'User deleted'
