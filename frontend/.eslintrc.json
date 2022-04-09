@@ -18,6 +18,7 @@
     "no-console": "off",
     "react/react-in-jsx-scope": "off",
     "no-shadow": "off",
-    "jsx-a11y/label-has-associated-control": 0
+    "jsx-a11y/label-has-associated-control": "off",
+    "no-plusplus": "off"
   }
 }

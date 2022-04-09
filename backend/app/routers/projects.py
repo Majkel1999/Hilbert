@@ -40,7 +40,6 @@ async def create_project(projectCreationData: ProjectCreationData, user: User = 
     hashbytes = bytes(hash, 'utf-8')
     project.data.invite_url_postfix = base64.urlsafe_b64encode(
         hashbytes).decode('utf-8').strip('=')
-    project.data.tags = projectCreationData.tags
     await project.save()
     return project
 

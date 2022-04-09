@@ -36,4 +36,3 @@ class Project(Document, ProjectOut):
 
 class ProjectCreationData(BaseModel):
     name: str
-    tags: List[str]
