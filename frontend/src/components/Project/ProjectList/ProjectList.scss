@@ -61,6 +61,10 @@
         display: flex;
         width: 100%;
         border-bottom: 1px solid rgba(0, 255, 255, 0.4);
+        &:hover {
+          background-color: rgba(24, 181, 181, 0.1);
+          cursor: pointer;
+        }
       }
       .head {
         display: flex;
@@ -68,6 +72,21 @@
         justify-content: center;
         width: 3%;
         margin-right: 15px;
+      }
+      td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        i {
+          display: block;
+          width: 50px;
+          height: 10px;
+          font-size: 20px;
+          &:hover {
+            opacity: 0.5;
+          }
+        }
       }
     }
   }

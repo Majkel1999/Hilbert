@@ -10,3 +10,4 @@ pymongo==3.12.3
 beanie==1.10.0
 pdfminer.six==20211012
 aio-pika==7.1.0
+fastapi_jwt_auth==0.5.0

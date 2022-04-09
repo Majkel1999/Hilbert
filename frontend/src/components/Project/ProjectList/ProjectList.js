@@ -1,18 +1,32 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import ProjectItem from '../ProjectItem/ProjectItem';
 import Button from '../../UI/Button/Button';
 import Input from '../../UI/Input/Input';
 import './ProjectList.scss';
-import { sendProjectsData } from '../../../store/projects/project-actions';
+import {
+  deleteProject,
+  sendProjectsData,
+} from '../../../store/projects/project-actions';
 
 export default function ProjectList({ items }) {
+  const navigate = useNavigate();
   const [projectName, setProjectName] = useState();
   const dispatch = useDispatch();
 
   const createNewProjectHandler = () => {
     dispatch(sendProjectsData({ name: projectName }));
+  };
+
+  const removeProjectHandler = (projectItem) => {
+    dispatch(deleteProject(projectItem.id));
+  };
+
+  const openProjectHandler = (id) => {
+    // Later if admin board will be displayed in rotue 'projects' change strint o route var
+    navigate(`projects/${id}`);
   };
 
   return (
@@ -45,7 +59,15 @@ export default function ProjectList({ items }) {
               <tr className="contentWrapper" key={`${projectItem.name}key`}>
                 <th className="head">{index}</th>
                 <td>
-                  <ProjectItem name={projectItem.name} />
+                  <ProjectItem
+                    name={projectItem.name}
+                    onClickHandler={() => openProjectHandler(projectItem.id)}
+                  />
+                  <i
+                    className="fa fa-minus"
+                    onClick={() => removeProjectHandler(projectItem)}
+                    aria-hidden="true"
+                  />
                 </td>
               </tr>
             ))}

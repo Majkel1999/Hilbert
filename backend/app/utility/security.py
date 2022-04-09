@@ -1,25 +1,29 @@
-from datetime import datetime, timedelta
-from typing import Optional
-from xmlrpc.client import boolean
-
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
-from passlib.context import CryptContext
-
 from app.models.project_models import Project
-from app.models.user_models import TokenData, User
+from app.models.user_models import User
 from bson.objectid import ObjectId
+from fastapi import Depends, HTTPException, status
+from fastapi_jwt_auth import AuthJWT
+from passlib.context import CryptContext
+from pydantic import BaseModel
 
 SECRET_KEY = "80c3327f78d73bc932a28aa87d484e20e3a1999a2fd1f8e133abf81f924ec8c0"
 ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 1
+
+
+class Settings(BaseModel):
+    authjwt_secret_key: str = SECRET_KEY
+
+
+@AuthJWT.load_config
+def get_config():
+    return Settings()
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login/")
 
 
-def verify_password(plain_password: str, hashed_password: str) -> boolean:
+def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
@@ -31,6 +35,10 @@ async def get_user(username: str) -> User:
     return await User.find_one(User.username == username)
 
 
+async def get_user_by_id(id: str) -> User:
+    return await User.find_one(User.id == ObjectId(id))
+
+
 async def authenticate_user(username: str, password: str) -> User:
     user = await get_user(username)
     if not user:
@@ -40,43 +48,33 @@ async def authenticate_user(username: str, password: str) -> User:
     return user
 
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
-
-
 async def register_user(username: str, password: str, email=None, fullname=None) -> User:
-    hashed_pw = get_password_hash(password)
     result = await User.find_one({"username": username})
     if(result is not None):
         return None
+    hashed_pw = get_password_hash(password)
     user = User(username=username, email=email,
                 full_name=fullname, hashed_password=hashed_pw)
     user = await user.insert()
     return user
 
 
-async def get_current_active_user(token: str = Depends(oauth2_scheme)) -> User:
+async def get_current_active_user(Authorize: AuthJWT = Depends()) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"}
     )
+
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
-            raise credentials_exception
-        token_data = TokenData(username=username)
-    except JWTError:
+        Authorize.jwt_required()
+    except:
         raise credentials_exception
-    user = await get_user(username=token_data.username)
+
+    user_id = Authorize.get_jwt_subject()
+    if user_id is None:
+        raise credentials_exception
+    user = await get_user_by_id(id=user_id)
     if not user:
         raise credentials_exception
     return user
