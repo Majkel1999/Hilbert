@@ -1,0 +1,481 @@
+[
+  {
+    "_id": "9c7c575b-597d-49b7-b85d-625e9b2db7ed",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "ff4c7454-c431-4f3b-acbb-60e8a21173e7",
+    "name": "Get User Info",
+    "url": "{{baseUrl}}/user/",
+    "method": "GET",
+    "sortNum": 4375,
+    "created": "2022-04-09T14:46:20.954Z",
+    "modified": "2022-04-09T14:55:42.072Z",
+    "headers": [],
+    "params": [],
+    "tests": [
+      {
+        "type": "json-query",
+        "custom": "json.username",
+        "action": "equal",
+        "value": "{{username}}"
+      },
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "443883da-db2a-45a0-bced-2678755d240e",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "250def74-3f1a-4a0f-a95f-413ff9db0531",
+    "name": "Delete User",
+    "url": "{{baseUrl}}/user/",
+    "method": "DELETE",
+    "sortNum": 20000,
+    "created": "2022-04-09T14:46:20.955Z",
+    "modified": "2022-04-09T15:18:19.490Z",
+    "headers": [],
+    "params": [],
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "2298ab5f-7700-438f-9a5e-eb875adec968",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "ff4c7454-c431-4f3b-acbb-60e8a21173e7",
+    "name": "Login",
+    "url": "{{baseUrl}}/user/login",
+    "method": "POST",
+    "sortNum": 3750,
+    "created": "2022-04-09T14:46:20.956Z",
+    "modified": "2022-04-09T14:54:29.472Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formencoded",
+      "raw": "",
+      "form": [
+        {
+          "name": "username",
+          "value": "{{username}}"
+        },
+        {
+          "name": "password",
+          "value": "{{password}}"
+        }
+      ]
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      },
+      {
+        "type": "set-env-var",
+        "custom": "json.access_token",
+        "action": "setto",
+        "value": "{{access_token}}"
+      },
+      {
+        "type": "set-env-var",
+        "custom": "json.refresh_token",
+        "action": "setto",
+        "value": "{{refresh_token}}"
+      }
+    ]
+  },
+  {
+    "_id": "3795a6e5-b4e6-4bfc-bcc8-9d052da98293",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "ff4c7454-c431-4f3b-acbb-60e8a21173e7",
+    "name": "Refresh",
+    "url": "{{baseUrl}}/user/refresh",
+    "method": "POST",
+    "sortNum": 5000,
+    "created": "2022-04-09T14:46:20.957Z",
+    "modified": "2022-04-09T14:56:45.114Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{refresh_token}}"
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      },
+      {
+        "type": "set-env-var",
+        "custom": "json.access_token",
+        "action": "setto",
+        "value": "{{access_token}}"
+      }
+    ]
+  },
+  {
+    "_id": "2751b9e1-0fe8-4ba6-b884-f235d39153dd",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "ff4c7454-c431-4f3b-acbb-60e8a21173e7",
+    "name": "Register",
+    "url": "{{baseUrl}}/user/register",
+    "method": "POST",
+    "sortNum": 2500,
+    "created": "2022-04-09T14:46:20.958Z",
+    "modified": "2022-04-09T14:52:05.297Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formencoded",
+      "raw": "",
+      "form": [
+        {
+          "name": "username",
+          "value": "{{username}}"
+        },
+        {
+          "name": "password",
+          "value": "{{password}}"
+        }
+      ]
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "897cadeb-c395-4a1d-9e36-3d9bcf56076e",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "ee316887-4639-453b-9353-405617672869",
+    "name": "Get User Projects",
+    "url": "{{baseUrl}}/project/",
+    "method": "GET",
+    "sortNum": 60000,
+    "created": "2022-04-09T14:46:20.959Z",
+    "modified": "2022-04-09T15:11:44.590Z",
+    "headers": [],
+    "params": [],
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.[0].name",
+        "action": "equal",
+        "value": "{{project_name}}"
+      },
+      {
+        "type": "set-env-var",
+        "custom": "json.[0]._id",
+        "action": "setto",
+        "value": "{{project_id}}"
+      },
+      {
+        "type": "set-env-var",
+        "custom": "json.[0].data.invite_url_postfix",
+        "action": "setto",
+        "value": "{{invite_url}}"
+      }
+    ]
+  },
+  {
+    "_id": "1e80e76b-703b-475c-97ff-352c05ee2737",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "ee316887-4639-453b-9353-405617672869",
+    "name": "Create Project",
+    "url": "{{baseUrl}}/project/",
+    "method": "POST",
+    "sortNum": 30000,
+    "created": "2022-04-09T14:46:20.960Z",
+    "modified": "2022-04-09T15:03:17.573Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"name\": \"{{project_name}}\"\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.name",
+        "action": "equal",
+        "value": "{{project_name}}"
+      }
+    ]
+  },
+  {
+    "_id": "1038cc9b-f258-43cd-a153-96154ae1e9c6",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "ee316887-4639-453b-9353-405617672869",
+    "name": "Get Project",
+    "url": "{{baseUrl}}/project/{project_id}",
+    "method": "GET",
+    "sortNum": 80000,
+    "created": "2022-04-09T14:46:20.961Z",
+    "modified": "2022-04-09T15:13:51.154Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "project_id",
+        "value": "{{project_id}}",
+        "isPath": true
+      }
+    ],
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "4d4d6226-6799-4ad3-a22e-d8b8e9d6392b",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "250def74-3f1a-4a0f-a95f-413ff9db0531",
+    "name": "Delete Project",
+    "url": "{{baseUrl}}/project/{project_id}",
+    "method": "DELETE",
+    "sortNum": 10000,
+    "created": "2022-04-09T14:46:20.962Z",
+    "modified": "2022-04-09T15:18:18.734Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "project_id",
+        "value": "{{project_id}}",
+        "isPath": true
+      }
+    ],
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "bb308784-2eda-4ca7-929c-9d7373820a8b",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "eeec32f5-5115-4454-a32c-b7ed20e226f2",
+    "name": "Queue Model Training",
+    "url": "{{baseUrl}}/project/data/train/{project_id}",
+    "method": "POST",
+    "sortNum": 100000,
+    "created": "2022-04-09T14:46:20.963Z",
+    "modified": "2022-04-09T15:05:10.461Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "project_id",
+        "value": "",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "e93d8f52-ca54-4c8f-8836-0a07baa82e88",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "eeec32f5-5115-4454-a32c-b7ed20e226f2",
+    "name": "Upload File",
+    "url": "{{baseUrl}}/project/data/upload/{project_id}",
+    "method": "POST",
+    "sortNum": 110000,
+    "created": "2022-04-09T14:46:20.964Z",
+    "modified": "2022-04-09T15:05:13.776Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "project_id",
+        "value": "",
+        "isPath": true
+      }
+    ],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "files",
+          "value": "thunder"
+        }
+      ]
+    },
+    "tests": []
+  },
+  {
+    "_id": "32b78361-f83e-4c8b-b27b-724f2c6fb525",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "eeec32f5-5115-4454-a32c-b7ed20e226f2",
+    "name": "Add Tag",
+    "url": "{{baseUrl}}/project/data/tag/{project_id}",
+    "method": "POST",
+    "sortNum": 50000,
+    "created": "2022-04-09T14:46:20.965Z",
+    "modified": "2022-04-09T15:13:57.657Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "project_id",
+        "value": "{{project_id}}",
+        "isPath": true
+      }
+    ],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"tag\": \"{{test_tag}}\"\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "7e930acd-0de2-4a89-bcd4-00298aa5bdf4",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "eeec32f5-5115-4454-a32c-b7ed20e226f2",
+    "name": "Delete Tag",
+    "url": "{{baseUrl}}/project/data/tag/{project_id}",
+    "method": "DELETE",
+    "sortNum": 75000,
+    "created": "2022-04-09T14:46:20.966Z",
+    "modified": "2022-04-09T15:14:12.016Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "project_id",
+        "value": "{{project_id}}",
+        "isPath": true
+      }
+    ],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"tag\": \"{{test_tag}}\"\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "54796e32-67e3-43ab-a3e5-7e2c586c76da",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "a35f2597-74b7-46fd-a88a-c5010707040c",
+    "name": "Get Project Info",
+    "url": "{{baseUrl}}/tag/{invite_url}",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2022-04-09T14:46:20.967Z",
+    "modified": "2022-04-09T15:14:18.769Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "invite_url",
+        "value": "{{invite_url}}",
+        "isPath": true
+      }
+    ],
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "c46a1da6-c711-429a-851a-a20684659479",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "a35f2597-74b7-46fd-a88a-c5010707040c",
+    "name": "Get Random Text",
+    "url": "{{baseUrl}}/tag/{invite_url}/text",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2022-04-09T14:46:20.968Z",
+    "modified": "2022-04-09T15:14:24.992Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "invite_url",
+        "value": "{{invite_url}}",
+        "isPath": true
+      }
+    ],
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "a96cc75a-56b2-4f36-aa47-7db5321836c5",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "a35f2597-74b7-46fd-a88a-c5010707040c",
+    "name": "Tag Text",
+    "url": "{{baseUrl}}/tag/{invite_url}/tag",
+    "method": "POST",
+    "sortNum": 30000,
+    "created": "2022-04-09T14:46:20.969Z",
+    "modified": "2022-04-09T15:17:28.336Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "invite_url",
+        "value": "{{invite_url}}",
+        "isPath": true
+      }
+    ],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"tag\": \"thunder\",\n  \"text_id\": \"thunder\"\n}",
+      "form": []
+    },
+    "tests": []
+  }
+]
