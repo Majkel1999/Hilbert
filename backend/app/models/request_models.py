@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
-
-class TagRequest(BaseModel):
-    tag: str
+class Tag(BaseModel):
+    tag:str
+class TagRequest(Tag):
     text_id : str
+

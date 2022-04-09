@@ -1,0 +1,8 @@
+.tagList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &:last-child {
+    cursor: pointer;
+  }
+}
