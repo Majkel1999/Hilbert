@@ -54,7 +54,7 @@ export const deleteProject = (projectId) => async (dispatch) => {
 export const addTagToProject = (projectId, tag) => async (dispatch) => {
   try {
     const response = await axios.post(TAG_OPERATION_URL(projectId), {
-      tag,
+      tag
     });
     if (response.status === 200) dispatch(fetchProjectsData());
   } catch (error) {
@@ -65,7 +65,7 @@ export const addTagToProject = (projectId, tag) => async (dispatch) => {
 export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
   try {
     const response = await axios.delete(TAG_OPERATION_URL(projectId), {
-      tag,
+      data: { tag }
     });
     if (response.status === 200) dispatch(fetchProjectsData());
   } catch (error) {

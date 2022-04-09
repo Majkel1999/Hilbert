@@ -14,10 +14,10 @@ export default function TagList({ tags }) {
   const dispatch = useDispatch();
   const params = useParams();
   const addNewTag = () => {
-    dispatch(addTagToProject({ projectId: params.id, tag: 'testTag' }));
+    dispatch(addTagToProject(params.id, 'testTag'));
   };
   const removeTag = () => {
-    dispatch(removeTagFromProject({ projectId: params.id, tag: 'testTag' }));
+    dispatch(removeTagFromProject(params.id, 'testTag'));
   };
   return (
     <div className="tagList">

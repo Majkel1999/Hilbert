@@ -1,12 +1,11 @@
 from typing import List
 
-from beanie import WriteRules
-
 from app.models.project_models import Project
+from app.models.request_models import Tag
+from app.utility.connectors.rabbitmq_connector import rabbitBroker
 from app.utility.file_helper import handleFile
 from app.utility.security import check_for_project_ownership
-from app.utility.connectors.rabbitmq_connector import rabbitBroker
-
+from beanie import WriteRules
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
 
 router = APIRouter(
@@ -41,8 +40,8 @@ async def upload_file(files: List[UploadFile], project: Project = Depends(check_
 @router.post("/tag/{project_id}", responses={
     status.HTTP_409_CONFLICT: {"description": "Duplicate tag"}
 })
-async def add_tag(tag: str,  project: Project = Depends(check_for_project_ownership)):
-    tag = tag.casefold()
+async def add_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
+    tag = tag.tag.casefold()
     if(any(x == tag for x in project.data.tags)):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -56,8 +55,8 @@ async def add_tag(tag: str,  project: Project = Depends(check_for_project_owners
 @router.delete("/tag/{project_id}", responses={
     status.HTTP_404_NOT_FOUND: {"description": "Tag not present in list"}
 })
-async def delete_tag(tag: str,  project: Project = Depends(check_for_project_ownership)):
-    tag = tag.casefold()
+async def delete_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
+    tag = tag.tag.casefold()
     if(any(x == tag for x in project.data.tags)):
         project.data.tags.remove(tag)
         await project.save()
