@@ -3,7 +3,7 @@ services:
   loadbalancer:
     image: traefik:2.6.1
     ports:
-      - '8000:80'
+      - '${EXTERNAL_PORT}:80'
       - "8080:8080"
     command:
       - "--api.insecure=true"
@@ -47,14 +47,6 @@ services:
   #         devices:
   #           - capabilities:
   #               - "gpu"
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-      - "15672:15672"
-    volumes:
-      - rabbitmq:/var/lib/rabbitmq
-
   mongodb:
     image: mongo:5.0.6
     restart: always
@@ -68,22 +60,48 @@ services:
     ports:
       - '27017:27017'
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.rabbitmq.rule=PathPrefix(`/rabbitmq`)'
+      - 'traefik.http.routers.rabbitmq.entrypoints=web'
+      - 'traefik.http.routers.rabbitmq.middlewares=rabbitmq-stripprefix'
+      - 'traefik.http.middlewares.rabbitmq-stripprefix.stripprefix.prefixes=/rabbitmq'
+      - 'traefik.http.services.rabbitmq.loadbalancer.server.port=15672'
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+
   prometheus:
     image: prom/prometheus:v2.34.0
     volumes:
       - ./monitoring/prometheus:/etc/prometheus
       - prometheus-data:/prometheus
-    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.prometheus.rule=PathPrefix(`/prometheus`)'
+      - 'traefik.http.routers.prometheus.entrypoints=web'
+      - 'traefik.http.services.prometheus.loadbalancer.server.port=9090'
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml --web.external-url=/prometheus/
     profiles:
       - "production"
 
   grafana:
-    image: grafana/grafana-oss:8.4.4
-    ports:
-      - '3000:3000'
+    image: grafana/grafana-oss:8.4.5
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./monitoring/grafana:/etc/grafana/provisioning/datasources
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./monitoring/grafana/dashboards_config:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_SERVER_DOMAIN=${HOST}
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:${EXTERNAL_PORT}/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.grafana.entrypoints=web'
+      - 'traefik.http.routers.grafana.rule=PathPrefix(`/grafana`)'
+      - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
     profiles:
       - "production"
 

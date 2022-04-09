@@ -18,18 +18,17 @@ cd Hilbert
 docker-compose up 
 ```
 
-In order to change configuration, edit **docker-compose.yml**. Default port allocation is as follows:
+In order to change configuration, edit **.env** file in root directory. By default it hosts all services at **localhost:8000**. 
 
-    "8000:80" - web service
-
-where the first port is on the physical pc, and the second is inside container. **Only change the first port, unless you know what you are doing.** For more information, consult [official docker-compose documentation](https://docs.docker.com/compose/).
+For more information, consult [official docker-compose documentation](https://docs.docker.com/compose/).
 
 Current endpoints are:
-> / - frontend
-
-> /api/v1 - api service
-
-> /api/v1/docs - swagger documentation
+- / - frontend
+- /api/v1 - Api service
+- /api/v1/docs - Swagger documentation
+- /prometheus - Prometheus dashboard
+- /rabbitmq - RabbitMQ Management plugin
+- /grafana - Grafana with 2 dashboards for monitoring
 
 For more information, consult official [Traefik routing documentation](https://doc.traefik.io/traefik/routing/overview/).
 
