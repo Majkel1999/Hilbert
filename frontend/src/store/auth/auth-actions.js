@@ -10,7 +10,7 @@ export const login = (loginData) => async (dispatch) => {
 
     dispatch(
       authActions.login({
-        token: response.data.access_token,
+        token: response.data,
       }),
     );
   } catch (error) {

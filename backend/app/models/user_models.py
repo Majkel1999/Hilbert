@@ -30,8 +30,9 @@ class RefreshToken(BaseModel):
 
 
 class TokensSet(BaseModel):
-    access_token: AccessToken
-    refresh_token: RefreshToken
+    access_token: str
+    refresh_token: str
+    token_type: str
 
 
 class TokenData(BaseModel):

@@ -32,8 +32,8 @@ async def login(username: str = Form(...), password: str = Form(...), Authorize:
         )
     access_token = Authorize.create_access_token(subject=str(user.id))
     refresh_token = Authorize.create_refresh_token(subject=str(user.id))
-    return TokensSet(access_token=AccessToken(access_token=access_token, token_type="Bearer"),
-                     refresh_token=RefreshToken(refresh_token=refresh_token, token_type="Bearer"))
+    return TokensSet(access_token=access_token,
+                     refresh_token=refresh_token, token_type="Bearer")
 
 
 @router.post("/refresh", response_model=AccessToken, responses={
