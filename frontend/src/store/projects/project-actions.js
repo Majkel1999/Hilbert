@@ -2,8 +2,8 @@ import axios from '../../api/axios';
 import { projectsActions } from './projects-slice';
 
 const FETCH_PROJECTS_URL = '/project';
-const CREATE_PROJECT_URL = 'project/create';
-const DELETE_PROJECT_URL = (id) => `project/delete/${id}`;
+const CREATE_PROJECT_URL = '/project';
+const DELETE_PROJECT_URL = (id) => `project/${id}`;
 const TAG_OPERATION_URL = (projectId) => `/project/data/tag/${projectId}`;
 
 export const fetchProjectsData = () => async (dispatch) => {
