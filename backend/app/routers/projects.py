@@ -24,7 +24,7 @@ async def get_user_projects(user: User = Depends(get_current_active_user)):
     return userprojects
 
 
-@router.get("/{projectId}", response_model=Project, responses={
+@router.get("/{project_id}", response_model=Project, responses={
     status.HTTP_403_FORBIDDEN: {
         "description": "User not authorized for specific project"}
 })
@@ -57,6 +57,11 @@ async def create_project(projectCreationData: ProjectCreationData, user: User = 
         "description": "User not authorized for specific project"}
 })
 async def delete_project(project: Project = Depends(check_for_project_ownership)):
+    projectName = await removeProject(project)
+    return projectName + " deleted successfuly"
+
+
+async def removeProject(project : Project) -> str:
     if(project.model is not None):
         mlModel = await project.model.fetch()
         await mlModel.delete()
@@ -65,4 +70,4 @@ async def delete_project(project: Project = Depends(check_for_project_ownership)
         await document.delete()
     projectName = project.name
     await project.delete()
-    return projectName + " deleted successfuly"
+    return projectName
