@@ -1,20 +1,26 @@
-from datetime import datetime, timedelta
-
 from app.models.project_models import Project
-from app.models.user_models import Token, TokenData, User
+from app.models.user_models import User
 from bson.objectid import ObjectId
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
+from fastapi_jwt_auth import AuthJWT
 from passlib.context import CryptContext
+from pydantic import BaseModel
 
 SECRET_KEY = "80c3327f78d73bc932a28aa87d484e20e3a1999a2fd1f8e133abf81f924ec8c0"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1
 
 
+class Settings(BaseModel):
+    authjwt_secret_key: str = SECRET_KEY
+
+
+@AuthJWT.load_config
+def get_config():
+    return Settings()
+
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login/")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -42,15 +48,6 @@ async def authenticate_user(username: str, password: str) -> User:
     return user
 
 
-def create_access_token(user_id: str) -> Token:
-    data = {"sub": user_id}
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode = data.copy()
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return Token(access_token=encoded_jwt, token_type="bearer")
-
-
 async def register_user(username: str, password: str, email=None, fullname=None) -> User:
     result = await User.find_one({"username": username})
     if(result is not None):
@@ -62,21 +59,22 @@ async def register_user(username: str, password: str, email=None, fullname=None)
     return user
 
 
-async def get_current_active_user(token: str = Depends(oauth2_scheme)) -> User:
+async def get_current_active_user(Authorize: AuthJWT = Depends()) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"}
     )
+
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: str = payload.get("sub")
-        if user_id is None:
-            raise credentials_exception
-        token_data = TokenData(user_id=user_id)
-    except JWTError:
+        Authorize.jwt_required()
+    except:
         raise credentials_exception
-    user = await get_user_by_id(id=token_data.user_id)
+
+    user_id = Authorize.get_jwt_subject()
+    if user_id is None:
+        raise credentials_exception
+    user = await get_user_by_id(id=user_id)
     if not user:
         raise credentials_exception
     return user

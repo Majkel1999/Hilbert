@@ -13,13 +13,25 @@ class UserOut(BaseModel):
 class User(Document, UserOut):
     hashed_password: str
 
-class UserForm(BaseModel):
-    username:str
-    password:str
 
-class Token(BaseModel):
+class UserForm(BaseModel):
+    username: str
+    password: str
+
+
+class AccessToken(BaseModel):
     access_token: str
     token_type: str
+
+
+class RefreshToken(BaseModel):
+    refresh_token: str
+    token_type: str
+
+
+class TokensSet(BaseModel):
+    access_token: AccessToken
+    refresh_token: RefreshToken
 
 
 class TokenData(BaseModel):
