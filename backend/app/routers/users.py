@@ -6,8 +6,6 @@ from app.utility.security import (authenticate_user, create_access_token,
 from fastapi import APIRouter, Depends, Form, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
 router = APIRouter(
     prefix="/user",
     tags=["Users"]
@@ -34,11 +32,8 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
-    return Token(access_token=access_token, token_type="bearer")
+    access_token = create_access_token(user_id=str(user.id))
+    return access_token
 
 
 @router.post("/register", response_model=UserOut, responses={
