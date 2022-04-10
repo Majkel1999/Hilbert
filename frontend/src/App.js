@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions } from './store/auth/auth-slice';
 import Auth from './pages/Auth/Auth';
 import Layout from './components/Layout/Layout';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
@@ -11,6 +12,11 @@ import * as routes from './constants/routes';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!isLoggedIn) dispatch(authActions.logout());
+  }, [isLoggedIn]);
 
   return (
     <Routes>
