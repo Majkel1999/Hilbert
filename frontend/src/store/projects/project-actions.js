@@ -75,8 +75,14 @@ export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
 export const fetchSingleProjectData = (projectId) => async (dispatch) => {
   try {
     const response = await axios.get(PROJECT_WITH_ID_URL(projectId));
+
     if (response.status === 200)
-      dispatch(projectsActions.updateProject(response.data));
+      dispatch(
+        projectsActions.updateProject({
+          name: response.data.name,
+          tags: response.data.data.tags,
+        }),
+      );
   } catch (error) {
     console.log(error);
   }

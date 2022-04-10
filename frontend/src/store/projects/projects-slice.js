@@ -34,6 +34,7 @@ const projectsSlice = createSlice({
       const updatedProjectIndex = state.items.findIndex(
         (item) => item.id === updatedProjectData.id,
       );
+
       if (updatedProjectIndex >= 0) {
         state.items[updatedProjectIndex] = updatedProjectData;
       }
