@@ -1,8 +1,24 @@
+import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
 import TagList from '../../components/Tags/TagList';
+import { fetchSingleProjectData } from '../../store/projects/project-actions';
+
 import './OpenedProject.scss';
 
-const MOCKED_TAGS = ['name1', 'name2', 'name3', 'name4', 'name5', 'name6'];
-
 export default function OpenedProject() {
-  return <TagList tags={MOCKED_TAGS} />;
+  const [fetchedData, setFetchedData] = useState(false);
+  const dispatch = useDispatch();
+  const params = useParams();
+  const currentProjectData = useSelector(
+    (state) => state.projects.currentProject,
+  );
+
+  useEffect(() => {
+    const projectId = params.id;
+    if (!fetchedData) dispatch(fetchSingleProjectData(projectId));
+    setFetchedData(true);
+  });
+
+  return <TagList tags={currentProjectData.tags} openedProjectId={params.id} />;
 }
