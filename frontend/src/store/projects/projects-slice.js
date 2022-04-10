@@ -27,8 +27,16 @@ const projectsSlice = createSlice({
       }
     },
     replaceProjectList(state, action) {
-      state.totalQuantity = action.payload.totalQuantity;
       state.items = action.payload.items;
+    },
+    updateProject(state, action) {
+      const updatedProjectData = action.payload;
+      const updatedProjectIndex = state.items.findIndex(
+        (item) => item.id === updatedProjectData.id,
+      );
+      if (updatedProjectIndex >= 0) {
+        state.items[updatedProjectIndex] = updatedProjectData;
+      }
     },
   },
 });

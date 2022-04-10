@@ -15,8 +15,8 @@ export const fetchProjectsData = () => async (dispatch) => {
             name: item.name,
             // eslint-disable-next-line dot-notation
             id: item['_id'],
+            tags: item.data.tags,
           })) || [],
-        totalQuantity: projectsData.data.length,
       }),
     );
   } catch (error) {
@@ -72,10 +72,11 @@ export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
   }
 };
 
-export const fetchSingleProjectData = (projectId) => async () => {
+export const fetchSingleProjectData = (projectId) => async (dispatch) => {
   try {
     const response = await axios.get(PROJECT_WITH_ID_URL(projectId));
-    console.log(response);
+    if (response.status === 200)
+      dispatch(projectsActions.updateProject(response.data));
   } catch (error) {
     console.log(error);
   }
