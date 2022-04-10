@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { uuid } from '../../utils/utils';
 import Chip from '../UI/Chip/Chip';
+import Input from '../UI/Input/Input';
 import {
   addTagToProject,
   removeTagFromProject,
@@ -9,12 +11,13 @@ import {
 import './TagList.scss';
 
 export default function TagList({ tags, openedProjectId }) {
+  const [tagName, setTagName] = useState('');
   const dispatch = useDispatch();
   const addNewTag = () => {
-    dispatch(addTagToProject(openedProjectId, 'testTag'));
+    dispatch(addTagToProject(openedProjectId, tagName));
   };
-  const removeTag = () => {
-    dispatch(removeTagFromProject(openedProjectId, 'testTag'));
+  const removeTag = (tag) => {
+    dispatch(removeTagFromProject(openedProjectId, tag));
   };
   return (
     <div className="tagList">
@@ -24,12 +27,19 @@ export default function TagList({ tags, openedProjectId }) {
             chipText={tag}
             key={uuid()}
             displayDeleteIcon
-            removeTagHandler={removeTag}
+            removeTagHandler={() => removeTag(tag)}
           />
         ))}
       <Chip
-        chipText={<i className="fa fa-plus" aria-hidden="true" />}
-        onChipClickHandler={addNewTag}
+        chipText={
+          <div className="addInputContainer">
+            <Input
+              showLabel={false}
+              onChangeHandler={(e) => setTagName(e.target.value)}
+            />
+            <i className="fa fa-plus" aria-hidden="true" onClick={addNewTag} />
+          </div>
+        }
       />
     </div>
   );
