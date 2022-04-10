@@ -7,19 +7,17 @@ import { fetchSingleProjectData } from '../../store/projects/project-actions';
 import './OpenedProject.scss';
 
 export default function OpenedProject() {
+  const [fetchedData, setFetchedData] = useState(false);
   const dispatch = useDispatch();
   const params = useParams();
-  const projects = useSelector((state) => state.projects.items);
-  // eslint-disable-next-line no-unused-vars
-  const [currentProjectData, setCurrentProjectData] = useState([]);
+  const currentProjectData = useSelector(
+    (state) => state.projects.currentProject,
+  );
 
   useEffect(() => {
     const projectId = params.id;
-    dispatch(fetchSingleProjectData(projectId));
-    if (projects) {
-      const updatedProject = projects.find((item) => item.id === projectId);
-      setCurrentProjectData(updatedProject);
-    }
+    if (!fetchedData) dispatch(fetchSingleProjectData(projectId));
+    setFetchedData(true);
   });
 
   return <TagList tags={currentProjectData.tags} />;

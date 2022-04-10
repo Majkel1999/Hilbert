@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialProjectsState = {
   items: [],
+  currentProject: {},
 };
 
 const projectsSlice = createSlice({
@@ -29,15 +30,8 @@ const projectsSlice = createSlice({
     replaceProjectList(state, action) {
       state.items = action.payload.items;
     },
-    updateProject(state, action) {
-      const updatedProjectData = action.payload;
-      const updatedProjectIndex = state.items.findIndex(
-        (item) => item.id === updatedProjectData.id,
-      );
-
-      if (updatedProjectIndex >= 0) {
-        state.items[updatedProjectIndex] = updatedProjectData;
-      }
+    setCurrentProjectData(state, action) {
+      state.currentProject = action.payload;
     },
   },
 });

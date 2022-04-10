@@ -78,7 +78,7 @@ export const fetchSingleProjectData = (projectId) => async (dispatch) => {
 
     if (response.status === 200)
       dispatch(
-        projectsActions.updateProject({
+        projectsActions.setCurrentProjectData({
           name: response.data.name,
           tags: response.data.data.tags,
         }),
