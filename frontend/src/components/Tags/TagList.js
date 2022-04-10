@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { uuid } from '../../utils/utils';
 import Chip from '../UI/Chip/Chip';
 import {
@@ -9,14 +8,13 @@ import {
 } from '../../store/projects/project-actions';
 import './TagList.scss';
 
-export default function TagList({ tags }) {
+export default function TagList({ tags, openedProjectId }) {
   const dispatch = useDispatch();
-  const params = useParams();
   const addNewTag = () => {
-    dispatch(addTagToProject(params.id, 'testTag'));
+    dispatch(addTagToProject(openedProjectId, 'testTag'));
   };
   const removeTag = () => {
-    dispatch(removeTagFromProject(params.id, 'testTag'));
+    dispatch(removeTagFromProject(openedProjectId, 'testTag'));
   };
   return (
     <div className="tagList">
@@ -39,8 +37,10 @@ export default function TagList({ tags }) {
 
 TagList.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string),
+  openedProjectId: PropTypes.string,
 };
 
 TagList.defaultProps = {
   tags: [],
+  openedProjectId: '',
 };

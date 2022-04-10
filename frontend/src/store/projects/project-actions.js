@@ -50,28 +50,6 @@ export const deleteProject = (projectId) => async (dispatch) => {
   }
 };
 
-export const addTagToProject = (projectId, tag) => async (dispatch) => {
-  try {
-    const response = await axios.post(TAG_OPERATION_URL(projectId), {
-      tag,
-    });
-    if (response.status === 200) dispatch(fetchProjectsData());
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
-  try {
-    const response = await axios.delete(TAG_OPERATION_URL(projectId), {
-      data: { tag },
-    });
-    if (response.status === 200) dispatch(fetchProjectsData());
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const fetchSingleProjectData = (projectId) => async (dispatch) => {
   try {
     const response = await axios.get(PROJECT_WITH_ID_URL(projectId));
@@ -83,6 +61,27 @@ export const fetchSingleProjectData = (projectId) => async (dispatch) => {
           tags: response.data.data.tags,
         }),
       );
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const addTagToProject = (projectId, tag) => async (dispatch) => {
+  try {
+    const response = await axios.post(TAG_OPERATION_URL(projectId), {
+      tag,
+    });
+    if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
+  try {
+    const response = await axios.delete(TAG_OPERATION_URL(projectId), {
+      data: { tag },
+    });
+    if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
   } catch (error) {
     console.log(error);
   }

@@ -20,5 +20,5 @@ export default function OpenedProject() {
     setFetchedData(true);
   });
 
-  return <TagList tags={currentProjectData.tags} />;
+  return <TagList tags={currentProjectData.tags} openedProjectId={params.id} />;
 }
