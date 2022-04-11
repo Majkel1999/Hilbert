@@ -294,12 +294,12 @@
     "method": "POST",
     "sortNum": 120000,
     "created": "2022-04-09T14:46:20.963Z",
-    "modified": "2022-04-11T08:18:08.480Z",
+    "modified": "2022-04-11T08:43:00.474Z",
     "headers": [],
     "params": [
       {
         "name": "project_id",
-        "value": "",
+        "value": "{{project_id}}",
         "isPath": true
       }
     ],
@@ -314,7 +314,7 @@
     "method": "POST",
     "sortNum": 25000,
     "created": "2022-04-09T14:46:20.964Z",
-    "modified": "2022-04-11T08:18:46.595Z",
+    "modified": "2022-04-11T08:33:26.042Z",
     "headers": [],
     "params": [
       {
@@ -331,10 +331,6 @@
         {
           "name": "files",
           "value": "plik2.pdf"
-        },
-        {
-          "name": "files",
-          "value": "testfile1.txt"
         }
       ]
     },
@@ -346,10 +342,10 @@
         "value": "200"
       },
       {
-        "type": "json-query",
-        "custom": "json.length",
-        "action": "equal",
-        "value": "2"
+        "type": "set-env-var",
+        "custom": "json.[0]._id",
+        "action": "setto",
+        "value": "{{file_id}}"
       }
     ]
   },
@@ -486,7 +482,7 @@
     "method": "POST",
     "sortNum": 30000,
     "created": "2022-04-09T14:46:20.969Z",
-    "modified": "2022-04-11T08:05:50.391Z",
+    "modified": "2022-04-11T08:42:41.032Z",
     "headers": [],
     "params": [
       {
@@ -500,6 +496,45 @@
       "raw": "{\n  \"tag\": \"{{test_tag}}\",\n  \"text_id\": \"{{text_id}}\"\n}",
       "form": []
     },
-    "tests": []
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "f1a3e410-4faf-4a52-a259-1a6501913c08",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "250def74-3f1a-4a0f-a95f-413ff9db0531",
+    "name": "Delete File",
+    "url": "{{baseUrl}}/project/data/upload/{project_id}",
+    "method": "DELETE",
+    "sortNum": 7500,
+    "created": "2022-04-11T08:29:02.497Z",
+    "modified": "2022-04-11T08:32:48.994Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "project_id",
+        "value": "{{project_id}}",
+        "isPath": true
+      }
+    ],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"file_id\":\"{{file_id}}\"\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
   }
 ]
