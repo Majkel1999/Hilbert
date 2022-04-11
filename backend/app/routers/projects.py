@@ -29,6 +29,7 @@ async def get_user_projects(user: User = Depends(get_current_active_user)):
         "description": "User not authorized for specific project"}
 })
 async def get_project(project: Project = Depends(check_for_project_ownership)):
+    await project.fetch_all_links()
     return project
 
 

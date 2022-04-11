@@ -43,6 +43,7 @@ async def get_random_text(project: Project = Depends(check_invite_url)):
     status.HTTP_409_CONFLICT: {"description": "Text already tagged"},
 })
 async def tag_text(request: TagRequest, project: Project = Depends(check_invite_url)):
+    request.tag = request.tag.casefold()
     if(not any(x.id == ObjectId(request.text_id) for x in project.texts)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
