@@ -4,6 +4,7 @@ import { projectsActions } from './projects-slice';
 const PROJECT_URL = '/project';
 const PROJECT_WITH_ID_URL = (id) => `project/${id}`;
 const TAG_OPERATION_URL = (projectId) => `/project/data/tag/${projectId}`;
+const FILE_OPERATION_URL = (projectId) => `/project/data/upload/${projectId}`;
 
 export const fetchProjectsData = () => async (dispatch) => {
   try {
@@ -53,14 +54,14 @@ export const deleteProject = (projectId) => async (dispatch) => {
 export const fetchSingleProjectData = (projectId) => async (dispatch) => {
   try {
     const response = await axios.get(PROJECT_WITH_ID_URL(projectId));
-
     if (response.status === 200)
-      dispatch(
-        projectsActions.setCurrentProjectData({
-          name: response.data.name,
-          tags: response.data.data.tags,
-        }),
-      );
+    dispatch(
+      projectsActions.setCurrentProjectData({
+        name: response.data.name,
+        tags: response.data.data.tags,
+        texts: response.data.texts
+      }),
+    );
   } catch (error) {
     console.log(error);
   }
@@ -86,3 +87,16 @@ export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
+  try {
+    const response = await axios.post(FILE_OPERATION_URL(projectId), files, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      }
+    });
+    if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
+  } catch (error) {
+    console.log(error);
+  }
+}
