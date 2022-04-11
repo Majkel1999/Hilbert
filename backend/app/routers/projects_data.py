@@ -1,11 +1,12 @@
 from typing import List
 
-from app.models.project_models import Project
-from app.models.request_models import Tag
+from app.models.project_models import Project, TextDocument
+from app.models.request_models import FileDeleteRequest, Tag
 from app.utility.connectors.rabbitmq_connector import rabbitBroker
 from app.utility.file_helper import handleFile
 from app.utility.security import check_for_project_ownership
 from beanie import WriteRules
+from bson import ObjectId
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
 
 router = APIRouter(
@@ -35,6 +36,24 @@ async def upload_file(files: List[UploadFile], project: Project = Depends(check_
         project.texts.append(document)
     await project.save(link_rule=WriteRules.WRITE)
     return response
+
+
+@router.delete("/upload/{project_id}",
+               responses={
+                   status.HTTP_400_BAD_REQUEST: {
+                       "description": "File not found"}
+               })
+async def delete_file(file_id: FileDeleteRequest, project: Project = Depends(check_for_project_ownership)):
+    await project.fetch_all_links()
+    fileToDelete = await TextDocument.find_one(TextDocument.id == ObjectId(file_id.file_id))
+    if(fileToDelete and any(file.id == ObjectId(file_id.file_id) for file in project.texts)):
+
+        await fileToDelete.delete()
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="File not found"
+        )
 
 
 @router.post("/tag/{project_id}", responses={

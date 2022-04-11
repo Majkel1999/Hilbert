@@ -267,7 +267,7 @@
     "method": "DELETE",
     "sortNum": 10000,
     "created": "2022-04-09T14:46:20.962Z",
-    "modified": "2022-04-09T15:18:18.734Z",
+    "modified": "2022-04-11T08:14:55.127Z",
     "headers": [],
     "params": [
       {
@@ -292,18 +292,25 @@
     "name": "Queue Model Training",
     "url": "{{baseUrl}}/project/data/train/{project_id}",
     "method": "POST",
-    "sortNum": 100000,
+    "sortNum": 120000,
     "created": "2022-04-09T14:46:20.963Z",
-    "modified": "2022-04-09T15:05:10.461Z",
+    "modified": "2022-04-11T09:42:02.630Z",
     "headers": [],
     "params": [
       {
         "name": "project_id",
-        "value": "",
+        "value": "{{project_id}}",
         "isPath": true
       }
     ],
-    "tests": []
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
   },
   {
     "_id": "e93d8f52-ca54-4c8f-8836-0a07baa82e88",
@@ -312,28 +319,42 @@
     "name": "Upload File",
     "url": "{{baseUrl}}/project/data/upload/{project_id}",
     "method": "POST",
-    "sortNum": 110000,
+    "sortNum": 25000,
     "created": "2022-04-09T14:46:20.964Z",
-    "modified": "2022-04-09T15:05:13.776Z",
+    "modified": "2022-04-11T08:33:26.042Z",
     "headers": [],
     "params": [
       {
         "name": "project_id",
-        "value": "",
+        "value": "{{project_id}}",
         "isPath": true
       }
     ],
     "body": {
       "type": "formdata",
       "raw": "",
-      "form": [
+      "form": [],
+      "files": [
         {
           "name": "files",
-          "value": "thunder"
+          "value": "plik2.pdf"
         }
       ]
     },
-    "tests": []
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      },
+      {
+        "type": "set-env-var",
+        "custom": "json.[0]._id",
+        "action": "setto",
+        "value": "{{file_id}}"
+      }
+    ]
   },
   {
     "_id": "32b78361-f83e-4c8b-b27b-724f2c6fb525",
@@ -370,13 +391,13 @@
   {
     "_id": "7e930acd-0de2-4a89-bcd4-00298aa5bdf4",
     "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
-    "containerId": "eeec32f5-5115-4454-a32c-b7ed20e226f2",
+    "containerId": "250def74-3f1a-4a0f-a95f-413ff9db0531",
     "name": "Delete Tag",
     "url": "{{baseUrl}}/project/data/tag/{project_id}",
     "method": "DELETE",
-    "sortNum": 75000,
+    "sortNum": 5000,
     "created": "2022-04-09T14:46:20.966Z",
-    "modified": "2022-04-09T15:14:12.016Z",
+    "modified": "2022-04-11T08:04:39.773Z",
     "headers": [],
     "params": [
       {
@@ -435,7 +456,7 @@
     "method": "GET",
     "sortNum": 20000,
     "created": "2022-04-09T14:46:20.968Z",
-    "modified": "2022-04-09T15:14:24.992Z",
+    "modified": "2022-04-11T08:05:33.481Z",
     "headers": [],
     "params": [
       {
@@ -450,6 +471,12 @@
         "custom": "",
         "action": "equal",
         "value": "200"
+      },
+      {
+        "type": "set-env-var",
+        "custom": "json._id",
+        "action": "setto",
+        "value": "{{text_id}}"
       }
     ]
   },
@@ -462,7 +489,7 @@
     "method": "POST",
     "sortNum": 30000,
     "created": "2022-04-09T14:46:20.969Z",
-    "modified": "2022-04-09T15:17:28.336Z",
+    "modified": "2022-04-11T08:42:41.032Z",
     "headers": [],
     "params": [
       {
@@ -473,9 +500,48 @@
     ],
     "body": {
       "type": "json",
-      "raw": "{\n  \"tag\": \"thunder\",\n  \"text_id\": \"thunder\"\n}",
+      "raw": "{\n  \"tag\": \"{{test_tag}}\",\n  \"text_id\": \"{{text_id}}\"\n}",
       "form": []
     },
-    "tests": []
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "f1a3e410-4faf-4a52-a259-1a6501913c08",
+    "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
+    "containerId": "250def74-3f1a-4a0f-a95f-413ff9db0531",
+    "name": "Delete File",
+    "url": "{{baseUrl}}/project/data/upload/{project_id}",
+    "method": "DELETE",
+    "sortNum": 7500,
+    "created": "2022-04-11T08:29:02.497Z",
+    "modified": "2022-04-11T08:32:48.994Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "project_id",
+        "value": "{{project_id}}",
+        "isPath": true
+      }
+    ],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"file_id\":\"{{file_id}}\"\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
   }
 ]

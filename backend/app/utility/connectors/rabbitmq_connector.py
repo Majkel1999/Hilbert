@@ -15,8 +15,8 @@ class RabbitMQHandler:
         print("Initializing RabbitMQ connection", flush=True)
         while(True):
             try:
-                self._connection = await aio_pika.connect_robust(host=RABBIT_HOST)
-                self._channel = await self._connection.channel()
+                self._connection: aio_pika.RobustConnection = await aio_pika.connect_robust(host=RABBIT_HOST)
+                self._channel: aio_pika.RobustChannel = await self._connection.channel()
                 await self._channel.declare_queue(QUEUE_NAME)
                 print("RabbitMQ connection initialized", flush=True)
                 return
@@ -31,6 +31,7 @@ class RabbitMQHandler:
         )
 
     async def closeConnection(self):
+        await self._channel.close()
         await self._connection.close()
 
 
