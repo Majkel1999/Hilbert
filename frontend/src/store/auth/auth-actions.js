@@ -25,26 +25,6 @@ export const login = (loginData) => async (dispatch) => {
   }
 };
 
-export const refresh = () => async (dispatch) => {
-  try {
-    const token = JSON.parse(localStorage.getItem('refresh_token'));
-    const response = await instance.post(REFRESH_URL, null,
-      {
-        headers: {
-          'Authorization': token
-            ? `${token.token_type} ${token.refresh_token}`
-            : ''
-        }
-      });
-    dispatch(authActions.login({
-      token: response.data
-    }))
-  }
-  catch (error) {
-    console.log(error);
-  }
-}
-
 export const register = (registerData) => async () => {
   try {
     const response = await instance.post(REGISTER_URL, registerData);
@@ -55,8 +35,23 @@ export const register = (registerData) => async () => {
   }
 };
 
-export default {
-  login,
-  register,
-  refresh
-};
+
+export async function refresh() {
+  try {
+    const token = JSON.parse(localStorage.getItem('refresh_token'));
+    const response = await instance.post(REFRESH_URL, null,
+      {
+        headers: {
+          'Authorization': token
+            ? `${token.token_type} ${token.refresh_token}`
+            : ''
+        }
+      });
+    const receivedToken = response.data;
+    console.log(receivedToken)
+    localStorage.setItem('token', JSON.stringify(receivedToken));
+  }
+  catch (error) {
+    console.log(error);
+  }
+}

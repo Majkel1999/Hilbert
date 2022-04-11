@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { refresh } from '../store/auth/auth-actions';
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -16,11 +17,9 @@ instance.interceptors.request.use((config) => {
 
 instance.interceptors.response.use((response) => response, (error) => {
   if (error.response.status === 401) {
-    // ToDo Token Refresh
-    console.log('401, implement token refresh here?');
-
+    refresh();
   }
-  return Promise.reject(error)
+  return error;
 });
 
 export default instance;

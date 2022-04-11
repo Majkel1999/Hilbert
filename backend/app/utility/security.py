@@ -9,7 +9,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 SECRET_KEY = "80c3327f78d73bc932a28aa87d484e20e3a1999a2fd1f8e133abf81f924ec8c0"
-ACCESS_TOKEN_EXPIRE = timedelta(seconds=30)
+ACCESS_TOKEN_EXPIRE = timedelta(minutes=30)
 REFRESH_TOKEN_EXPIRE = timedelta(days=30)
 
 
