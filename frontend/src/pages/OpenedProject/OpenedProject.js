@@ -23,8 +23,8 @@ export default function OpenedProject() {
 
   return (
     <div>
-      <FileUploader />
-      <TagList tags={currentProjectData.tags} openedProjectId={params.id} />;
+      <FileUploader openedProjectId={params.id} />
+      <TagList tags={currentProjectData.tags} openedProjectId={params.id} />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { projectsActions } from './projects-slice';
 const PROJECT_URL = '/project';
 const PROJECT_WITH_ID_URL = (id) => `project/${id}`;
 const TAG_OPERATION_URL = (projectId) => `/project/data/tag/${projectId}`;
+const FILE_OPERATION_URL = (projectId) => `/project/data/upload/${projectId}`;
 
 export const fetchProjectsData = () => async (dispatch) => {
   try {
@@ -86,3 +87,16 @@ export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
+  try {
+    const response = await axios.post(FILE_OPERATION_URL(projectId), files, {
+      headers: {
+          "Content-Type": "multipart/form-data",
+      }
+    });
+    if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
+  } catch (error) {
+    console.log(error);
+  }
+}
