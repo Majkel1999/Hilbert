@@ -5,6 +5,7 @@ import TagList from '../../components/Tags/TagList';
 import { fetchSingleProjectData } from '../../store/projects/project-actions';
 
 import './OpenedProject.scss';
+import FileUploader from '../../components/FileUploader/FileUploader';
 
 export default function OpenedProject() {
   const [fetchedData, setFetchedData] = useState(false);
@@ -20,5 +21,10 @@ export default function OpenedProject() {
     setFetchedData(true);
   });
 
-  return <TagList tags={currentProjectData.tags} openedProjectId={params.id} />;
+  return (
+    <div>
+      <FileUploader />
+      <TagList tags={currentProjectData.tags} openedProjectId={params.id} />;
+    </div>
+  );
 }
