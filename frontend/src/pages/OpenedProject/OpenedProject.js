@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import TagList from '../../components/Tags/TagList';
+import FileList from '../../components/FileList/FilesList';
 import { fetchSingleProjectData } from '../../store/projects/project-actions';
 
 import './OpenedProject.scss';
@@ -21,10 +22,16 @@ export default function OpenedProject() {
     setFetchedData(true);
   });
 
+  let texts=[]
+  if (currentProjectData.texts) {
+    texts = currentProjectData.texts.map((element) => element.name);
+  }
+
   return (
     <div>
       <FileUploader openedProjectId={params.id} />
       <TagList tags={currentProjectData.tags} openedProjectId={params.id} />
+      <FileList files={texts}/> 
     </div>
   );
 }
