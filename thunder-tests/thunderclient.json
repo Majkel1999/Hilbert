@@ -294,7 +294,7 @@
     "method": "POST",
     "sortNum": 120000,
     "created": "2022-04-09T14:46:20.963Z",
-    "modified": "2022-04-11T08:43:00.474Z",
+    "modified": "2022-04-11T09:42:02.630Z",
     "headers": [],
     "params": [
       {
@@ -303,7 +303,14 @@
         "isPath": true
       }
     ],
-    "tests": []
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
   },
   {
     "_id": "e93d8f52-ca54-4c8f-8836-0a07baa82e88",
