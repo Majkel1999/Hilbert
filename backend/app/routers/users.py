@@ -1,12 +1,11 @@
 from app.models.project_models import Project
 from app.models.user_models import AccessToken, TokensSet, User, UserOut
 from app.routers.projects import removeProject
-from app.utility.security import (authenticate_user, create_token_set,
-                                  get_current_active_user, register_user)
+from app.utility.security import (authenticate_user, create_access_token,
+                                  create_token_set, get_current_active_user,
+                                  register_user)
 from fastapi import APIRouter, Depends, Form, HTTPException, status
 from fastapi_jwt_auth import AuthJWT
-
-from backend.app.utility.security import create_access_token
 
 router = APIRouter(
     prefix="/user",
