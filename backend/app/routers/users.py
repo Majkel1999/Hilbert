@@ -1,15 +1,12 @@
-from datetime import timedelta
-
 from app.models.project_models import Project
 from app.models.user_models import AccessToken, TokensSet, User, UserOut
 from app.routers.projects import removeProject
-from app.utility.security import (authenticate_user, get_current_active_user,
-                                  register_user)
+from app.utility.security import (authenticate_user, create_token_set,
+                                  get_current_active_user, register_user)
 from fastapi import APIRouter, Depends, Form, HTTPException, status
 from fastapi_jwt_auth import AuthJWT
 
-ACCESS_TOKEN_EXPIRE = timedelta(minutes=30)
-REFRESH_TOKEN_EXPIRE = timedelta(days=30)
+from backend.app.utility.security import create_access_token
 
 router = APIRouter(
     prefix="/user",
@@ -36,12 +33,7 @@ async def login(username: str = Form(...), password: str = Form(...), Authorize:
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token = Authorize.create_access_token(
-        subject=str(user.id), expires_time=ACCESS_TOKEN_EXPIRE)
-    refresh_token = Authorize.create_refresh_token(
-        subject=str(user.id), expires_time=REFRESH_TOKEN_EXPIRE)
-    return TokensSet(access_token=access_token,
-                     refresh_token=refresh_token, token_type="Bearer")
+    return create_token_set(user_id=str(user.id), Authorize=Authorize)
 
 
 @router.post("/refresh", response_model=AccessToken, responses={
@@ -54,8 +46,7 @@ async def refresh(Authorize: AuthJWT = Depends()):
     except:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="Refresh token not present or expired")
-    user_id = Authorize.get_jwt_subject()
-    return AccessToken(access_token=Authorize.create_access_token(subject=user_id, expires_time=ACCESS_TOKEN_EXPIRE), token_type="Bearer")
+    return create_access_token(user_id=Authorize.get_jwt_subject(), Authorize=Authorize)
 
 
 @router.post("/register", response_model=UserOut, responses={
