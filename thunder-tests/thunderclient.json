@@ -321,7 +321,7 @@
     "method": "POST",
     "sortNum": 25000,
     "created": "2022-04-09T14:46:20.964Z",
-    "modified": "2022-04-11T08:33:26.042Z",
+    "modified": "2022-04-11T11:08:38.879Z",
     "headers": [],
     "params": [
       {
@@ -352,7 +352,7 @@
         "type": "set-env-var",
         "custom": "json.[0]._id",
         "action": "setto",
-        "value": "{{file_id}}"
+        "value": "{{text_id}}"
       }
     ]
   },
@@ -521,7 +521,7 @@
     "method": "DELETE",
     "sortNum": 7500,
     "created": "2022-04-11T08:29:02.497Z",
-    "modified": "2022-04-11T08:32:48.994Z",
+    "modified": "2022-04-11T11:08:56.509Z",
     "headers": [],
     "params": [
       {
@@ -532,7 +532,7 @@
     ],
     "body": {
       "type": "json",
-      "raw": "{\n    \"file_id\":\"{{file_id}}\"\n}",
+      "raw": "{\n    \"file_id\":\"{{text_id}}\"\n}",
       "form": []
     },
     "tests": [
