@@ -1,5 +1,7 @@
+from datetime import timedelta
+
 from app.models.project_models import Project
-from app.models.user_models import User
+from app.models.user_models import AccessToken, TokensSet, User
 from bson.objectid import ObjectId
 from fastapi import Depends, HTTPException, status
 from fastapi_jwt_auth import AuthJWT
@@ -7,8 +9,8 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 SECRET_KEY = "80c3327f78d73bc932a28aa87d484e20e3a1999a2fd1f8e133abf81f924ec8c0"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1
+ACCESS_TOKEN_EXPIRE = timedelta(seconds=30)
+REFRESH_TOKEN_EXPIRE = timedelta(days=30)
 
 
 class Settings(BaseModel):
@@ -37,6 +39,22 @@ async def get_user(username: str) -> User:
 
 async def get_user_by_id(id: str) -> User:
     return await User.find_one(User.id == ObjectId(id))
+
+
+def create_access_token(user_id: str, Authorize: AuthJWT) -> AccessToken:
+    access_token = Authorize.create_access_token(
+        subject=user_id, expires_time=ACCESS_TOKEN_EXPIRE)
+    return AccessToken(access_token=access_token, token_type='Bearer')
+
+
+def create_token_set(user_id: str, Authorize: AuthJWT) -> TokensSet:
+    access_token = Authorize.create_access_token(
+        subject=user_id, expires_time=ACCESS_TOKEN_EXPIRE)
+    refresh_token = Authorize.create_refresh_token(
+        subject=user_id, expires_time=REFRESH_TOKEN_EXPIRE)
+    return TokensSet(access_token=access_token,
+                     refresh_token=refresh_token,
+                     token_type='Bearer')
 
 
 async def authenticate_user(username: str, password: str) -> User:
