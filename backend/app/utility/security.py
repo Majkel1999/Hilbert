@@ -7,8 +7,6 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 SECRET_KEY = "80c3327f78d73bc932a28aa87d484e20e3a1999a2fd1f8e133abf81f924ec8c0"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1
 
 
 class Settings(BaseModel):
