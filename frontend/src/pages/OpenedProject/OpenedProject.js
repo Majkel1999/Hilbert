@@ -35,8 +35,8 @@ export default function OpenedProject() {
 
   return (
     <div>
-      <FileUploader openedProjectId={params.id} />
       <TagList tags={currentProjectData.tags} openedProjectId={params.id} />
+      <FileUploader openedProjectId={params.id} />
       <FileList files={projectTexts} openedProjectId={params.id} />
     </div>
   );
