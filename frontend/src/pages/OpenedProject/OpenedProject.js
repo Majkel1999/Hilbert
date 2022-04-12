@@ -24,7 +24,11 @@ export default function OpenedProject() {
     setFetchedData(true);
 
     if (currentProjectData.texts) {
-      const texts = currentProjectData.texts.map((element) => element.name);
+      const texts = currentProjectData.texts.map((element) => ({
+        // eslint-disable-next-line dot-notation
+        id: element['_id'],
+        name: element.name,
+      }));
       setProjectTexts(texts);
     }
   }, [currentProjectData]);

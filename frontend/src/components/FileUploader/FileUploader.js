@@ -17,7 +17,7 @@ export default function FileUploader({ openedProjectId }) {
 
   const onFileUpload = () => {
     const formData = new FormData();
-    console.log(filesToUpload);
+
     for (let i = 0; i < filesToUpload.length; i++) {
       formData.append('files', filesToUpload[i]);
     }
