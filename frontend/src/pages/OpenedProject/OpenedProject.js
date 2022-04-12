@@ -10,6 +10,8 @@ import FileUploader from '../../components/FileUploader/FileUploader';
 
 export default function OpenedProject() {
   const [fetchedData, setFetchedData] = useState(false);
+  const [projectTexts, setProjectTexts] = useState([]);
+
   const dispatch = useDispatch();
   const params = useParams();
   const currentProjectData = useSelector(
@@ -20,18 +22,18 @@ export default function OpenedProject() {
     const projectId = params.id;
     if (!fetchedData) dispatch(fetchSingleProjectData(projectId));
     setFetchedData(true);
-  });
 
-  let texts=[]
-  if (currentProjectData.texts) {
-    texts = currentProjectData.texts.map((element) => element.name);
-  }
+    if (currentProjectData.texts) {
+      const texts = currentProjectData.texts.map((element) => element.name);
+      setProjectTexts(texts);
+    }
+  }, [currentProjectData]);
 
   return (
     <div>
       <FileUploader openedProjectId={params.id} />
       <TagList tags={currentProjectData.tags} openedProjectId={params.id} />
-      <FileList files={texts}/> 
+      <FileList files={projectTexts} />
     </div>
   );
 }
