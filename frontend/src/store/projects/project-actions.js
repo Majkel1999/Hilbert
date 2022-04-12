@@ -105,7 +105,7 @@ export const deleteFileFromProject =
   (projectId, fileId) => async (dispatch) => {
     try {
       const response = await axios.delete(FILE_OPERATION_URL(projectId), {
-        file_id: fileId,
+        data: { file_id: fileId },
       });
       if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
     } catch (error) {
