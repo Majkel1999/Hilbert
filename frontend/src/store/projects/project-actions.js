@@ -100,3 +100,15 @@ export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const deleteFileFromProject =
+  (projectId, fileId) => async (dispatch) => {
+    try {
+      const response = await axios.delete(FILE_OPERATION_URL(projectId), {
+        file_id: fileId,
+      });
+      if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
+    } catch (error) {
+      console.log(error);
+    }
+  };

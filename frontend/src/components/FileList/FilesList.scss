@@ -1,0 +1,32 @@
+.filesListContainer {
+  width: 20%;
+  text-align: center;
+  .listWrapper {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .listItem {
+      text-decoration: none;
+      width: 100%;
+      .fileContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        span {
+          font-size: 1.6rem;
+          margin-right: 10px;
+        }
+        i {
+          font-size: 1.6rem;
+          margin-top: 5px;
+          &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  }
+}
