@@ -7,7 +7,7 @@ import Button from '../UI/Button/Button';
 import './FileUploader.scss';
 import { uploadFilesToProject } from '../../store/projects/project-actions';
 
-export default function FileUploader({openedProjectId}) {
+export default function FileUploader({ openedProjectId }) {
   const [filesToUpload, setFilesToUpload] = useState([]);
   const dispatch = useDispatch();
 
@@ -17,16 +17,21 @@ export default function FileUploader({openedProjectId}) {
 
   const onFileUpload = () => {
     const formData = new FormData();
-    console.log(filesToUpload);
-    for (let i = 0; i < filesToUpload.length; i++){
+
+    for (let i = 0; i < filesToUpload.length; i++) {
       formData.append('files', filesToUpload[i]);
     }
-    dispatch(uploadFilesToProject(openedProjectId,formData))
+    dispatch(uploadFilesToProject(openedProjectId, formData));
   };
 
   return (
     <div>
-      <Input labelName='Text files *.txt, *.pdf and *.zip' type="file" onChangeHandler={onFileChange} multiple/>
+      <Input
+        labelName="Text files *.txt, *.pdf and *.zip"
+        type="file"
+        onChangeHandler={onFileChange}
+        multiple
+      />
       <Button onClickHandler={onFileUpload} text="Upload file" />
     </div>
   );
