@@ -44,6 +44,8 @@ async def create_project(projectCreationData: ProjectCreationData, user: User = 
         )
     project = Project(name=projectCreationData.name, owner=str(user.id))
     await project.insert()
+    project.data.tags.extend(projectCreationData.tags)
+    project.is_multi_label = projectCreationData.is_multi_label
     hash = sha256_crypt.hash(str(project.id))
     hashbytes = bytes(hash, 'utf-8')
     project.data.invite_url_postfix = base64.urlsafe_b64encode(

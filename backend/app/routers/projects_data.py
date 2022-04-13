@@ -10,7 +10,7 @@ from bson import ObjectId
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
 
 router = APIRouter(
-    prefix="/project/data",
+    prefix="/project",
     tags=["Project Data"],
     responses={
         status.HTTP_401_UNAUTHORIZED: {"description": "User not authenticated"},
@@ -20,12 +20,12 @@ router = APIRouter(
 )
 
 
-@router.post("/train/{project_id}")
+@router.post("/{project_id}/train")
 async def queue_model_training(project: Project = Depends(check_for_project_ownership)):
     return await rabbitBroker.sendMessage(str(project.id))
 
 
-@router.post("/upload/{project_id}")
+@router.post("/{project_id}/file")
 async def upload_file(files: List[UploadFile], project: Project = Depends(check_for_project_ownership)):
     response = list()
     for file in files:
@@ -38,7 +38,7 @@ async def upload_file(files: List[UploadFile], project: Project = Depends(check_
     return response
 
 
-@router.delete("/upload/{project_id}",
+@router.delete("/{project_id}/file",
                responses={
                    status.HTTP_400_BAD_REQUEST: {
                        "description": "File not found"}
@@ -56,7 +56,7 @@ async def delete_file(file_id: FileDeleteRequest, project: Project = Depends(che
         )
 
 
-@router.post("/tag/{project_id}", responses={
+@router.post("/{project_id}/tag", responses={
     status.HTTP_409_CONFLICT: {"description": "Duplicate tag"}
 })
 async def add_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
@@ -71,7 +71,7 @@ async def add_tag(tag: Tag,  project: Project = Depends(check_for_project_owners
         return f"Tag created: {tag}"
 
 
-@router.delete("/tag/{project_id}", responses={
+@router.delete("/{project_id}/tag", responses={
     status.HTTP_404_NOT_FOUND: {"description": "Tag not present in list"}
 })
 async def delete_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
