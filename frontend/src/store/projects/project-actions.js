@@ -2,9 +2,9 @@ import axios from '../../api/axios';
 import { projectsActions } from './projects-slice';
 
 const PROJECT_URL = '/project';
-const PROJECT_WITH_ID_URL = (id) => `project/${id}`;
-const TAG_OPERATION_URL = (projectId) => `/project/data/tag/${projectId}`;
-const FILE_OPERATION_URL = (projectId) => `/project/data/upload/${projectId}`;
+const PROJECT_WITH_ID_URL = (id) => `/project/${id}`;
+const TAG_OPERATION_URL = (projectId) => `/project/${projectId}/tag`;
+const FILE_OPERATION_URL = (projectId) => `/project/${projectId}/file`;
 
 export const fetchProjectsData = () => async (dispatch) => {
   try {

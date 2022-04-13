@@ -32,7 +32,10 @@ class ProjectOut(BaseModel):
 class Project(Document, ProjectOut):
     owner: str
     model: Optional[Link[MLModel]]
+    is_multi_label : bool = False
 
 
 class ProjectCreationData(BaseModel):
     name: str
+    tags: List[str] = list()
+    is_multi_label : bool = False
