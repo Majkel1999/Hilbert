@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
@@ -11,7 +12,22 @@ export default function FileUploader({ openedProjectId }) {
   const dispatch = useDispatch();
 
   const onFileChange = (event) => {
-    setFilesToUpload(event.target.files);
+    const selectedFiles = event.target.files;
+    const allowedExtensions = /(\.txt|\.pdf|\.zip)$/i;
+
+    if (
+      Object.values(selectedFiles).some(
+        (item) => !allowedExtensions.exec(item.name),
+      )
+    ) {
+      console.log(
+        `File ${event.target.value.replace(
+          /^.*[\\/]/,
+          '',
+        )} has incorrect extension`,
+      );
+      event.target.value = '';
+    } else setFilesToUpload(selectedFiles);
   };
 
   const onFileUpload = () => {
@@ -31,7 +47,11 @@ export default function FileUploader({ openedProjectId }) {
         onChangeHandler={onFileChange}
         multiple
       />
-      <Button onClickHandler={onFileUpload} text="Upload file" />
+      <Button
+        onClickHandler={onFileUpload}
+        text="Upload file"
+        isDisabled={!filesToUpload.length}
+      />
     </div>
   );
 }
