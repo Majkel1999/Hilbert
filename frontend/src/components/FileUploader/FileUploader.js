@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button';
-
-import './FileUploader.scss';
 import { uploadFilesToProject } from '../../store/projects/project-actions';
+import './FileUploader.scss';
 
 export default function FileUploader({ openedProjectId }) {
   const [filesToUpload, setFilesToUpload] = useState([]);

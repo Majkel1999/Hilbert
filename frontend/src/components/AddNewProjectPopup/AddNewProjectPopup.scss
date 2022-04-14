@@ -67,15 +67,8 @@
         --o: 1;
       }
     }
-    & + label {
-      font-size: 14px;
-      line-height: 21px;
-      display: inline-block;
-      vertical-align: top;
-      cursor: pointer;
-      margin-left: 4px;
-    }
   }
+
   input[type='checkbox'] {
     &:not(.switch) {
       border-radius: 7px;
@@ -102,5 +95,23 @@
   justify-content: center;
   > div {
     margin: 0 25px;
+    .inputContainer {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: auto;
+      label {
+        order: 2;
+        font-size: 14px;
+        line-height: 21px;
+        display: inline-block;
+        vertical-align: top;
+        cursor: pointer;
+        margin-left: 4px;
+      }
+      input {
+        order: 1;
+      }
+    }
   }
 }

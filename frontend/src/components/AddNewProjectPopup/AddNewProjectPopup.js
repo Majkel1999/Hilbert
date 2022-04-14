@@ -13,6 +13,18 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
   const [projectName, setProjectName] = useState();
   const [enteredTags, setEnteredTags] = useState([]);
   const [currentTag, setCurrentTag] = useState('');
+  const [checked, setCheckBoxChecked] = useState('');
+
+  const checkBoxes = [
+    {
+      id: 'multiLabel',
+      text: 'Multi label',
+    },
+    {
+      id: 'singleLabel',
+      text: 'Single label',
+    },
+  ];
 
   const addNewTag = () => {
     const tagIndex = enteredTags.findIndex((item) => item === currentTag);
@@ -25,34 +37,18 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
   };
 
   const createProject = () => {
-    dispatch(sendProjectsData({ name: projectName, tags: enteredTags }));
+    const isMultiLabel = checked === checkBoxes[0].id;
+    dispatch(
+      sendProjectsData({
+        name: projectName,
+        tags: enteredTags,
+        is_multi_label: isMultiLabel,
+      }),
+    );
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const [checkBoxes, setCheckBoxes] = useState([
-    {
-      id: 'multiLabel',
-      text: 'Multi label',
-      value: true,
-    },
-    {
-      id: 'singleLabel',
-      text: 'Single label',
-      value: false,
-    },
-  ]);
-
-  const checkboxHandler = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.name);
-    const tempCheckboxes = checkBoxes;
-    const updatedCheckBoxIndex = tempCheckboxes.findIndex(
-      (item) => item.id === e.target.name,
-    );
-    tempCheckboxes[updatedCheckBoxIndex].value = true;
-
-    console.log(tempCheckboxes);
-    setCheckBoxes(tempCheckboxes);
+  const checkboxHandler = (name) => {
+    if (name !== checked) setCheckBoxChecked(name);
   };
 
   const popupBodyContent = (
@@ -73,15 +69,14 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
       <div className="checkBoxContainer">
         {checkBoxes.map((item) => (
           <div key={item.id}>
-            <input
+            <Input
               id={item.id}
               type="checkbox"
-              onChange={checkboxHandler}
-              value={item.value}
-              checked={item.value}
-              name={item.id}
+              onChangeHandler={(e) => checkboxHandler(e.target.id)}
+              checked={checked === item.id}
+              labelName={item.id}
+              labelText={item.text}
             />
-            <label htmlFor={item.id}>{item.text}</label>
           </div>
         ))}
       </div>
