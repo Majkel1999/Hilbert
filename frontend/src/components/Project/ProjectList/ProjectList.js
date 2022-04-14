@@ -7,6 +7,7 @@ import Button from '../../UI/Button/Button';
 import AddNewProjectPopup from '../../AddNewProjectPopup/AddNewProjectPopup';
 import './ProjectList.scss';
 import { deleteProject } from '../../../store/projects/project-actions';
+import { ROLES } from '../../../constants/roles';
 
 export default function ProjectList({ items }) {
   const [openPopup, setOpenPopup] = useState();
@@ -23,7 +24,7 @@ export default function ProjectList({ items }) {
 
   const openProjectHandler = (id) => {
     // Later if admin board will be displayed in rotue 'projects' change strint o route var
-    navigate(`projects/${id}`);
+    navigate(`${ROLES.ADMIN}/projects/${id}`);
   };
 
   return (

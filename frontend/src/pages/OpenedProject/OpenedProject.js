@@ -11,6 +11,7 @@ import {
 
 import './OpenedProject.scss';
 import FileUploader from '../../components/FileUploader/FileUploader';
+import { ROLES } from '../../constants/roles';
 
 export default function OpenedProject() {
   const [fetchedData, setFetchedData] = useState(false);
@@ -51,7 +52,7 @@ export default function OpenedProject() {
           aria-hidden="true"
           onClick={() => {
             navigator.clipboard.writeText(
-              `${process.env.REACT_APP_WEB_URL}/${currentProjectData.inviteUrl}/train`,
+              `${process.env.REACT_APP_WEB_URL}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
             );
           }}
         />
@@ -72,7 +73,9 @@ export default function OpenedProject() {
           />
         </div>
         <div className="filesWrapper">
-          <FileUploader openedProjectId={params.id} />
+          {params.role === ROLES.ADMIN && (
+            <FileUploader openedProjectId={params.id} />
+          )}
           <FileList files={projectTexts} openedProjectId={params.id} />
         </div>
       </div>
