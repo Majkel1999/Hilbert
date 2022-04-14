@@ -10,6 +10,7 @@ export default function TagList({
   removeTagHandler,
   setTagName,
   enableAddingTag,
+  displayDeleteIcon,
 }) {
   return (
     <div className="tagList">
@@ -21,7 +22,7 @@ export default function TagList({
           <Chip
             chipText={tag}
             key={uuid()}
-            displayDeleteIcon
+            displayDeleteIcon={displayDeleteIcon}
             removeTagHandler={() => removeTagHandler(tag)}
           />
         ))}
@@ -52,6 +53,7 @@ TagList.propTypes = {
   removeTagHandler: PropTypes.func,
   setTagName: PropTypes.func,
   enableAddingTag: PropTypes.bool,
+  displayDeleteIcon: PropTypes.bool,
 };
 
 TagList.defaultProps = {
@@ -60,4 +62,5 @@ TagList.defaultProps = {
   addNewTagHandler: () => {},
   removeTagHandler: () => {},
   enableAddingTag: true,
+  displayDeleteIcon: true,
 };

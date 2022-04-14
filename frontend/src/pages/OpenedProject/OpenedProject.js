@@ -39,6 +39,7 @@ export default function OpenedProject() {
         tags={currentProjectData.tags}
         openedProjectId={params.id}
         enableAddingTag={false}
+        displayDeleteIcon={false}
       />
       <FileUploader openedProjectId={params.id} />
       <FileList files={projectTexts} openedProjectId={params.id} />
