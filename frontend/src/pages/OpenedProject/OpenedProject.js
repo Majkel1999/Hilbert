@@ -36,18 +36,6 @@ export default function OpenedProject() {
 
   return (
     <div className="openedProjectContainer">
-      <div className="inviteUrlWrapper">
-        <h2> {currentProjectData.inviteUrl} </h2>
-        <i
-          className="fa fa-copy"
-          aria-hidden="true"
-          onClick={() => {
-            navigator.clipboard.writeText(
-              `${process.env.REACT_APP_WEB_URL}/${currentProjectData.inviteUrl}/train`,
-            );
-          }}
-        />
-      </div>
       <div className="textOperationsWrapper">
         <TagList
           tags={currentProjectData.tags}
@@ -56,6 +44,18 @@ export default function OpenedProject() {
           displayDeleteIcon={false}
         />
         <div className="textContainer">
+          <div className="inviteUrlWrapper">
+            <h2> {currentProjectData.inviteUrl} </h2>
+            <i
+              className="fa fa-copy"
+              aria-hidden="true"
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `${process.env.REACT_APP_WEB_URL}/${currentProjectData.inviteUrl}/train`,
+                );
+              }}
+            />
+          </div>
           <div className="textWrapper" />
           <Button text="Train model" />
         </div>
