@@ -19,6 +19,17 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
       />
     </div>
   );
+  const popupButtons = [
+    {
+      text: 'Add new project',
+      onClickHandler: () => {},
+    },
+    {
+      text: 'Close',
+      onClickHandler: () => {},
+    },
+  ];
+
   const headerText = 'Creating new project';
 
   return (
@@ -29,6 +40,7 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
         showCloseIcon
         bodyContent={popupBodyContent}
         headerText={headerText}
+        popupButtons={popupButtons}
       />
     </div>
   );

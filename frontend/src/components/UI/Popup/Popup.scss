@@ -27,21 +27,6 @@
   animation-name: animatetop;
   animation-duration: 0.4s;
 }
-
-.close {
-  color: white;
-  float: right;
-  font-weight: bold;
-  font-size: 2rem !important;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-
 .modal-header {
   padding: 2px 16px;
   background-color: #5cb85c;
@@ -56,6 +41,28 @@
 
 .modal-body {
   padding: 2px 16px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  .button {
+    margin: 20px 30px;
+  }
+}
+
+.close {
+  color: white;
+  float: right;
+  font-weight: bold;
+  font-size: 2rem !important;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 @-webkit-keyframes animatetop {

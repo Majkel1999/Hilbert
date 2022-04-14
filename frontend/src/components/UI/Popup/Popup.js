@@ -29,9 +29,10 @@ export default function Popup({
         </div>
         <div className="modal-body">{bodyContent}</div>
         <div className="buttons">
-          {popupButtons.map((item) => (
-            <Button text={item.text} onClickHandler={item.onClickHandler} />
-          ))}
+          {popupButtons &&
+            popupButtons.map((item) => (
+              <Button text={item.text} onClickHandler={item.onClickHandler} />
+            ))}
         </div>
       </div>
     </div>
