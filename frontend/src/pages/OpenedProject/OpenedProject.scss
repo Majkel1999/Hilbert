@@ -32,6 +32,9 @@
     .textContainer {
       order: 2;
       width: 58%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .filesWrapper {
       order: 1;

@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import TagList from '../../components/Tags/TagList';
+import Button from '../../components/UI/Button/Button';
 import FileList from '../../components/FileList/FilesList';
 import { fetchSingleProjectData } from '../../store/projects/project-actions';
 
@@ -46,7 +47,9 @@ export default function OpenedProject() {
           enableAddingTag={false}
           displayDeleteIcon={false}
         />
-        <div className="textContainer"> </div>
+        <div className="textContainer">
+          <Button text="Train model" />
+        </div>
         <div className="filesWrapper">
           <FileUploader openedProjectId={params.id} />
           <FileList files={projectTexts} openedProjectId={params.id} />
