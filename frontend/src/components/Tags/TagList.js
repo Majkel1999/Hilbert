@@ -1,24 +1,15 @@
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
 import { uuid } from '../../utils/utils';
 import Chip from '../UI/Chip/Chip';
 import Input from '../UI/Input/Input';
-import {
-  addTagToProject,
-  removeTagFromProject,
-} from '../../store/projects/project-actions';
 import './TagList.scss';
 
-export default function TagList({ tags, openedProjectId }) {
-  const [tagName, setTagName] = useState('');
-  const dispatch = useDispatch();
-  const addNewTag = () => {
-    dispatch(addTagToProject(openedProjectId, tagName));
-  };
-  const removeTag = (tag) => {
-    dispatch(removeTagFromProject(openedProjectId, tag));
-  };
+export default function TagList({
+  tags,
+  addNewTagHandler,
+  removeTagHandler,
+  setTagName,
+}) {
   return (
     <div className="tagList">
       {tags &&
@@ -27,7 +18,7 @@ export default function TagList({ tags, openedProjectId }) {
             chipText={tag}
             key={uuid()}
             displayDeleteIcon
-            removeTagHandler={() => removeTag(tag)}
+            removeTagHandler={() => removeTagHandler(tag)}
           />
         ))}
       <Chip
@@ -37,7 +28,11 @@ export default function TagList({ tags, openedProjectId }) {
               showLabel={false}
               onChangeHandler={(e) => setTagName(e.target.value)}
             />
-            <i className="fa fa-plus" aria-hidden="true" onClick={addNewTag} />
+            <i
+              className="fa fa-plus"
+              aria-hidden="true"
+              onClick={addNewTagHandler}
+            />
           </div>
         }
       />
@@ -47,10 +42,14 @@ export default function TagList({ tags, openedProjectId }) {
 
 TagList.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string),
-  openedProjectId: PropTypes.string,
+  addNewTagHandler: PropTypes.func,
+  removeTagHandler: PropTypes.func,
+  setTagName: PropTypes.func,
 };
 
 TagList.defaultProps = {
   tags: [],
-  openedProjectId: '',
+  setTagName: () => {},
+  addNewTagHandler: () => {},
+  removeTagHandler: () => {},
 };

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import Button from '../Button/Button';
+import { uuid } from '../../../utils/utils';
 import './Popup.scss';
 
 export default function Popup({
@@ -31,7 +32,11 @@ export default function Popup({
         <div className="buttons">
           {popupButtons &&
             popupButtons.map((item) => (
-              <Button text={item.text} onClickHandler={item.onClickHandler} />
+              <Button
+                key={uuid()}
+                text={item.text}
+                onClickHandler={item.onClickHandler}
+              />
             ))}
         </div>
       </div>

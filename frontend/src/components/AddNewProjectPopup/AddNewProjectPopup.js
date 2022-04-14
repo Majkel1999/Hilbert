@@ -4,9 +4,19 @@ import Popup from '../UI/Popup/Popup';
 import Input from '../UI/Input/Input';
 
 import './AddNewProjectPopup.scss';
+import TagList from '../Tags/TagList';
 
 export default function AddNewProjectPopup({ open, onCloseHandler }) {
   const [projectName, setProjectName] = useState();
+  const [enteredTags, setEnteredTags] = useState([]);
+  const [currentTag, setCurrentTag] = useState('');
+
+  const addNewTag = () => {
+    const tagIndex = enteredTags.findIndex((item) => item === currentTag);
+    if (tagIndex < 0) {
+      setEnteredTags([...enteredTags, currentTag]);
+    }
+  };
 
   const popupBodyContent = (
     <div>
@@ -16,6 +26,11 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
         onChangeHandler={(e) => setProjectName(e.target.value)}
         value={projectName}
         type="text"
+      />
+      <TagList
+        tags={enteredTags}
+        addNewTagHandler={addNewTag}
+        setTagName={setCurrentTag}
       />
     </div>
   );
