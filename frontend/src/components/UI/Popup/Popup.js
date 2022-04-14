@@ -1,4 +1,4 @@
-import PropTypes, { arrayOf, shape } from 'prop-types';
+import PropTypes from 'prop-types';
 import Button from '../Button/Button';
 import './Popup.scss';
 
