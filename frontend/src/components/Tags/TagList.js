@@ -9,6 +9,7 @@ export default function TagList({
   addNewTagHandler,
   removeTagHandler,
   setTagName,
+  enableAddingTag,
 }) {
   return (
     <div className="tagList">
@@ -24,21 +25,23 @@ export default function TagList({
             removeTagHandler={() => removeTagHandler(tag)}
           />
         ))}
-      <Chip
-        chipText={
-          <div className="addInputContainer">
-            <Input
-              showLabel={false}
-              onChangeHandler={(e) => setTagName(e.target.value)}
-            />
-            <i
-              className="fa fa-plus"
-              aria-hidden="true"
-              onClick={addNewTagHandler}
-            />
-          </div>
-        }
-      />
+      {enableAddingTag && (
+        <Chip
+          chipText={
+            <div className="addInputContainer">
+              <Input
+                showLabel={false}
+                onChangeHandler={(e) => setTagName(e.target.value)}
+              />
+              <i
+                className="fa fa-plus"
+                aria-hidden="true"
+                onClick={addNewTagHandler}
+              />
+            </div>
+          }
+        />
+      )}
     </div>
   );
 }
@@ -48,6 +51,7 @@ TagList.propTypes = {
   addNewTagHandler: PropTypes.func,
   removeTagHandler: PropTypes.func,
   setTagName: PropTypes.func,
+  enableAddingTag: PropTypes.bool,
 };
 
 TagList.defaultProps = {
@@ -55,4 +59,5 @@ TagList.defaultProps = {
   setTagName: () => {},
   addNewTagHandler: () => {},
   removeTagHandler: () => {},
+  enableAddingTag: true,
 };
