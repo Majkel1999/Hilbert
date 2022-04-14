@@ -122,7 +122,7 @@ export const deleteFileFromProject =
 
 export const trainModel = (projectId) => async () => {
   try {
-    const response = await axios.post(PROJECT_DATA_URL(projectId));
+    const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/train`);
     console.log(response);
   } catch (error) {
     console.log(error);

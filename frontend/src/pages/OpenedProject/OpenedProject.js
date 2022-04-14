@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react';
 import TagList from '../../components/Tags/TagList';
 import Button from '../../components/UI/Button/Button';
 import FileList from '../../components/FileList/FilesList';
-import { fetchSingleProjectData } from '../../store/projects/project-actions';
+import {
+  fetchSingleProjectData,
+  trainModel,
+} from '../../store/projects/project-actions';
 
 import './OpenedProject.scss';
 import FileUploader from '../../components/FileUploader/FileUploader';
@@ -18,6 +21,11 @@ export default function OpenedProject() {
   const currentProjectData = useSelector(
     (state) => state.projects.currentProject,
   );
+
+  const trainModelHandler = () => {
+    const projectId = params.id;
+    dispatch(trainModel(projectId));
+  };
 
   useEffect(() => {
     const projectId = params.id;
@@ -57,7 +65,11 @@ export default function OpenedProject() {
         />
         <div className="textContainer">
           <div className="textWrapper" />
-          <Button text="Train model" />
+          <Button
+            text="Train model"
+            onClickHandler={trainModelHandler}
+            isDisabled // Disabled untill model didn't work
+          />
         </div>
         <div className="filesWrapper">
           <FileUploader openedProjectId={params.id} />
