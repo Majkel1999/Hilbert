@@ -31,8 +31,8 @@
 .close {
   color: white;
   float: right;
-  font-size: 28px;
   font-weight: bold;
+  font-size: 2rem !important;
 }
 
 .close:hover,
@@ -47,6 +47,9 @@
   background-color: #5cb85c;
   color: white;
   min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .modal-body {

@@ -35,7 +35,11 @@ export default function ProjectList({ items }) {
 
   return (
     <div className="tableWrapper">
-      <Popup open={openPopup} />
+      <Popup
+        open={openPopup}
+        onCloseHandler={() => setOpenPopup(false)}
+        showCloseIcon
+      />
       <div className="header">
         <Input
           showLabel={false}
