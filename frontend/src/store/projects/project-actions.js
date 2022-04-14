@@ -130,10 +130,18 @@ export const trainModel = (projectId) => async () => {
   }
 };
 
-export const fetchAnnotatorData = (inviteUrl) => async () => {
+export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
   try {
     const response = await axios.get(TAG_URL(inviteUrl));
-    console.log(response);
+
+    dispatch(
+      projectsActions.setCurrentProjectData({
+        name: response.data.name,
+        tags: response.data.data.tags,
+        texts: response.data.texts,
+        inviteUrl: response.data.data.invite_url_postfix,
+      }),
+    );
   } catch (error) {
     console.log(error);
   }

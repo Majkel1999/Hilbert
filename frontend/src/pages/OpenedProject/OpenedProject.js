@@ -7,6 +7,7 @@ import FileList from '../../components/FileList/FilesList';
 import {
   fetchSingleProjectData,
   trainModel,
+  fetchAnnotatorData,
 } from '../../store/projects/project-actions';
 
 import './OpenedProject.scss';
@@ -30,7 +31,12 @@ export default function OpenedProject() {
 
   useEffect(() => {
     const projectId = params.id;
-    if (!fetchedData) dispatch(fetchSingleProjectData(projectId));
+    if (!fetchedData) {
+      // eslint-disable-next-line no-unused-expressions
+      params.role === ROLES.ADMIN
+        ? dispatch(fetchSingleProjectData(projectId))
+        : dispatch(fetchAnnotatorData(projectId));
+    }
     setFetchedData(true);
 
     if (currentProjectData.texts) {
