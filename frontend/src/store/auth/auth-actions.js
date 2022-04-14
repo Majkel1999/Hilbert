@@ -10,7 +10,6 @@ const instance = axios.create({
   baseURL: BASE_URL,
 });
 
-
 export const login = (loginData) => async (dispatch) => {
   try {
     const response = await instance.post(LOGIN_URL, loginData);
@@ -35,23 +34,20 @@ export const register = (registerData) => async () => {
   }
 };
 
-
 export async function refresh() {
   try {
     const token = JSON.parse(localStorage.getItem('refresh_token'));
-    const response = await instance.post(REFRESH_URL, null,
-      {
-        headers: {
-          'Authorization': token
-            ? `${token.token_type} ${token.refresh_token}`
-            : ''
-        }
-      });
+    const response = await instance.post(REFRESH_URL, null, {
+      headers: {
+        Authorization: token
+          ? `${token.token_type} ${token.refresh_token}`
+          : '',
+      },
+    });
     const receivedToken = response.data;
-    console.log(receivedToken)
+    console.log(receivedToken);
     localStorage.setItem('token', JSON.stringify(receivedToken));
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
   }
 }

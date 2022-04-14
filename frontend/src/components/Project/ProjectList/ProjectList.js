@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
@@ -5,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import ProjectItem from '../ProjectItem/ProjectItem';
 import Button from '../../UI/Button/Button';
 import Input from '../../UI/Input/Input';
+import Popup from '../../UI/Popup/Popup';
 import './ProjectList.scss';
 import {
   deleteProject,
@@ -12,12 +14,14 @@ import {
 } from '../../../store/projects/project-actions';
 
 export default function ProjectList({ items }) {
+  const [openPopup, setOpenPopup] = useState();
   const navigate = useNavigate();
   const [projectName, setProjectName] = useState();
   const dispatch = useDispatch();
 
   const createNewProjectHandler = () => {
-    dispatch(sendProjectsData({ name: projectName }));
+    setOpenPopup(true);
+    // dispatch(sendProjectsData({ name: projectName }));
   };
 
   const removeProjectHandler = (projectItem) => {
@@ -31,6 +35,7 @@ export default function ProjectList({ items }) {
 
   return (
     <div className="tableWrapper">
+      <Popup open={openPopup} />
       <div className="header">
         <Input
           showLabel={false}
