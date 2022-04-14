@@ -1,57 +1,61 @@
 .openedProjectContainer {
   height: 100%;
-  padding-top: 20px;
+  padding: 20px 0 0;
   display: flex;
   flex-direction: column;
-
-  .textOperationsWrapper {
-    height: 100%;
+  background-color: #deefe7;
+  .inviteUrlWrapper {
+    height: 10%;
+    width: 40%;
+    border: 1px solid aqua;
+    border-radius: 10px;
     display: flex;
-    justify-content: space-around;
-    .tagList {
-      order: 3;
-      width: 14%;
-      justify-content: flex-start;
-      margin-top: 5%;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 30px;
+    margin: 0 auto 30px auto;
+    h2 {
+      width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
-    .textContainer {
-      order: 2;
-      width: 58%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      .textWrapper {
-        height: 80%;
-      }
-      .inviteUrlWrapper {
-        height: 8%;
-        width: 40%;
-        border: 1px solid aqua;
-        border-radius: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 5px 30px;
-        margin: 0 auto 30px auto;
-        h2 {
-          width: 100%;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          white-space: nowrap;
-        }
-        i {
-          font-size: 1.4rem;
-          cursor: pointer;
-        }
-        h2 {
-          margin-right: 10px;
-        }
-      }
+    i {
+      font-size: 1.4rem;
+      cursor: pointer;
     }
+    h2 {
+      margin-right: 10px;
+    }
+  }
+  button {
+    margin-bottom: 40px;
+  }
+}
+.textOperationsWrapper {
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+
+  .tagList {
+    order: 3;
+    width: 16%;
+    justify-content: flex-start;
+  }
+  .textContainer {
+    order: 2;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .textWrapper {
+      height: 80%;
+    }
+
     .filesWrapper {
       order: 1;
-      width: 22%;
-      margin-top: 5%;
+      width: 24%;
     }
   }
 }
