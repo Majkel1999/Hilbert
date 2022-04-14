@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import ProjectItem from '../ProjectItem/ProjectItem';
 import Button from '../../UI/Button/Button';
 import Input from '../../UI/Input/Input';
-import Popup from '../../UI/Popup/Popup';
+import AddNewProjectPopup from '../../AddNewProjectPopup/AddNewProjectPopup';
 import './ProjectList.scss';
 import {
   deleteProject,
@@ -35,10 +35,9 @@ export default function ProjectList({ items }) {
 
   return (
     <div className="tableWrapper">
-      <Popup
+      <AddNewProjectPopup
         open={openPopup}
         onCloseHandler={() => setOpenPopup(false)}
-        showCloseIcon
       />
       <div className="header">
         <Input
