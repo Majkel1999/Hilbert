@@ -2,9 +2,7 @@ import axios from '../../api/axios';
 import { projectsActions } from './projects-slice';
 
 const PROJECT_URL = '/project';
-const PROJECT_WITH_ID_URL = (id) => `/project/${id}`;
-const TAG_OPERATION_URL = (projectId) => `/project/${projectId}/tag`;
-const FILE_OPERATION_URL = (projectId) => `/project/${projectId}/file`;
+const PROJECT_DATA_URL = (projectId) => `${PROJECT_URL}/${projectId}`;
 
 export const fetchProjectsData = () => async (dispatch) => {
   try {
@@ -17,6 +15,7 @@ export const fetchProjectsData = () => async (dispatch) => {
             // eslint-disable-next-line dot-notation
             id: item['_id'],
             tags: item.data.tags,
+            inviteUrl: item.data.invite_url_postfix,
           })) || [],
       }),
     );
@@ -43,7 +42,7 @@ export const sendProjectsData = (project) => async (dispatch) => {
 
 export const deleteProject = (projectId) => async (dispatch) => {
   try {
-    const response = await axios.delete(PROJECT_WITH_ID_URL(projectId));
+    const response = await axios.delete(PROJECT_DATA_URL(projectId));
     if (response.status === 200)
       dispatch(projectsActions.removeProject(projectId));
   } catch (error) {
@@ -53,13 +52,14 @@ export const deleteProject = (projectId) => async (dispatch) => {
 
 export const fetchSingleProjectData = (projectId) => async (dispatch) => {
   try {
-    const response = await axios.get(PROJECT_WITH_ID_URL(projectId));
+    const response = await axios.get(PROJECT_DATA_URL(projectId));
     if (response.status === 200)
       dispatch(
         projectsActions.setCurrentProjectData({
           name: response.data.name,
           tags: response.data.data.tags,
           texts: response.data.texts,
+          inviteUrl: response.data.data.invite_url_postfix,
         }),
       );
   } catch (error) {
@@ -68,7 +68,7 @@ export const fetchSingleProjectData = (projectId) => async (dispatch) => {
 };
 export const addTagToProject = (projectId, tag) => async (dispatch) => {
   try {
-    const response = await axios.post(TAG_OPERATION_URL(projectId), {
+    const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/tag`, {
       tag,
     });
     if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
@@ -79,7 +79,7 @@ export const addTagToProject = (projectId, tag) => async (dispatch) => {
 
 export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
   try {
-    const response = await axios.delete(TAG_OPERATION_URL(projectId), {
+    const response = await axios.delete(`${PROJECT_DATA_URL(projectId)}/tag`, {
       data: { tag },
     });
     if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
@@ -90,11 +90,15 @@ export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
 
 export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
   try {
-    const response = await axios.post(FILE_OPERATION_URL(projectId), files, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
+    const response = await axios.post(
+      `${PROJECT_DATA_URL(projectId)}/file`,
+      files,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       },
-    });
+    );
     if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
   } catch (error) {
     console.log(error);
@@ -104,11 +108,23 @@ export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
 export const deleteFileFromProject =
   (projectId, fileId) => async (dispatch) => {
     try {
-      const response = await axios.delete(FILE_OPERATION_URL(projectId), {
-        data: { file_id: fileId },
-      });
+      const response = await axios.delete(
+        `${PROJECT_DATA_URL(projectId)}/file`,
+        {
+          data: { file_id: fileId },
+        },
+      );
       if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
     } catch (error) {
       console.log(error);
     }
   };
+
+export const trainModel = (projectId) => async () => {
+  try {
+    const response = await axios.post(PROJECT_DATA_URL(projectId));
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};

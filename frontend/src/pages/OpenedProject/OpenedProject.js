@@ -48,6 +48,7 @@ export default function OpenedProject() {
           displayDeleteIcon={false}
         />
         <div className="textContainer">
+          <div className="textWrapper" />
           <Button text="Train model" />
         </div>
         <div className="filesWrapper">
