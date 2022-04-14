@@ -1,1 +1,8 @@
-
+.fileUploaderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  button {
+    margin: 20px 0 10px;
+  }
+}

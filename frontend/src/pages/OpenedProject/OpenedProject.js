@@ -34,15 +34,24 @@ export default function OpenedProject() {
   }, [currentProjectData]);
 
   return (
-    <div>
-      <TagList
-        tags={currentProjectData.tags}
-        openedProjectId={params.id}
-        enableAddingTag={false}
-        displayDeleteIcon={false}
-      />
-      <FileUploader openedProjectId={params.id} />
-      <FileList files={projectTexts} openedProjectId={params.id} />
+    <div className="openedProjectContainer">
+      <div className="inviteUrlWrapper">
+        <h2> InviteUrl </h2>
+        <i className="fa fa-copy" aria-hidden="true" />
+      </div>
+      <div className="textOperationsWrapper">
+        <TagList
+          tags={currentProjectData.tags}
+          openedProjectId={params.id}
+          enableAddingTag={false}
+          displayDeleteIcon={false}
+        />
+        <div className="textContainer"> </div>
+        <div className="filesWrapper">
+          <FileUploader openedProjectId={params.id} />
+          <FileList files={projectTexts} openedProjectId={params.id} />
+        </div>
+      </div>
     </div>
   );
 }

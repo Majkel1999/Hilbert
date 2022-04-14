@@ -1,0 +1,41 @@
+.openedProjectContainer {
+  height: 100%;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  .inviteUrlWrapper {
+    height: 8%;
+    width: 40%;
+    border: 1px solid aqua;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 30px auto;
+    i {
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+    h2 {
+      margin-right: 10px;
+    }
+  }
+  .textOperationsWrapper {
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    .tagList {
+      order: 3;
+      width: 14%;
+      justify-content: flex-start;
+    }
+    .textContainer {
+      order: 2;
+      width: 58%;
+    }
+    .filesWrapper {
+      order: 1;
+      width: 22%;
+    }
+  }
+}

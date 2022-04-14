@@ -40,7 +40,7 @@ export default function FileUploader({ openedProjectId }) {
   };
 
   return (
-    <div>
+    <div className="fileUploaderContainer">
       <Input
         labelName="Text files *.txt, *.pdf and *.zip"
         type="file"
