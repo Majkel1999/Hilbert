@@ -39,7 +39,6 @@ export default function ProjectList({ items }) {
         onCloseHandler={() => setOpenPopup(false)}
       />
       <div className="header">
-        <Input showLabel={false} labelName="Project name" type="text" />
         <Button
           text="Add new project"
           onClickHandler={createNewProjectHandler}
