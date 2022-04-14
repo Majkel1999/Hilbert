@@ -49,7 +49,9 @@
   min-height: 40px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  .headerTitle {
+    width: 97%;
+  }
 }
 
 .modal-body {
