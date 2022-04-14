@@ -12,6 +12,9 @@ export default function TagList({
 }) {
   return (
     <div className="tagList">
+      <div className="tagListHeader">
+        <h2>Project tags</h2>
+      </div>
       {tags &&
         tags.map((tag) => (
           <Chip

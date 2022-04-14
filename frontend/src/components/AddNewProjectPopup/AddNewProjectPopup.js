@@ -18,8 +18,19 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
     }
   };
 
+  const checkBoxes = [
+    {
+      id: 'multiLabel',
+      text: 'Multi label',
+    },
+    {
+      id: 'singleLabel',
+      text: 'Single label',
+    },
+  ];
+
   const popupBodyContent = (
-    <div>
+    <div className="bodyContent">
       <Input
         showLabel={false}
         labelName="Project name"
@@ -32,6 +43,14 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
         addNewTagHandler={addNewTag}
         setTagName={setCurrentTag}
       />
+      <div className="checkBoxContainer">
+        {checkBoxes.map((item) => (
+          <div key={item.id}>
+            <input id={item.id} type="checkbox" />
+            <label htmlFor={item.id}>{item.text}</label>
+          </div>
+        ))}
+      </div>
     </div>
   );
   const popupButtons = [
@@ -41,7 +60,7 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
     },
     {
       text: 'Close',
-      onClickHandler: () => {},
+      onClickHandler: () => onCloseHandler(false),
     },
   ];
 
