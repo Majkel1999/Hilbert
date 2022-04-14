@@ -10,7 +10,7 @@ import TagList from '../Tags/TagList';
 
 export default function AddNewProjectPopup({ open, onCloseHandler }) {
   const dispatch = useDispatch();
-  const [projectName, setProjectName] = useState();
+  const [projectName, setProjectName] = useState('');
   const [enteredTags, setEnteredTags] = useState([]);
   const [currentTag, setCurrentTag] = useState('');
   const [checked, setCheckBoxChecked] = useState('');
@@ -82,10 +82,12 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
       </div>
     </div>
   );
+
   const popupButtons = [
     {
       text: 'Add new project',
       onClickHandler: () => createProject(),
+      isDisabled: !(projectName && checked && enteredTags.length),
     },
     {
       text: 'Close',

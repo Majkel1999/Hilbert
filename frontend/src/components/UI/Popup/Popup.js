@@ -36,6 +36,7 @@ export default function Popup({
                 key={uuid()}
                 text={item.text}
                 onClickHandler={item.onClickHandler}
+                isDisabled={item.isDisabled}
               />
             ))}
         </div>
