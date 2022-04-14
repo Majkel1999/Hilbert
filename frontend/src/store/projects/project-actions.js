@@ -3,6 +3,7 @@ import { projectsActions } from './projects-slice';
 
 const PROJECT_URL = '/project';
 const PROJECT_DATA_URL = (projectId) => `${PROJECT_URL}/${projectId}`;
+const TAG_URL = (inviteUrl) => `tag/${inviteUrl}`;
 
 export const fetchProjectsData = () => async (dispatch) => {
   try {
@@ -123,6 +124,32 @@ export const deleteFileFromProject =
 export const trainModel = (projectId) => async () => {
   try {
     const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/train`);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchAnnotatorData = (inviteUrl) => async () => {
+  try {
+    const response = await axios.get(TAG_URL(inviteUrl));
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchAnnotatorText = (inviteUrl) => async () => {
+  try {
+    const response = await axios.get(`${TAG_URL(inviteUrl)}/text`);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const tagText = (inviteUrl) => async () => {
+  try {
+    const response = await axios.post(`${TAG_URL(inviteUrl)}/tag`);
     console.log(response);
   } catch (error) {
     console.log(error);
