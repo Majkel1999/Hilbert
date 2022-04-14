@@ -20,6 +20,9 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
       setEnteredTags([...enteredTags, currentTag]);
     }
   };
+  const removeTag = (tagName) => {
+    setEnteredTags(enteredTags.filter((item) => item !== tagName));
+  };
 
   const createProject = () => {
     dispatch(sendProjectsData({ name: projectName, tags: enteredTags }));
@@ -64,6 +67,7 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
       <TagList
         tags={enteredTags}
         addNewTagHandler={addNewTag}
+        removeTagHandler={removeTag}
         setTagName={setCurrentTag}
       />
       <div className="checkBoxContainer">
