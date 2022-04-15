@@ -79,12 +79,13 @@ export default function OpenedProject() {
             isDisabled // Disabled untill model didn't work
           />
         </div>
-        <div className="filesWrapper">
-          {params.role === ROLES.ADMIN && (
+        {params.role === ROLES.ADMIN && (
+          <div className="filesWrapper">
             <FileUploader openedProjectId={params.id} />
-          )}
-          <FileList files={projectTexts} openedProjectId={params.id} />
-        </div>
+
+            <FileList files={projectTexts} openedProjectId={params.id} />
+          </div>
+        )}
       </div>
     </div>
   );
