@@ -15,11 +15,20 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-instance.interceptors.response.use((response) => response, (error) => {
-  if (error.response.status === 401) {
-    refresh();
-  }
-  return error;
-});
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const prevRequest = error?.config;
+    console.log(prevRequest);
+    if (error.response.status === 401 && !prevRequest?.sent) {
+      prevRequest.sent = true;
+      refresh();
+      const token = JSON.parse(localStorage.getItem('token'));
+      prevRequest.headers.Authorization = `${token.token_type} ${token.access_token}`;
+      axios(prevRequest);
+    }
+    return error;
+  },
+);
 
 export default instance;

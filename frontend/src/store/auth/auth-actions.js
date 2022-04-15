@@ -45,7 +45,6 @@ export async function refresh() {
       },
     });
     const receivedToken = response.data;
-    console.log(receivedToken);
     localStorage.setItem('token', JSON.stringify(receivedToken));
   } catch (error) {
     console.log(error);
