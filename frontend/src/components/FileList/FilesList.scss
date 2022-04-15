@@ -2,15 +2,32 @@
   text-align: center;
   margin-top: 20px;
   margin-bottom: 30px;
+  height: 60%;
+  h2 {
+    margin-bottom: 10px;
+  }
   .listWrapper {
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    height: 100%;
+    overflow-y: scroll;
+
     .listItem {
+      &:first-child {
+        margin-top: 20px;
+      }
+      &:last-child {
+        margin-bottom: 20px;
+      }
       text-decoration: none;
-      width: 100%;
+      margin: 3px 0;
+      width: 60%;
+      border-radius: 10px;
+      border: 1px solid aqua;
+
       .fileContainer {
         display: flex;
         align-items: center;
