@@ -1,16 +1,6 @@
 import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fab } from '@fortawesome/free-brands-svg-icons';
-import {
-  faCopy,
-  faMinus,
-  faPlusCircle,
-  faTrashAlt,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
-
 import { authActions } from './store/auth/auth-slice';
 import Auth from './pages/Auth/Auth';
 import Layout from './components/Layout/Layout';
@@ -19,8 +9,8 @@ import AdminBoard from './pages/AdminBoard/AdminBoard';
 import Home from './pages/Home/Home';
 import OpenedProject from './pages/OpenedProject/OpenedProject';
 import * as routes from './constants/routes';
-
-library.add(fab, faTrashAlt, faMinus, faCopy, faXmark, faPlusCircle);
+// eslint-disable-next-line no-unused-vars
+import FontAwesome from './FontAwesome/FontAwesome';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
