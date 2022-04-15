@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Chip.scss';
 
 export default function Chip({
@@ -13,10 +14,10 @@ export default function Chip({
         {chipText}
       </span>
       {displayDeleteIcon && (
-        <i
-          className="fa fa-close"
-          aria-hidden="true"
+        <FontAwesomeIcon
+          icon="fa-solid fa-xmark"
           onClick={removeTagHandler}
+          size="lg"
         />
       )}
     </div>

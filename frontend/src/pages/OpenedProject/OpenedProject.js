@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TagList from '../../components/Tags/TagList';
 import Button from '../../components/UI/Button/Button';
 import FileList from '../../components/FileList/FilesList';
@@ -61,14 +62,14 @@ export default function OpenedProject() {
         <div className="textContainer">
           <div className="inviteUrlWrapper">
             <h2> {currentProjectData.inviteUrl} </h2>
-            <i
-              className="fa fa-copy"
-              aria-hidden="true"
+            <FontAwesomeIcon
+              icon="fa-solid fa-copy"
               onClick={() => {
                 navigator.clipboard.writeText(
                   `${process.env.REACT_APP_WEB_URL}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
                 );
               }}
+              size="lg"
             />
           </div>
           <div className="textWrapper" />

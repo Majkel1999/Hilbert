@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { deleteFileFromProject } from '../../store/projects/project-actions';
 import './FilesList.scss';
 
@@ -18,10 +19,10 @@ export default function FilesList({ files, openedProjectId }) {
           <li className="listItem" key={index.toString() + 2}>
             <div className="fileContainer">
               <span>{element.name}</span>
-              <i
-                className="fa fa-close"
-                aria-hidden="true"
+              <FontAwesomeIcon
+                icon="fa-solid fa-xmark"
                 onClick={() => removeFile(element)}
+                size="lg"
               />
             </div>
           </li>

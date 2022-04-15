@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { uuid } from '../../utils/utils';
 import Chip from '../UI/Chip/Chip';
 import Input from '../UI/Input/Input';
@@ -34,10 +35,10 @@ export default function TagList({
                 showLabel={false}
                 onChangeHandler={(e) => setTagName(e.target.value)}
               />
-              <i
-                className="fa fa-plus"
-                aria-hidden="true"
+              <FontAwesomeIcon
+                icon="fa-solid fa-plus-circle"
                 onClick={addNewTagHandler}
+                size="lg"
               />
             </div>
           }

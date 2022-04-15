@@ -2,6 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ProjectItem from '../ProjectItem/ProjectItem';
 import Button from '../../UI/Button/Button';
 import AddNewProjectPopup from '../../AddNewProjectPopup/AddNewProjectPopup';
@@ -59,10 +60,10 @@ export default function ProjectList({ items }) {
                     name={projectItem.name}
                     onClickHandler={() => openProjectHandler(projectItem.id)}
                   />
-                  <i
-                    className="fa fa-minus"
+                  <FontAwesomeIcon
+                    icon="fa-solid fa-minus"
                     onClick={() => removeProjectHandler(projectItem)}
-                    aria-hidden="true"
+                    size="6x"
                   />
                 </td>
               </tr>

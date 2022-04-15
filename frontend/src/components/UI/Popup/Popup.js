@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../Button/Button';
 import { uuid } from '../../../utils/utils';
 import './Popup.scss';
@@ -20,10 +21,10 @@ export default function Popup({
             <h2>{headerText}</h2>
           </div>
           {showCloseIcon && (
-            <i
-              className="fa fa-close close"
-              aria-hidden="true"
+            <FontAwesomeIcon
+              icon="fa-solid fa-xmark"
               onClick={onCloseHandler}
+              size="lg"
             />
           )}
           {headerContent}
