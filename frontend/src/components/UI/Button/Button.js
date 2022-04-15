@@ -2,10 +2,10 @@
 import PropTypes from 'prop-types';
 import './Button.scss';
 
-const Button = ({ type, onClickHandler, text, isDisabled }) => (
+const Button = ({ type, onClickHandler, text, isDisabled, customClass }) => (
   <button
     type={type}
-    className="button"
+    className={customClass}
     onClick={onClickHandler}
     disabled={isDisabled}
   >
@@ -15,6 +15,7 @@ const Button = ({ type, onClickHandler, text, isDisabled }) => (
 
 Button.propTypes = {
   type: PropTypes.string,
+  customClass: PropTypes.string,
   isDisabled: PropTypes.bool,
   onClickHandler: PropTypes.func,
   text: PropTypes.string.isRequired,
@@ -22,6 +23,7 @@ Button.propTypes = {
 
 Button.defaultProps = {
   type: 'button',
+  customClass: '',
   isDisabled: false,
   onClickHandler: () => {},
 };

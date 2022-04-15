@@ -36,6 +36,7 @@ export default function ProjectList({ items }) {
       <div className="header">
         <Button
           text="Add new project"
+          customClass="small"
           onClickHandler={createNewProjectHandler}
         />
       </div>

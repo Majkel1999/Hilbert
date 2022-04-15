@@ -46,8 +46,9 @@
 .buttons {
   display: flex;
   justify-content: center;
-  .button {
-    margin: 20px 30px;
+  margin: 20px 30px;
+  button {
+    margin: 0 10px;
   }
 }
 

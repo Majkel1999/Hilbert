@@ -1,4 +1,4 @@
-.button {
+button {
   background-color: #1b7f79;
   font-size: 16px;
   letter-spacing: 2px;
@@ -7,7 +7,7 @@
   cursor: pointer;
   padding: 12px 24px;
   border: 1px solid #1b7f79;
-  border-radius: 5px;
+  border-radius: 28px;
   display: flex;
   align-items: center;
   &:hover {
@@ -16,4 +16,9 @@
   &:disabled {
     opacity: 0.5;
   }
+}
+
+.small {
+  font-size: 14px;
+  padding: 10px 20px;
 }
