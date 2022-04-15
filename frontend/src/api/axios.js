@@ -17,12 +17,17 @@ instance.interceptors.request.use((config) => {
 
 instance.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
+    console.log(error);
     const prevRequest = error?.config;
     console.log(prevRequest);
-    if (error.response.status === 401 && !prevRequest?.sent) {
+    if (
+      error.response.status === 401 &&
+      !prevRequest?.sent &&
+      error.response.status !== 403
+    ) {
       prevRequest.sent = true;
-      refresh();
+      await refresh();
       const token = JSON.parse(localStorage.getItem('token'));
       prevRequest.headers.Authorization = `${token.token_type} ${token.access_token}`;
       axios(prevRequest);
