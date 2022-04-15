@@ -1,33 +1,9 @@
 .openedProjectContainer {
   height: 100%;
-  padding: 20px 0 0;
   display: flex;
   flex-direction: column;
   background-color: #deefe7;
-  .inviteUrlWrapper {
-    height: 10%;
-    width: 40%;
-    border: 1px solid aqua;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5px 30px;
-    margin: 0 auto 30px auto;
-    h2 {
-      width: 100%;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    i {
-      font-size: 1.4rem;
-      cursor: pointer;
-    }
-    h2 {
-      margin-right: 10px;
-    }
-  }
+
   button {
     margin-bottom: 40px;
   }
@@ -35,27 +11,62 @@
 .textOperationsWrapper {
   height: 100%;
   display: flex;
-  justify-content: space-around;
-
+  justify-content: space-between;
+  padding: 30px 20px 20px;
   .tagList {
     order: 3;
-    width: 16%;
+    width: 14%;
     justify-content: flex-start;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  }
+  .filesWrapper {
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    order: 1;
+    width: 24%;
+    background-color: white;
+    border-radius: 5px;
   }
   .textContainer {
     order: 2;
-    width: 60%;
+    background-color: white;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+      rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    width: 58%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
 
     .textWrapper {
       height: 80%;
     }
 
-    .filesWrapper {
-      order: 1;
-      width: 24%;
+    .inviteUrlWrapper {
+      height: 10%;
+      width: 70%;
+      border: 1px solid aqua;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 30px;
+      margin: 0 auto 30px auto;
+      h2 {
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      i {
+        font-size: 1.4rem;
+        cursor: pointer;
+      }
+      h2 {
+        margin-right: 10px;
+      }
     }
   }
 }

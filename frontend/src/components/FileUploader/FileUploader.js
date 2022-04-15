@@ -41,8 +41,9 @@ export default function FileUploader({ openedProjectId }) {
 
   return (
     <div className="fileUploaderContainer">
+      <p>Acceptable extensions *.txt, *.pdf and *.zip</p>
       <Input
-        labelName="Text files *.txt, *.pdf and *.zip"
+        labelText="Browse file"
         type="file"
         onChangeHandler={onFileChange}
         multiple
