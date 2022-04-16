@@ -19,6 +19,13 @@ export default function AnnotatorOpenedProject() {
     (state) => state.projects.currentProject,
   );
 
+  const selectTag = (tagName) => {
+    const updatedTags = tagsWithAddedProps.map((tag) =>
+      tag.name === tagName ? { ...tag, selected: !tag.selected } : tag,
+    );
+    setTagsWithAddedProps(updatedTags);
+  };
+
   useEffect(() => {
     if (!fetchedData) dispatch(fetchAnnotatorData(params.inviteUrl));
 
@@ -51,6 +58,7 @@ export default function AnnotatorOpenedProject() {
             tags={tagsWithAddedProps}
             enableAddingTag={false}
             displayDeleteIcon={false}
+            onTagClickHandler={selectTag}
           />
         )}
         <div className="textContainer">
