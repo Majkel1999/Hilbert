@@ -19,11 +19,13 @@ export default function FilesList({ files, openedProjectId }) {
           <li className="listItem" key={index.toString() + 2}>
             <div className="fileContainer">
               <span>{element.name}</span>
-              <FontAwesomeIcon
-                icon="fa-solid fa-xmark"
-                onClick={() => removeFile(element)}
-                size="lg"
-              />
+              {openedProjectId && (
+                <FontAwesomeIcon
+                  icon="fa-solid fa-xmark"
+                  onClick={() => removeFile(element)}
+                  size="lg"
+                />
+              )}
             </div>
           </li>
         ))}
@@ -44,5 +46,5 @@ FilesList.propTypes = {
 
 FilesList.defaultProps = {
   files: [],
-  openedProjectId: PropTypes.string,
+  openedProjectId: '',
 };

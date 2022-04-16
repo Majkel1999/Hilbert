@@ -1,20 +1,15 @@
+import './OpenedProject.scss';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TagList from '../../components/Tags/TagList';
-import Button from '../../components/UI/Button/Button';
 import FileList from '../../components/FileList/FilesList';
-import {
-  fetchSingleProjectData,
-  trainModel,
-} from '../../store/projects/project-actions';
-
-import './OpenedProject.scss';
-import FileUploader from '../../components/FileUploader/FileUploader';
+import { fetchAnnotatorData } from '../../store/projects/project-actions';
+import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
 
-export default function OpenedProject() {
+export default function AnnotatorOpenedProject() {
   const [fetchedData, setFetchedData] = useState(false);
   const [projectTexts, setProjectTexts] = useState([]);
 
@@ -24,14 +19,8 @@ export default function OpenedProject() {
     (state) => state.projects.currentProject,
   );
 
-  const trainModelHandler = () => {
-    const projectId = params.id;
-    dispatch(trainModel(projectId));
-  };
-
   useEffect(() => {
-    const projectId = params.id;
-    if (!fetchedData) dispatch(fetchSingleProjectData(projectId));
+    if (!fetchedData) dispatch(fetchAnnotatorData(params.inviteUrl));
 
     setFetchedData(true);
 
@@ -50,7 +39,6 @@ export default function OpenedProject() {
       <div className="textOperationsWrapper">
         <TagList
           tags={currentProjectData.tags}
-          openedProjectId={params.id}
           enableAddingTag={false}
           displayDeleteIcon={false}
         />
@@ -70,13 +58,12 @@ export default function OpenedProject() {
           <div className="textWrapper" />
           <Button
             text="Train model"
-            onClickHandler={trainModelHandler}
+            // onClickHandler={trainModelHandler}
             isDisabled // Disabled untill model didn't work
           />
         </div>
-        <div className="filesWrapper">
-          <FileUploader openedProjectId={params.id} />
 
+        <div className="filesWrapper">
           <FileList files={projectTexts} openedProjectId={params.id} />
         </div>
       </div>

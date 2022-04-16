@@ -11,6 +11,7 @@ import OpenedProject from './pages/OpenedProject/OpenedProject';
 import * as routes from './constants/routes';
 // eslint-disable-next-line no-unused-vars
 import FontAwesome from './FontAwesome/FontAwesome';
+import AnnotatorOpenedProject from './pages/OpenedProject/AnnotatorOpenedProject';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -27,6 +28,11 @@ function App() {
         {/* Available for everyone */}
         <Route path={routes.LOGIN} element={<Auth />} />
         <Route path={routes.REGISTER} element={<Auth />} />
+        <Route
+          path={routes.ANNOTATOR_ITEM}
+          element={<AnnotatorOpenedProject />}
+        />
+
         {/* Requiring to be logged in */}
         <Route element={<ProtectedRoute />}>
           <Route path={routes.HOME} element={<AdminBoard />} />
