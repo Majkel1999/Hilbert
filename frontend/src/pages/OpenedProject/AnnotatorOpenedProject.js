@@ -57,7 +57,7 @@ export default function AnnotatorOpenedProject() {
           </div>
           <div className="textWrapper" />
           <Button
-            text="Submit added tags"
+            text="Submit tags"
             // onClickHandler={trainModelHandler}
             isDisabled // Disabled untill model didn't work
           />

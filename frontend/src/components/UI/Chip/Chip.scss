@@ -7,6 +7,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   span {
     margin: 0 5px;
   }
@@ -14,6 +15,13 @@
     cursor: pointer;
     &:hover {
       opacity: 0.5;
+    }
+  }
+  &.selected {
+    border: 3px solid purple;
+    background-color: #aae0f9;
+    span {
+      font-weight: bold;
     }
   }
 }
