@@ -40,7 +40,7 @@ export default function AnnotatorOpenedProject() {
       tagText({
         inviteUrl: currentProjectData.inviteUrl,
         tags: selectedTags,
-        textId: 'test',
+        textId: fetchedTextData.id,
       }),
     );
   };
