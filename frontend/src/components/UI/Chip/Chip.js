@@ -16,9 +16,8 @@ export default function Chip({
       </span>
       {displayDeleteIcon && (
         <FontAwesomeIcon
-          icon="fa-solid fa-xmark"
+          icon="fa-solid fa-xmark-circle"
           onClick={removeTagHandler}
-          size="lg"
         />
       )}
     </div>
