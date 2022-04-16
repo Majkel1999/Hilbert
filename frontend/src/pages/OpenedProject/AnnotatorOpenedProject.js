@@ -57,13 +57,13 @@ export default function AnnotatorOpenedProject() {
           </div>
           <div className="textWrapper" />
           <Button
-            text="Train model"
+            text="Submit added tags"
             // onClickHandler={trainModelHandler}
             isDisabled // Disabled untill model didn't work
           />
         </div>
 
-        <div className="filesWrapper">
+        <div className="filesWrapper annotator">
           <FileList files={projectTexts} openedProjectId={params.id} />
         </div>
       </div>
