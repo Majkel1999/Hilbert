@@ -49,6 +49,26 @@
 
     .textWrapper {
       height: 80%;
+      width: 100%;
+      .header {
+        background-color: rgba(150, 200, 200, 0.8);
+        text-align: center;
+        height: 60px;
+        line-height: 60px;
+        span {
+          width: 100%;
+          font-size: 2.8rem;
+        }
+      }
+      .textValue {
+        margin: 30px 3.6rem 30px;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+          rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        p {
+          font-size: 1.3rem;
+          padding: 20px 40px;
+        }
+      }
     }
 
     .inviteUrlWrapper {

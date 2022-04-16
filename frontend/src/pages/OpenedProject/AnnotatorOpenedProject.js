@@ -7,6 +7,7 @@ import TagList from '../../components/Tags/TagList';
 import FileList from '../../components/FileList/FilesList';
 import {
   fetchAnnotatorData,
+  fetchAnnotatorText,
   tagText,
 } from '../../store/projects/project-actions';
 import Button from '../../components/UI/Button/Button';
@@ -21,6 +22,9 @@ export default function AnnotatorOpenedProject() {
   const params = useParams();
   const currentProjectData = useSelector(
     (state) => state.projects.currentProject,
+  );
+  const fetchedTextData = useSelector(
+    (state) => state.projects.fetchedTextData,
   );
 
   const selectTag = (tagName) => {
@@ -42,7 +46,11 @@ export default function AnnotatorOpenedProject() {
   };
 
   useEffect(() => {
-    if (!fetchedData) dispatch(fetchAnnotatorData(params.inviteUrl));
+    if (!fetchedData) {
+      const url = params.inviteUrl;
+      dispatch(fetchAnnotatorData(url));
+      dispatch(fetchAnnotatorText(url));
+    }
 
     setFetchedData(true);
 
@@ -88,7 +96,20 @@ export default function AnnotatorOpenedProject() {
               size="lg"
             />
           </div>
-          <div className="textWrapper" />
+
+          <div className="textWrapper">
+            <div className="header">
+              <span> {fetchedTextData.name}</span>{' '}
+            </div>
+            <div className="textValue">
+              <p>
+                {fetchedTextData.value} loremipsumloremipsum loremipsum
+                loremipsum loremipsum loremipsum loremipsum loremipsum
+                loremipsum loremipsum loremipsum loremipsum loremipsum
+                loremipsum loremipsum loremipsum loremipsum loremipsum
+              </p>
+            </div>
+          </div>
           <Button
             text="Submit tags"
             onClickHandler={tagTextHandler}

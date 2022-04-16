@@ -67,6 +67,7 @@ export default function OpenedProject() {
               size="lg"
             />
           </div>
+
           <div className="textWrapper" />
           <Button
             text="Train model"

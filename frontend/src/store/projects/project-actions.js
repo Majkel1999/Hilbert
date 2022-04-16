@@ -147,10 +147,18 @@ export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
   }
 };
 
-export const fetchAnnotatorText = (inviteUrl) => async () => {
+export const fetchAnnotatorText = (inviteUrl) => async (dispatch) => {
   try {
     const response = await axios.get(`${TAG_URL(inviteUrl)}/text`);
-    console.log(response);
+    const { name, _id, value, preferredTag } = response.data;
+    dispatch(
+      projectsActions.setFetchedTextData({
+        name,
+        id: _id,
+        value,
+        preferredTag,
+      }),
+    );
   } catch (error) {
     console.log(error);
   }

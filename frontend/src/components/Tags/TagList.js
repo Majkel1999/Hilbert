@@ -53,7 +53,7 @@ export default function TagList({
 
 TagList.propTypes = {
   tags: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.object], PropTypes.string),
+    PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   ),
   addNewTagHandler: PropTypes.func,
   removeTagHandler: PropTypes.func,
