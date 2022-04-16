@@ -35,6 +35,12 @@
   .headerTitle {
     width: 97%;
   }
+  svg {
+    cursor: pointer;
+    &:hover {
+      opacity: 0.6;
+    }
+  }
 }
 
 .modal-body {

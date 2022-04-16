@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Popup from '../UI/Popup/Popup';
@@ -12,9 +12,8 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
   const dispatch = useDispatch();
   const [projectName, setProjectName] = useState('');
   const [enteredTags, setEnteredTags] = useState([]);
-  const [currentTag, setCurrentTag] = useState('');
   const [checked, setCheckBoxChecked] = useState('');
-
+  const inputRef = useRef('');
   const checkBoxes = [
     {
       id: 'multiLabel',
@@ -26,10 +25,16 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
     },
   ];
 
-  const addNewTag = () => {
-    const tagIndex = enteredTags.findIndex((item) => item === currentTag);
-    if (tagIndex < 0) {
-      setEnteredTags([...enteredTags, currentTag]);
+  const addNewTag = (e, addedByClick) => {
+    const handledTag = inputRef.current.value;
+    const tagIndex = enteredTags.findIndex((item) => item === handledTag);
+    const addNewTagValidator = tagIndex < 0 && handledTag;
+
+    if (
+      (addedByClick && addNewTagValidator) ||
+      (e.key === 'Enter' && addNewTagValidator)
+    ) {
+      setEnteredTags([...enteredTags, handledTag]);
     }
   };
   const removeTag = (tagName) => {
@@ -38,19 +43,28 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
 
   const createProject = () => {
     const isMultiLabel = checked === checkBoxes[0].id;
-    dispatch(
-      sendProjectsData({
-        name: projectName,
-        tags: enteredTags,
-        is_multi_label: isMultiLabel,
-      }),
-    );
+    if (enteredTags.length && isMultiLabel && projectName) {
+      dispatch(
+        sendProjectsData({
+          name: projectName,
+          tags: enteredTags,
+          is_multi_label: isMultiLabel,
+        }),
+      );
+    }
     onCloseHandler();
   };
 
   const checkboxHandler = (name) => {
     if (name !== checked) setCheckBoxChecked(name);
   };
+
+  useEffect(() => {
+    document.addEventListener('keypress', addNewTag);
+    return () => {
+      document.removeEventListener('keypress', addNewTag);
+    };
+  }, [enteredTags]);
 
   const popupBodyContent = (
     <div className="bodyContent">
@@ -65,7 +79,7 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
         tags={enteredTags}
         addNewTagHandler={addNewTag}
         removeTagHandler={removeTag}
-        setTagName={setCurrentTag}
+        inputRef={inputRef}
       />
       <div className="checkBoxContainer">
         {checkBoxes.map((item) => (

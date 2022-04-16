@@ -9,10 +9,10 @@ export default function TagList({
   tags,
   addNewTagHandler,
   removeTagHandler,
-  setTagName,
   enableAddingTag,
   displayDeleteIcon,
   onTagClickHandler,
+  inputRef,
 }) {
   return (
     <div className="tagList">
@@ -34,13 +34,10 @@ export default function TagList({
         <Chip
           chipText={
             <div className="addInputContainer">
-              <Input
-                showLabel={false}
-                onChangeHandler={(e) => setTagName(e.target.value)}
-              />
+              <Input showLabel={false} inputRef={inputRef} />
               <FontAwesomeIcon
                 icon="fa-solid fa-plus-circle"
-                onClick={addNewTagHandler}
+                onClick={(e) => addNewTagHandler(e, true)}
                 size="lg"
               />
             </div>
@@ -58,17 +55,18 @@ TagList.propTypes = {
   addNewTagHandler: PropTypes.func,
   removeTagHandler: PropTypes.func,
   onTagClickHandler: PropTypes.func,
-  setTagName: PropTypes.func,
   enableAddingTag: PropTypes.bool,
   displayDeleteIcon: PropTypes.bool,
+  // eslint-disable-next-line react/forbid-prop-types
+  inputRef: PropTypes.any,
 };
 
 TagList.defaultProps = {
   tags: [],
-  setTagName: () => {},
   onTagClickHandler: () => {},
   addNewTagHandler: () => {},
   removeTagHandler: () => {},
   enableAddingTag: true,
   displayDeleteIcon: true,
+  inputRef: null,
 };

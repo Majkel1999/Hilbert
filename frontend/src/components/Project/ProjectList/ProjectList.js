@@ -53,7 +53,10 @@ export default function ProjectList({ items }) {
         <tbody className="tableContent">
           {items &&
             items.map((projectItem, index) => (
-              <tr className="contentWrapper" key={`${projectItem.name}key`}>
+              <tr
+                className="contentWrapper"
+                key={`${projectItem.name}${index + 1}key`}
+              >
                 <th className="head">{index}</th>
                 <td>
                   <ProjectItem

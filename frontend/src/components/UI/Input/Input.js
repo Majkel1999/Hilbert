@@ -11,6 +11,7 @@ const Input = ({
   multiple,
   labelText,
   checked,
+  inputRef,
 }) => (
   <div className="inputContainer">
     {showLabel && (
@@ -28,6 +29,7 @@ const Input = ({
       placeholder={`${labelName}`}
       multiple={multiple}
       checked={checked}
+      ref={inputRef}
     />
   </div>
 );
@@ -43,6 +45,8 @@ Input.propTypes = {
   onChangeHandler: PropTypes.func,
   showLabel: PropTypes.bool,
   multiple: PropTypes.bool,
+  // eslint-disable-next-line react/forbid-prop-types
+  inputRef: PropTypes.any,
 };
 
 Input.defaultProps = {
@@ -54,4 +58,5 @@ Input.defaultProps = {
   showLabel: true,
   multiple: false,
   checked: false,
+  inputRef: null,
 };
