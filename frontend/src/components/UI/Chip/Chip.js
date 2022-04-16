@@ -7,9 +7,10 @@ export default function Chip({
   displayDeleteIcon,
   onChipClickHandler,
   removeTagHandler,
+  customClass,
 }) {
   return (
-    <div className="chipContainer">
+    <div className={`chipContainer ${customClass}`}>
       <span onClick={onChipClickHandler} aria-hidden="true">
         {chipText}
       </span>
@@ -26,6 +27,7 @@ export default function Chip({
 
 Chip.propTypes = {
   chipText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  customClass: PropTypes.string,
   displayDeleteIcon: PropTypes.bool,
   removeTagHandler: PropTypes.func,
   onChipClickHandler: PropTypes.func,
@@ -33,6 +35,7 @@ Chip.propTypes = {
 
 Chip.defaultProps = {
   chipText: '',
+  customClass: '',
   displayDeleteIcon: false,
   removeTagHandler: () => {},
   onChipClickHandler: () => {},

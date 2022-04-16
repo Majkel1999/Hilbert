@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { uuid } from '../../utils/utils';
@@ -21,10 +22,11 @@ export default function TagList({
       {tags &&
         tags.map((tag) => (
           <Chip
-            chipText={tag}
+            chipText={tag.name || tag}
             key={uuid()}
             displayDeleteIcon={displayDeleteIcon}
-            removeTagHandler={() => removeTagHandler(tag)}
+            removeTagHandler={() => removeTagHandler(tag.name || tag)}
+            customClass={tag.selected ? 'selected' : ''}
           />
         ))}
       {enableAddingTag && (
@@ -49,7 +51,9 @@ export default function TagList({
 }
 
 TagList.propTypes = {
-  tags: PropTypes.arrayOf(PropTypes.string),
+  tags: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.object], PropTypes.string),
+  ),
   addNewTagHandler: PropTypes.func,
   removeTagHandler: PropTypes.func,
   setTagName: PropTypes.func,

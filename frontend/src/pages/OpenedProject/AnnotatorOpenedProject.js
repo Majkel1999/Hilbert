@@ -12,7 +12,7 @@ import { ROLES } from '../../constants/roles';
 export default function AnnotatorOpenedProject() {
   const [fetchedData, setFetchedData] = useState(false);
   const [projectTexts, setProjectTexts] = useState([]);
-
+  const [tagsWithAddedProps, setTagsWithAddedProps] = useState([]);
   const dispatch = useDispatch();
   const params = useParams();
   const currentProjectData = useSelector(
@@ -32,16 +32,27 @@ export default function AnnotatorOpenedProject() {
       }));
       setProjectTexts(texts);
     }
+    if (currentProjectData.tags) {
+      const tagArr = currentProjectData.tags.map((item, index) => ({
+        key: index + 2,
+        name: item,
+        selected: false,
+      }));
+      console.log(tagArr);
+      setTagsWithAddedProps(tagArr);
+    }
   }, [currentProjectData]);
 
   return (
     <div className="openedProjectContainer">
       <div className="textOperationsWrapper">
-        <TagList
-          tags={currentProjectData.tags}
-          enableAddingTag={false}
-          displayDeleteIcon={false}
-        />
+        {tagsWithAddedProps && (
+          <TagList
+            tags={tagsWithAddedProps}
+            enableAddingTag={false}
+            displayDeleteIcon={false}
+          />
+        )}
         <div className="textContainer">
           <div className="inviteUrlWrapper">
             <h2> {currentProjectData.inviteUrl} </h2>
