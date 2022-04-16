@@ -45,6 +45,7 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
         is_multi_label: isMultiLabel,
       }),
     );
+    onCloseHandler();
   };
 
   const checkboxHandler = (name) => {
