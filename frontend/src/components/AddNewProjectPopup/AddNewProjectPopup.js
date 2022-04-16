@@ -35,6 +35,7 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
       (e.key === 'Enter' && addNewTagValidator)
     ) {
       setEnteredTags([...enteredTags, handledTag]);
+      inputRef.current.value = '';
     }
   };
   const removeTag = (tagName) => {
