@@ -155,11 +155,16 @@ export const fetchAnnotatorText = (inviteUrl) => async () => {
     console.log(error);
   }
 };
-export const tagText = (inviteUrl) => async () => {
-  try {
-    const response = await axios.post(`${TAG_URL(inviteUrl)}/tag`);
-    console.log(response);
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const tagText =
+  ({ inviteUrl, tags, textId }) =>
+  async () => {
+    try {
+      const response = await axios.post(`${TAG_URL(inviteUrl)}/tag`, {
+        tags,
+        text_id: textId,
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };

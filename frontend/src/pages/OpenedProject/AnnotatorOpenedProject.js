@@ -5,7 +5,10 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TagList from '../../components/Tags/TagList';
 import FileList from '../../components/FileList/FilesList';
-import { fetchAnnotatorData } from '../../store/projects/project-actions';
+import {
+  fetchAnnotatorData,
+  tagText,
+} from '../../store/projects/project-actions';
 import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
 
@@ -13,6 +16,7 @@ export default function AnnotatorOpenedProject() {
   const [fetchedData, setFetchedData] = useState(false);
   const [projectTexts, setProjectTexts] = useState([]);
   const [tagsWithAddedProps, setTagsWithAddedProps] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
   const dispatch = useDispatch();
   const params = useParams();
   const currentProjectData = useSelector(
@@ -23,7 +27,18 @@ export default function AnnotatorOpenedProject() {
     const updatedTags = tagsWithAddedProps.map((tag) =>
       tag.name === tagName ? { ...tag, selected: !tag.selected } : tag,
     );
+    setSelectedTags(updatedTags.filter((item) => item.selected));
     setTagsWithAddedProps(updatedTags);
+  };
+
+  const tagTextHandler = () => {
+    dispatch(
+      tagText({
+        inviteUrl: currentProjectData.inviteUrl,
+        tags: selectedTags,
+        textId: 'test',
+      }),
+    );
   };
 
   useEffect(() => {
@@ -45,7 +60,6 @@ export default function AnnotatorOpenedProject() {
         name: item,
         selected: false,
       }));
-      console.log(tagArr);
       setTagsWithAddedProps(tagArr);
     }
   }, [currentProjectData]);
@@ -77,8 +91,8 @@ export default function AnnotatorOpenedProject() {
           <div className="textWrapper" />
           <Button
             text="Submit tags"
-            // onClickHandler={trainModelHandler}
-            isDisabled // Disabled untill model didn't work
+            onClickHandler={tagTextHandler}
+            isDisabled={!selectedTags.length > 0} // Disabled untill model didn't work
           />
         </div>
 
