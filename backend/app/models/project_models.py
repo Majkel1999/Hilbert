@@ -7,10 +7,10 @@ from pydantic import BaseModel
 class TextDocument(Document):
     name: str
     value: str
-    tag: Optional[str]
+    tags: List[str] = list()
 
 class TextOut(TextDocument):
-    tags: List[str]
+    possible_tags: List[str]
     preferredTag: Optional[str] = None
 
 

@@ -10,7 +10,7 @@ from pdfminer.high_level import extract_text
 
 
 def createDocument(content: str, name: str) -> TextDocument:
-    text = TextDocument(name=name, value=content, tags=dict())
+    text = TextDocument(name=name, value=content)
     return text
 
 

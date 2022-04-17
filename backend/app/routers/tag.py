@@ -27,40 +27,56 @@ async def get_project_info(project: Project = Depends(check_invite_url)):
 })
 async def get_random_text(project: Project = Depends(check_invite_url)):
     try:
-        texts = [x for x in project.texts if x.tag is None]
+        texts = [x for x in project.texts if len(x.tags) == 0]
         document: TextDocument = random.choice(texts)
-        return TextOut(id=document.id, name=document.name, value=document.value, tags=project.data.tags)
-    except:
+        return TextOut(id=document.id, name=document.name, value=document.value, possible_tags=project.data.tags)
+    except Exception as e:
+        print(e)
         raise HTTPException(
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="All texts have been tagged"
         )
 
 
-@router.post("/{invite_url}/tag", response_model=str,    responses={
+@router.post("/{invite_url}/tag", response_model=TextDocument,    responses={
+    status.HTTP_400_BAD_REQUEST: {"description": "Tag array cannot be empty or multiple tags in single-label project"},
     status.HTTP_401_UNAUTHORIZED: {"description": "Invite link not matching document"},
     status.HTTP_406_NOT_ACCEPTABLE: {"description": "Tag doesn't exist in project"},
     status.HTTP_409_CONFLICT: {"description": "Text already tagged"},
 })
 async def tag_text(request: TagRequest, project: Project = Depends(check_invite_url)):
-    request.tag = request.tag.casefold()
+    if(len(request.tags) == 0):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Tag array cannot be empty"
+        )
+
+    if(not project.is_multi_label and len(request.tags) > 1):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Multiple tags in a single label project"
+        )
+
     if(not any(x.id == ObjectId(request.text_id) for x in project.texts)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invite link not matching document"
         )
-    elif(not any(tag == request.tag for tag in project.data.tags)):
-        raise HTTPException(
-            status_code=status.HTTP_406_NOT_ACCEPTABLE,
-            detail="Tag doesn't exist in project"
-        )
-    else:
-        text = await TextDocument.find_one(TextDocument.id == ObjectId(request.text_id))
-        if(text.tag is not None):
+
+    for tag in request.tags:
+        tag = tag.casefold()
+        if(not any(projectTag == tag for projectTag in project.data.tags)):
             raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail="Text already tagged"
+                status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                detail="Tag: - {tag} - doesn't exist in project"
             )
-        text.tag = request.tag
-        await text.save()
-        return text.tag
+
+    text = await TextDocument.find_one(TextDocument.id == ObjectId(request.text_id))
+    if(len(text.tags) != 0):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Text already tagged"
+        )
+    text.tags = request.tags
+    await text.save()
+    return text
