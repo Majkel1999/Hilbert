@@ -20,7 +20,7 @@ class MLModel(Document):
 
 class ProjectData(BaseModel):
     tags: List[str] = list()
-    invite_url_postfix: Optional[str] = None
+    invite_url_postfix: str = None
 
 
 class ProjectOut(BaseModel):
