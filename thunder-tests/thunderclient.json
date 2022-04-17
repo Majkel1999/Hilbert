@@ -290,11 +290,11 @@
     "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
     "containerId": "eeec32f5-5115-4454-a32c-b7ed20e226f2",
     "name": "Queue Model Training",
-    "url": "{{baseUrl}}/project/data/train/{project_id}",
+    "url": "{{baseUrl}}/project/{project_id}/train",
     "method": "POST",
     "sortNum": 120000,
     "created": "2022-04-09T14:46:20.963Z",
-    "modified": "2022-04-11T09:42:02.630Z",
+    "modified": "2022-04-17T16:15:01.357Z",
     "headers": [],
     "params": [
       {
@@ -317,11 +317,11 @@
     "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
     "containerId": "eeec32f5-5115-4454-a32c-b7ed20e226f2",
     "name": "Upload File",
-    "url": "{{baseUrl}}/project/data/upload/{project_id}",
+    "url": "{{baseUrl}}/project/{project_id}/file",
     "method": "POST",
     "sortNum": 25000,
     "created": "2022-04-09T14:46:20.964Z",
-    "modified": "2022-04-11T11:08:38.879Z",
+    "modified": "2022-04-17T16:14:49.708Z",
     "headers": [],
     "params": [
       {
@@ -361,11 +361,11 @@
     "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
     "containerId": "eeec32f5-5115-4454-a32c-b7ed20e226f2",
     "name": "Add Tag",
-    "url": "{{baseUrl}}/project/data/tag/{project_id}",
+    "url": "{{baseUrl}}/project/{project_id}/tag",
     "method": "POST",
     "sortNum": 50000,
     "created": "2022-04-09T14:46:20.965Z",
-    "modified": "2022-04-09T15:13:57.657Z",
+    "modified": "2022-04-17T16:14:57.900Z",
     "headers": [],
     "params": [
       {
@@ -393,11 +393,11 @@
     "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
     "containerId": "250def74-3f1a-4a0f-a95f-413ff9db0531",
     "name": "Delete Tag",
-    "url": "{{baseUrl}}/project/data/tag/{project_id}",
+    "url": "{{baseUrl}}/project/{project_id}/tag",
     "method": "DELETE",
     "sortNum": 5000,
     "created": "2022-04-09T14:46:20.966Z",
-    "modified": "2022-04-11T08:04:39.773Z",
+    "modified": "2022-04-17T16:15:08.955Z",
     "headers": [],
     "params": [
       {
@@ -489,7 +489,7 @@
     "method": "POST",
     "sortNum": 30000,
     "created": "2022-04-09T14:46:20.969Z",
-    "modified": "2022-04-11T08:42:41.032Z",
+    "modified": "2022-04-17T16:18:58.346Z",
     "headers": [],
     "params": [
       {
@@ -500,7 +500,7 @@
     ],
     "body": {
       "type": "json",
-      "raw": "{\n  \"tag\": \"{{test_tag}}\",\n  \"text_id\": \"{{text_id}}\"\n}",
+      "raw": "{\n  \"tags\": [\"{{test_tag}}\"],\n  \"text_id\": \"{{text_id}}\"\n}",
       "form": []
     },
     "tests": [
@@ -517,11 +517,11 @@
     "colId": "5e6d5437-3463-413e-8e79-e2d0eb22770e",
     "containerId": "250def74-3f1a-4a0f-a95f-413ff9db0531",
     "name": "Delete File",
-    "url": "{{baseUrl}}/project/data/upload/{project_id}",
+    "url": "{{baseUrl}}/project/{project_id}/file",
     "method": "DELETE",
     "sortNum": 7500,
     "created": "2022-04-11T08:29:02.497Z",
-    "modified": "2022-04-11T11:08:56.509Z",
+    "modified": "2022-04-17T16:15:06.400Z",
     "headers": [],
     "params": [
       {
