@@ -1,9 +1,10 @@
 import axios from '../../api/axios';
 import { projectsActions } from './projects-slice';
-
-const PROJECT_URL = '/project';
-const PROJECT_DATA_URL = (projectId) => `${PROJECT_URL}/${projectId}`;
-const TAG_URL = (inviteUrl) => `tag/${inviteUrl}`;
+import {
+  PROJECT_URL,
+  PROJECT_DATA_URL,
+  TAG_URL,
+} from '../../constants/apiUrls';
 
 export const fetchProjectsData = () => async (dispatch) => {
   try {

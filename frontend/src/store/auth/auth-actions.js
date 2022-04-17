@@ -1,18 +1,10 @@
-import axios from 'axios';
+import { LOGIN_URL, REGISTER_URL } from '../../constants/apiUrls';
+import axios from '../../api/axios';
 import { authActions } from './auth-slice';
-
-const BASE_URL = process.env.REACT_APP_SERVER_URL;
-const LOGIN_URL = '/user/login';
-const REFRESH_URL = 'user/refresh';
-const REGISTER_URL = '/user/register';
-
-const instance = axios.create({
-  baseURL: BASE_URL,
-});
 
 export const login = (loginData) => async (dispatch) => {
   try {
-    const response = await instance.post(LOGIN_URL, loginData);
+    const response = await axios.post(LOGIN_URL, loginData);
 
     dispatch(
       authActions.login({
@@ -26,27 +18,10 @@ export const login = (loginData) => async (dispatch) => {
 
 export const register = (registerData) => async () => {
   try {
-    const response = await instance.post(REGISTER_URL, registerData);
+    const response = await axios.post(REGISTER_URL, registerData);
     return response;
   } catch (error) {
     console.log(error);
     return error;
   }
 };
-
-export async function refresh() {
-  try {
-    const token = JSON.parse(localStorage.getItem('refresh_token'));
-    const response = await instance.post(REFRESH_URL, null, {
-      headers: {
-        Authorization: token
-          ? `${token.token_type} ${token.refresh_token}`
-          : '',
-      },
-    });
-    const receivedToken = response.data;
-    localStorage.setItem('token', JSON.stringify(receivedToken));
-  } catch (error) {
-    console.log(error);
-  }
-}
