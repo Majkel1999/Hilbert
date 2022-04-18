@@ -18,6 +18,7 @@ export default function AnnotatorOpenedProject() {
   const [projectTexts, setProjectTexts] = useState([]);
   const [tagsWithAddedProps, setTagsWithAddedProps] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [isMultiLabel, setIsMultiLabel] = useState(false);
   const dispatch = useDispatch();
   const params = useParams();
   const currentProjectData = useSelector(
@@ -28,9 +29,17 @@ export default function AnnotatorOpenedProject() {
   );
 
   const selectTag = (tagName) => {
-    const updatedTags = tagsWithAddedProps.map((tag) =>
-      tag.name === tagName ? { ...tag, selected: !tag.selected } : tag,
-    );
+    let updatedTags;
+    if (isMultiLabel) {
+      updatedTags = tagsWithAddedProps.map((tag) =>
+        tag.name === tagName ? { ...tag, selected: !tag.selected } : tag,
+      );
+    }
+    else {
+      updatedTags = tagsWithAddedProps.map((tag) =>
+        tag.name === tagName ? { ...tag, selected: true } : { ...tag, selected: false },
+      );
+    }
     setSelectedTags(updatedTags.filter((item) => item.selected));
     setTagsWithAddedProps(updatedTags);
   };
@@ -39,7 +48,7 @@ export default function AnnotatorOpenedProject() {
     dispatch(
       tagText({
         inviteUrl: currentProjectData.inviteUrl,
-        tags: selectedTags,
+        tags: selectedTags.map((value) => value.name),
         textId: fetchedTextData.id,
       }),
     );
@@ -69,6 +78,9 @@ export default function AnnotatorOpenedProject() {
         selected: false,
       }));
       setTagsWithAddedProps(tagArr);
+    }
+    if (currentProjectData.is_multi_label) {
+      setIsMultiLabel(true);
     }
   }, [currentProjectData]);
 
