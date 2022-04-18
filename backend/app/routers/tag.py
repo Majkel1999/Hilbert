@@ -65,10 +65,10 @@ async def tag_text(request: TagRequest, project: Project = Depends(check_invite_
 
     for tag in request.tags:
         tag = tag.casefold()
-        if(not any(projectTag == tag for projectTag in project.data.tags)):
+        if(not any(projectTag.casefold() == tag for projectTag in project.data.tags)):
             raise HTTPException(
                 status_code=status.HTTP_406_NOT_ACCEPTABLE,
-                detail="Tag: - {tag} - doesn't exist in project"
+                detail=f'Tag: - {tag} - does not exist in project'
             )
 
     text = await TextDocument.find_one(TextDocument.id == ObjectId(request.text_id))

@@ -27,12 +27,12 @@ class ProjectOut(BaseModel):
     name: str
     texts: List[Link[TextDocument]] = list()
     data: ProjectData = ProjectData()
+    is_multi_label : bool = False
 
 
 class Project(Document, ProjectOut):
     owner: str
     model: Optional[Link[MLModel]]
-    is_multi_label : bool = False
 
 
 class ProjectCreationData(BaseModel):
