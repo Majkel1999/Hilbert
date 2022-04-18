@@ -44,7 +44,7 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
 
   const createProject = () => {
     const isMultiLabel = checked === checkBoxes[0].id;
-    if (enteredTags.length && isMultiLabel && projectName) {
+    if (enteredTags.length && projectName) {
       dispatch(
         sendProjectsData({
           name: projectName,
