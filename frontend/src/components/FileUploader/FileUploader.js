@@ -1,18 +1,33 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button';
-
-import './FileUploader.scss';
 import { uploadFilesToProject } from '../../store/projects/project-actions';
+import './FileUploader.scss';
 
 export default function FileUploader({ openedProjectId }) {
   const [filesToUpload, setFilesToUpload] = useState([]);
   const dispatch = useDispatch();
 
   const onFileChange = (event) => {
-    setFilesToUpload(event.target.files);
+    const selectedFiles = event.target.files;
+    const allowedExtensions = /(\.txt|\.pdf|\.zip)$/i;
+
+    if (
+      Object.values(selectedFiles).some(
+        (item) => !allowedExtensions.exec(item.name),
+      )
+    ) {
+      console.log(
+        `File ${event.target.value.replace(
+          /^.*[\\/]/,
+          '',
+        )} has incorrect extension`,
+      );
+      event.target.value = '';
+    } else setFilesToUpload(selectedFiles);
   };
 
   const onFileUpload = () => {
@@ -25,14 +40,19 @@ export default function FileUploader({ openedProjectId }) {
   };
 
   return (
-    <div>
+    <div className="fileUploaderContainer">
+      <p>Acceptable extensions *.txt, *.pdf and *.zip</p>
       <Input
-        labelName="Text files *.txt, *.pdf and *.zip"
+        labelText="Browse file"
         type="file"
         onChangeHandler={onFileChange}
         multiple
       />
-      <Button onClickHandler={onFileUpload} text="Upload file" />
+      <Button
+        onClickHandler={onFileUpload}
+        text="Upload file"
+        isDisabled={!filesToUpload.length}
+      />
     </div>
   );
 }

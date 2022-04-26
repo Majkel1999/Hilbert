@@ -1,0 +1,91 @@
+.modal {
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 100);
+  background-color: rgba(0, 0, 100, 0.4);
+}
+
+.modal-content {
+  position: relative;
+  top: 10%;
+  width: 35vw;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+}
+.modal-header {
+  padding: 2px 16px;
+  background-color: #364958;
+  color: #ddd;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  .headerTitle {
+    width: 97%;
+  }
+  svg {
+    cursor: pointer;
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+}
+
+.modal-body {
+  display: flex;
+  justify-content: center;
+  padding: 2px 16px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin: 20px 30px;
+  button {
+    margin: 0 10px;
+  }
+}
+
+.close {
+  color: white;
+  float: right;
+  font-weight: bold;
+  font-size: 2rem !important;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@-webkit-keyframes animatetop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes animatetop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
