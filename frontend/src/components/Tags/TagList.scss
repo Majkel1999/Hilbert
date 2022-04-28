@@ -1,8 +1,24 @@
 .tagList {
+  width: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  .tagListHeader {
+    margin: 10px 0;
+  }
   &:last-child {
     cursor: pointer;
+  }
+  .addInputContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    svg {
+      margin-left: 12px;
+    }
+    .inputContainer {
+      margin: 3px 0;
+    }
   }
 }

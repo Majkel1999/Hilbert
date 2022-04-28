@@ -3,11 +3,10 @@ from typing import List
 
 from app.models.project_models import Project, ProjectCreationData
 from app.models.user_models import User
-from app.utility.security import get_current_active_user
+from app.utility.security import (check_for_project_ownership,
+                                  get_current_active_user)
 from fastapi import APIRouter, Depends, HTTPException, status
 from passlib.hash import sha256_crypt
-
-from app.utility.security import check_for_project_ownership
 
 router = APIRouter(
     prefix="/project",
@@ -29,6 +28,7 @@ async def get_user_projects(user: User = Depends(get_current_active_user)):
         "description": "User not authorized for specific project"}
 })
 async def get_project(project: Project = Depends(check_for_project_ownership)):
+    await project.fetch_all_links()
     return project
 
 
@@ -44,6 +44,8 @@ async def create_project(projectCreationData: ProjectCreationData, user: User = 
         )
     project = Project(name=projectCreationData.name, owner=str(user.id))
     await project.insert()
+    project.data.tags.extend([x.casefold() for x in projectCreationData.tags])
+    project.is_multi_label = projectCreationData.is_multi_label
     hash = sha256_crypt.hash(str(project.id))
     hashbytes = bytes(hash, 'utf-8')
     project.data.invite_url_postfix = base64.urlsafe_b64encode(
@@ -61,13 +63,12 @@ async def delete_project(project: Project = Depends(check_for_project_ownership)
     return projectName + " deleted successfuly"
 
 
-async def removeProject(project : Project) -> str:
+async def removeProject(project: Project) -> str:
+    await project.fetch_all_links()
     if(project.model is not None):
-        mlModel = await project.model.fetch()
-        await mlModel.delete()
+        await project.model.delete()
     for text in project.texts:
-        document = await text.fetch()
-        await document.delete()
+        await text.delete()
     projectName = project.name
     await project.delete()
     return projectName

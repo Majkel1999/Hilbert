@@ -2,22 +2,21 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ProjectItem from '../ProjectItem/ProjectItem';
 import Button from '../../UI/Button/Button';
-import Input from '../../UI/Input/Input';
+import AddNewProjectPopup from '../../AddNewProjectPopup/AddNewProjectPopup';
 import './ProjectList.scss';
-import {
-  deleteProject,
-  sendProjectsData,
-} from '../../../store/projects/project-actions';
+import { deleteProject } from '../../../store/projects/project-actions';
+import { ROLES } from '../../../constants/roles';
 
 export default function ProjectList({ items }) {
+  const [openPopup, setOpenPopup] = useState();
   const navigate = useNavigate();
-  const [projectName, setProjectName] = useState();
   const dispatch = useDispatch();
 
   const createNewProjectHandler = () => {
-    dispatch(sendProjectsData({ name: projectName }));
+    setOpenPopup(true);
   };
 
   const removeProjectHandler = (projectItem) => {
@@ -26,21 +25,19 @@ export default function ProjectList({ items }) {
 
   const openProjectHandler = (id) => {
     // Later if admin board will be displayed in rotue 'projects' change strint o route var
-    navigate(`projects/${id}`);
+    navigate(`${ROLES.ADMIN}/projects/${id}`);
   };
 
   return (
     <div className="tableWrapper">
+      <AddNewProjectPopup
+        open={openPopup}
+        onCloseHandler={() => setOpenPopup(false)}
+      />
       <div className="header">
-        <Input
-          showLabel={false}
-          labelName="Project name"
-          onChangeHandler={(e) => setProjectName(e.target.value)}
-          value={projectName}
-          type="text"
-        />
         <Button
           text="Add new project"
+          customClass="small"
           onClickHandler={createNewProjectHandler}
         />
       </div>
@@ -56,17 +53,20 @@ export default function ProjectList({ items }) {
         <tbody className="tableContent">
           {items &&
             items.map((projectItem, index) => (
-              <tr className="contentWrapper" key={`${projectItem.name}key`}>
+              <tr
+                className="contentWrapper"
+                key={`${projectItem.name}${index + 1}key`}
+              >
                 <th className="head">{index}</th>
                 <td>
                   <ProjectItem
                     name={projectItem.name}
                     onClickHandler={() => openProjectHandler(projectItem.id)}
                   />
-                  <i
-                    className="fa fa-minus"
+                  <FontAwesomeIcon
+                    icon="fa-solid fa-minus"
                     onClick={() => removeProjectHandler(projectItem)}
-                    aria-hidden="true"
+                    size="6x"
                   />
                 </td>
               </tr>

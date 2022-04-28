@@ -1,19 +1,33 @@
 .chipContainer {
   margin: 3px 0;
-  padding: 5px 10px;
-  background-color: #caf0f8;
+  padding: 6px 18px;
+  background-color: #eaeaea;
   font-size: 1.3rem;
-  border-radius: 10px;
+  border-radius: 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
+
   span {
     margin: 0 5px;
   }
-  i {
+  svg {
     cursor: pointer;
+    color: #6b6b6b;
+    margin-top: 2px;
+    margin-left: 8px;
+    font-size: 20px;
+
     &:hover {
       opacity: 0.5;
+    }
+  }
+  &.selected {
+    border: 3px solid purple;
+    background-color: #aae0f9;
+    span {
+      font-weight: bold;
     }
   }
 }

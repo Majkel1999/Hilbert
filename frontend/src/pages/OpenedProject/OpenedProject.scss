@@ -1,0 +1,98 @@
+.openedProjectContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #deefe7;
+
+  button {
+    margin-bottom: 40px;
+  }
+}
+.textOperationsWrapper {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 20px 20px;
+  .tagList {
+    order: 3;
+    width: 14%;
+    justify-content: flex-start;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  }
+  .filesWrapper {
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    order: 1;
+    width: 24%;
+    background-color: white;
+    border-radius: 5px;
+    h2 {
+      margin-bottom: 24px;
+    }
+  }
+  .annotator .filesListContainer {
+    height: 90%;
+  }
+  .textContainer {
+    order: 2;
+    background-color: white;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+      rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    width: 58%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+
+    .textWrapper {
+      height: 80%;
+      width: 100%;
+      .header {
+        background-color: rgba(150, 200, 200, 0.8);
+        text-align: center;
+        height: 60px;
+        line-height: 60px;
+        span {
+          width: 100%;
+          font-size: 2.8rem;
+        }
+      }
+      .textValue {
+        margin: 30px 3.6rem 30px;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+          rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        p {
+          font-size: 1.3rem;
+          padding: 20px 40px;
+        }
+      }
+    }
+
+    .inviteUrlWrapper {
+      height: 10%;
+      width: 70%;
+      border: 1px solid aqua;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 30px;
+      margin: 0 auto 30px auto;
+      h2 {
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      svg {
+        font-size: 1.4rem;
+        cursor: pointer;
+      }
+      h2 {
+        margin-right: 10px;
+      }
+    }
+  }
+}

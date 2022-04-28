@@ -1,47 +1,72 @@
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { uuid } from '../../utils/utils';
 import Chip from '../UI/Chip/Chip';
-import {
-  addTagToProject,
-  removeTagFromProject,
-} from '../../store/projects/project-actions';
+import Input from '../UI/Input/Input';
 import './TagList.scss';
 
-export default function TagList({ tags }) {
-  const dispatch = useDispatch();
-  const params = useParams();
-  const addNewTag = () => {
-    dispatch(addTagToProject(params.id, 'testTag'));
-  };
-  const removeTag = () => {
-    dispatch(removeTagFromProject(params.id, 'testTag'));
-  };
+export default function TagList({
+  tags,
+  addNewTagHandler,
+  removeTagHandler,
+  enableAddingTag,
+  displayDeleteIcon,
+  onTagClickHandler,
+  inputRef,
+}) {
   return (
     <div className="tagList">
+      <div className="tagListHeader">
+        <h2>Project tags</h2>
+      </div>
       {tags &&
         tags.map((tag) => (
           <Chip
-            chipText={tag}
+            chipText={tag.name || tag}
             key={uuid()}
-            displayDeleteIcon
-            removeTagHandler={removeTag}
+            displayDeleteIcon={displayDeleteIcon}
+            removeTagHandler={() => removeTagHandler(tag.name || tag)}
+            customClass={tag.selected ? 'selected' : ''}
+            onChipClickHandler={() => onTagClickHandler(tag.name)}
           />
         ))}
-      <Chip
-        chipText={<i className="fa fa-plus" aria-hidden="true" />}
-        onChipClickHandler={addNewTag}
-      />
+      {enableAddingTag && (
+        <Chip
+          chipText={
+            <div className="addInputContainer">
+              <Input showLabel={false} inputRef={inputRef} />
+              <FontAwesomeIcon
+                icon="fa-solid fa-plus-circle"
+                onClick={(e) => addNewTagHandler(e, true)}
+                size="lg"
+              />
+            </div>
+          }
+        />
+      )}
     </div>
   );
 }
 
 TagList.propTypes = {
-  tags: PropTypes.arrayOf(PropTypes.string),
+  tags: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  ),
+  addNewTagHandler: PropTypes.func,
+  removeTagHandler: PropTypes.func,
+  onTagClickHandler: PropTypes.func,
+  enableAddingTag: PropTypes.bool,
+  displayDeleteIcon: PropTypes.bool,
+  // eslint-disable-next-line react/forbid-prop-types
+  inputRef: PropTypes.any,
 };
 
 TagList.defaultProps = {
   tags: [],
+  onTagClickHandler: () => {},
+  addNewTagHandler: () => {},
+  removeTagHandler: () => {},
+  enableAddingTag: true,
+  displayDeleteIcon: true,
+  inputRef: null,
 };

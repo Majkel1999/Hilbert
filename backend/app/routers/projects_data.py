@@ -1,15 +1,16 @@
 from typing import List
 
-from app.models.project_models import Project
-from app.models.request_models import Tag
+from app.models.project_models import Project, TextDocument
+from app.models.request_models import FileDeleteRequest, Tag
 from app.utility.connectors.rabbitmq_connector import rabbitBroker
 from app.utility.file_helper import handleFile
 from app.utility.security import check_for_project_ownership
 from beanie import WriteRules
+from bson import ObjectId
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
 
 router = APIRouter(
-    prefix="/project/data",
+    prefix="/project",
     tags=["Project Data"],
     responses={
         status.HTTP_401_UNAUTHORIZED: {"description": "User not authenticated"},
@@ -19,12 +20,12 @@ router = APIRouter(
 )
 
 
-@router.post("/train/{project_id}")
+@router.post("/{project_id}/train")
 async def queue_model_training(project: Project = Depends(check_for_project_ownership)):
     return await rabbitBroker.sendMessage(str(project.id))
 
 
-@router.post("/upload/{project_id}")
+@router.post("/{project_id}/file")
 async def upload_file(files: List[UploadFile], project: Project = Depends(check_for_project_ownership)):
     response = list()
     for file in files:
@@ -37,7 +38,25 @@ async def upload_file(files: List[UploadFile], project: Project = Depends(check_
     return response
 
 
-@router.post("/tag/{project_id}", responses={
+@router.delete("/{project_id}/file",
+               responses={
+                   status.HTTP_400_BAD_REQUEST: {
+                       "description": "File not found"}
+               })
+async def delete_file(file_id: FileDeleteRequest, project: Project = Depends(check_for_project_ownership)):
+    await project.fetch_all_links()
+    fileToDelete = await TextDocument.find_one(TextDocument.id == ObjectId(file_id.file_id))
+    if(fileToDelete and any(file.id == ObjectId(file_id.file_id) for file in project.texts)):
+
+        await fileToDelete.delete()
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="File not found"
+        )
+
+
+@router.post("/{project_id}/tag", responses={
     status.HTTP_409_CONFLICT: {"description": "Duplicate tag"}
 })
 async def add_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
@@ -52,7 +71,7 @@ async def add_tag(tag: Tag,  project: Project = Depends(check_for_project_owners
         return f"Tag created: {tag}"
 
 
-@router.delete("/tag/{project_id}", responses={
+@router.delete("/{project_id}/tag", responses={
     status.HTTP_404_NOT_FOUND: {"description": "Tag not present in list"}
 })
 async def delete_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):

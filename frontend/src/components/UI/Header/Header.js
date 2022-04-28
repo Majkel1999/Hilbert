@@ -1,15 +1,18 @@
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '../../../store/auth/auth-slice';
-
 import * as routes from '../../../constants/routes';
 import './Header.scss';
 
 export default function Header() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const logout = () => dispatch(authActions.logout());
+  const logout = () => {
+    dispatch(authActions.logout());
+    navigate(routes.LOGIN, { replace: true });
+  };
 
   return (
     <div className="headerContainer">

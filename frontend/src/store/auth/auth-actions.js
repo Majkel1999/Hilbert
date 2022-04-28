@@ -1,8 +1,6 @@
+import { LOGIN_URL, REGISTER_URL } from '../../constants/apiUrls';
 import axios from '../../api/axios';
 import { authActions } from './auth-slice';
-
-const LOGIN_URL = '/user/login';
-const REGISTER_URL = '/user/register';
 
 export const login = (loginData) => async (dispatch) => {
   try {
@@ -26,9 +24,4 @@ export const register = (registerData) => async () => {
     console.log(error);
     return error;
   }
-};
-
-export default {
-  login,
-  register,
 };

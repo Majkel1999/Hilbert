@@ -7,10 +7,10 @@ from pydantic import BaseModel
 class TextDocument(Document):
     name: str
     value: str
-    tag: Optional[str]
+    tags: List[str] = list()
 
 class TextOut(TextDocument):
-    tags: List[str]
+    possible_tags: List[str]
     preferredTag: Optional[str] = None
 
 
@@ -20,13 +20,14 @@ class MLModel(Document):
 
 class ProjectData(BaseModel):
     tags: List[str] = list()
-    invite_url_postfix: Optional[str] = None
+    invite_url_postfix: str = None
 
 
 class ProjectOut(BaseModel):
     name: str
     texts: List[Link[TextDocument]] = list()
     data: ProjectData = ProjectData()
+    is_multi_label : bool = False
 
 
 class Project(Document, ProjectOut):
@@ -36,3 +37,5 @@ class Project(Document, ProjectOut):
 
 class ProjectCreationData(BaseModel):
     name: str
+    tags: List[str] = list()
+    is_multi_label : bool = False

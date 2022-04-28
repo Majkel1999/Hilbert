@@ -1,8 +1,8 @@
 from app.models.project_models import Project
-from app.models.user_models import (AccessToken, RefreshToken, TokensSet, User,
-                                    UserOut)
-from app.routers.projects import delete_project, removeProject
-from app.utility.security import (authenticate_user, get_current_active_user,
+from app.models.user_models import AccessToken, TokensSet, User, UserOut
+from app.routers.projects import removeProject
+from app.utility.security import (authenticate_user, create_access_token,
+                                  create_token_set, get_current_active_user,
                                   register_user)
 from fastapi import APIRouter, Depends, Form, HTTPException, status
 from fastapi_jwt_auth import AuthJWT
@@ -32,24 +32,20 @@ async def login(username: str = Form(...), password: str = Form(...), Authorize:
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token = Authorize.create_access_token(subject=str(user.id))
-    refresh_token = Authorize.create_refresh_token(subject=str(user.id))
-    return TokensSet(access_token=access_token,
-                     refresh_token=refresh_token, token_type="Bearer")
+    return create_token_set(user_id=str(user.id), Authorize=Authorize)
 
 
 @router.post("/refresh", response_model=AccessToken, responses={
     status.HTTP_401_UNAUTHORIZED: {
-        "description": "Incorrect refresh token"}
+        "description": "Refresh token not present or expired"}
 })
 async def refresh(Authorize: AuthJWT = Depends()):
     try:
         Authorize.jwt_refresh_token_required()
     except:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                            detail="Refresh token not present")
-    user_id = Authorize.get_jwt_subject()
-    return AccessToken(access_token=Authorize.create_access_token(subject=user_id), token_type="Bearer")
+                            detail="Refresh token not present or expired")
+    return create_access_token(user_id=Authorize.get_jwt_subject(), Authorize=Authorize)
 
 
 @router.post("/register", response_model=UserOut, responses={
