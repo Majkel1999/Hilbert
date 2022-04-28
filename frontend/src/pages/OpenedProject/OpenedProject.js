@@ -61,7 +61,7 @@ export default function OpenedProject() {
               icon="fa-solid fa-copy"
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `${process.env.REACT_APP_WEB_URL}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
+                  `${window.location.host}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
                 );
               }}
               size="lg"
