@@ -1,13 +1,17 @@
 from typing import List
 
+from app.models.actions import Action
 from app.models.project_models import Project, TextDocument
 from app.models.request_models import FileDeleteRequest, Tag
 from app.utility.connectors.rabbitmq_connector import rabbitBroker
 from app.utility.file_helper import handleFile
 from app.utility.security import check_for_project_ownership
+from app.utility.websocket_manager import wsManager
 from beanie import WriteRules
 from bson import ObjectId
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
+from fastapi import (APIRouter, Depends, HTTPException, UploadFile,
+                     WebSocketDisconnect, status)
+from starlette.websockets import WebSocket
 
 router = APIRouter(
     prefix="/project",
@@ -20,9 +24,21 @@ router = APIRouter(
 )
 
 
+@router.websocket("/{projectId}/ws")
+async def project_websocket(projectId: str, websocket: WebSocket):
+    connection = await wsManager.connect(websocket, projectId)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        wsManager.disconnect(connection)
+
+
 @router.post("/{project_id}/train")
 async def queue_model_training(project: Project = Depends(check_for_project_ownership)):
-    return await rabbitBroker.sendMessage(str(project.id))
+    projectId = str(project.id)
+    await wsManager.send_by_projectId(Action.ModelTrainig, projectId)
+    return await rabbitBroker.sendMessage(projectId)
 
 
 @router.post("/{project_id}/file")
@@ -35,6 +51,7 @@ async def upload_file(files: List[UploadFile], project: Project = Depends(check_
         await document.insert()
         project.texts.append(document)
     await project.save(link_rule=WriteRules.WRITE)
+    await wsManager.send_by_projectId(Action.FileAdded, str(project.id))
     return response
 
 
@@ -47,8 +64,8 @@ async def delete_file(file_id: FileDeleteRequest, project: Project = Depends(che
     await project.fetch_all_links()
     fileToDelete = await TextDocument.find_one(TextDocument.id == ObjectId(file_id.file_id))
     if(fileToDelete and any(file.id == ObjectId(file_id.file_id) for file in project.texts)):
-
         await fileToDelete.delete()
+        await wsManager.send_by_projectId(Action.FileDeleted, str(project.id))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
