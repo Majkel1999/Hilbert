@@ -1,10 +1,12 @@
 import base64
 from typing import List
 
+from app.models.actions import Action
 from app.models.project_models import Project, ProjectCreationData
 from app.models.user_models import User
 from app.utility.security import (check_for_project_ownership,
                                   get_current_active_user)
+from app.utility.websocket_manager import wsManager
 from fastapi import APIRouter, Depends, HTTPException, status
 from passlib.hash import sha256_crypt
 
@@ -60,6 +62,7 @@ async def create_project(projectCreationData: ProjectCreationData, user: User = 
 })
 async def delete_project(project: Project = Depends(check_for_project_ownership)):
     projectName = await removeProject(project)
+    await wsManager.send_by_projectId(Action.ProjectDeleted, str(project.id))
     return projectName + " deleted successfuly"
 
 
