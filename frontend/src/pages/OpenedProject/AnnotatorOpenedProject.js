@@ -79,8 +79,10 @@ export default function AnnotatorOpenedProject() {
       }));
       setTagsWithAddedProps(tagArr);
     }
-    if (currentProjectData.is_multi_label) {
+    console.log(currentProjectData);
+    if (currentProjectData.isMultiLabel) {
       setIsMultiLabel(true);
+      console.log("Is multi label");
     }
   }, [currentProjectData]);
 
