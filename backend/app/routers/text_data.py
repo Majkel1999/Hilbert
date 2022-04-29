@@ -50,10 +50,11 @@ async def get_dataset(project_id: str):
         if(not project):
             raise exception
         texts = []
+        labels = []
         for text in project.texts:
-            texts.append(DataEntry(text=text.value, label=list(map(
-                lambda x: project.data.tags.index(x), text.tags))))
-        return DatasetResponse(tags=project.data.tags, data=texts)
+            texts.append(text.value)
+            labels.append(list(map(lambda x : project.data.tags.index(x), text.tags)))
+        return DatasetResponse(texts=texts, labels=labels)
     except Exception as e:
         print(e)
         raise exception

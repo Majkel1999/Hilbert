@@ -14,12 +14,6 @@ class TagRequest(BaseModel):
 class FileDeleteRequest(BaseModel):
     file_id: str
 
-
-class DataEntry(BaseModel):
-    text: str
-    label: List[int]
-
-
 class DatasetResponse(BaseModel):
-    tags: List[str]
-    data: List[DataEntry]
+    labels: List[List[int]]
+    texts: List[str]
