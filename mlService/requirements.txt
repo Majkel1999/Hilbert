@@ -1,2 +1,0 @@
-aio_pika==7.1.2
-tensorflow==2.8.0
