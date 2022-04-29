@@ -79,26 +79,6 @@ async def delete_file(file_id: FileDeleteRequest, project: Project = Depends(che
         raise notFoundException
 
 
-@router.get("/{project_id}/tag",
-            response_model=List[str],
-            responses={
-                status.HTTP_400_BAD_REQUEST: {
-                    "description": "Project not found"
-                }
-            })
-async def get_tags(project_id: str):
-    exception = HTTPException(
-        status_code=status.HTTP_400_BAD_REQUEST,
-        detail="Project not found"
-    )
-    try:
-        project = await Project.find_one(Project.id == ObjectId(project_id))
-        if(not project):
-            raise exception
-        return project.data.tags
-    except:
-        raise exception
-
 
 @router.post("/{project_id}/tag", responses={
     status.HTTP_409_CONFLICT: {"description": "Duplicate tag"}

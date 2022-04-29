@@ -65,7 +65,7 @@ async def tag_text(request: TagRequest, project: Project = Depends(check_invite_
             detail="Text not found"
         )
 
-    if(not any(x.id == textId) for x in project.texts):
+    if(not any(x.id == textId for x in project.texts)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invite link not matching document"
