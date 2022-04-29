@@ -39,7 +39,7 @@ async def get_random_text(project: Project = Depends(check_invite_url)):
 
 
 @router.post("/{invite_url}/tag", response_model=TextDocument,    responses={
-    status.HTTP_400_BAD_REQUEST: {"description": "Tag array cannot be empty or multiple tags in single-label project"},
+    status.HTTP_400_BAD_REQUEST: {"description": "Tag array cannot be empty or multiple tags in single-label project or text not found"},
     status.HTTP_401_UNAUTHORIZED: {"description": "Invite link not matching document"},
     status.HTTP_406_NOT_ACCEPTABLE: {"description": "Tag doesn't exist in project"},
     status.HTTP_409_CONFLICT: {"description": "Text already tagged"},
@@ -57,7 +57,15 @@ async def tag_text(request: TagRequest, project: Project = Depends(check_invite_
             detail="Multiple tags in a single label project"
         )
 
-    if(not any(x.id == ObjectId(request.text_id) for x in project.texts)):
+    try:
+        textId = ObjectId(request.text_id)
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Text not found"
+        )
+
+    if(not any(x.id == textId) for x in project.texts):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invite link not matching document"
@@ -71,7 +79,7 @@ async def tag_text(request: TagRequest, project: Project = Depends(check_invite_
                 detail=f'Tag: - {tag} - does not exist in project'
             )
 
-    text = await TextDocument.find_one(TextDocument.id == ObjectId(request.text_id))
+    text = await TextDocument.find_one(TextDocument.id == textId)
     if(len(text.tags) != 0):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,

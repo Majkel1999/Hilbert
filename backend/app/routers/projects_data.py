@@ -61,16 +61,43 @@ async def upload_file(files: List[UploadFile], project: Project = Depends(check_
                        "description": "File not found"}
                })
 async def delete_file(file_id: FileDeleteRequest, project: Project = Depends(check_for_project_ownership)):
+    notFoundException = HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="File not found"
+    )
+
     await project.fetch_all_links()
-    fileToDelete = await TextDocument.find_one(TextDocument.id == ObjectId(file_id.file_id))
-    if(fileToDelete and any(file.id == ObjectId(file_id.file_id) for file in project.texts)):
+    try:
+        fileId = ObjectId(file_id.file_id)
+    except:
+        raise notFoundException
+    fileToDelete = await TextDocument.find_one(TextDocument.id == fileId)
+    if(fileToDelete and any(file.id == fileId for file in project.texts)):
         await fileToDelete.delete()
         await wsManager.send_by_projectId(Action.FileDeleted, str(project.id))
     else:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="File not found"
-        )
+        raise notFoundException
+
+
+@router.get("/{project_id}/tag",
+            response_model=List[str],
+            responses={
+                status.HTTP_400_BAD_REQUEST: {
+                    "description": "Project not found"
+                }
+            })
+async def get_tags(project_id: str):
+    exception = HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Project not found"
+    )
+    try:
+        project = await Project.find_one(Project.id == ObjectId(project_id))
+        if(not project):
+            raise exception
+        return project.data.tags
+    except:
+        raise exception
 
 
 @router.post("/{project_id}/tag", responses={
