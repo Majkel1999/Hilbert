@@ -2,6 +2,7 @@ version: '3'
 services:
   loadbalancer:
     image: traefik:2.6.1
+    restart: always
     ports:
       - '${EXTERNAL_PORT}:80'
       - "8080:8080"
@@ -17,6 +18,7 @@ services:
   frontend:
     build: ./frontend/
     image: hilbert_frontend
+    restart: always
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.frontend.rule=PathPrefix(`/`)'
@@ -37,16 +39,20 @@ services:
       - DB_CONN_STRING=mongodb://root:root@mongodb:27017
     restart: always
 
-  # mlService:
-  #   build: ./mlService/
-  #   image: hilbert_mlservice
-  #   restart: always
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - capabilities:
-  #               - "gpu"
+  mlService:
+    build: ./mlService/
+    image: hilbert_mlservice
+    restart: always
+    volumes:
+      - mldata:/var/results
+      - mlcache:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - "gpu"
+
   mongodb:
     image: mongo:5.0.6
     restart: always
@@ -62,6 +68,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
+    restart: always
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.rabbitmq.rule=PathPrefix(`/rabbitmq`)'
@@ -69,6 +76,8 @@ services:
       - 'traefik.http.routers.rabbitmq.middlewares=rabbitmq-stripprefix'
       - 'traefik.http.middlewares.rabbitmq-stripprefix.stripprefix.prefixes=/rabbitmq'
       - 'traefik.http.services.rabbitmq.loadbalancer.server.port=15672'
+    ports:
+      - "5672:5672"
     volumes:
       - rabbitmq:/var/lib/rabbitmq
 
@@ -111,3 +120,5 @@ volumes:
   rabbitmq:
   prometheus-data:
   grafana-data:
+  mldata:
+  mlcache:
