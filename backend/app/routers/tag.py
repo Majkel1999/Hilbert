@@ -25,11 +25,14 @@ async def get_project_info(project: Project = Depends(check_invite_url)):
 @router.get("/{invite_url}/text", response_model=TextOut, responses={
     status.HTTP_406_NOT_ACCEPTABLE: {"description": "All texts in project are tagged"},
 })
-async def get_random_text(project: Project = Depends(check_invite_url)):
+async def get_random_text(predict: bool = False, project: Project = Depends(check_invite_url)):
     try:
         texts = [x for x in project.texts if len(x.tags) == 0]
         document: TextDocument = random.choice(texts)
-        return TextOut(id=document.id, name=document.name, value=document.value, possible_tags=project.data.tags)
+        tag = None
+        if(predict):
+            tag = random.choice(project.data.tags)
+        return TextOut(id=document.id, name=document.name, value=document.value, possible_tags=project.data.tags, preferredTag=tag)
     except Exception as e:
         print(e)
         raise HTTPException(
