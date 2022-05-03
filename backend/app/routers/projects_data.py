@@ -80,31 +80,31 @@ async def delete_file(file_id: FileDeleteRequest, project: Project = Depends(che
 
 
 
-@router.post("/{project_id}/tag", responses={
-    status.HTTP_409_CONFLICT: {"description": "Duplicate tag"}
-})
-async def add_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
-    tag = tag.tag.casefold()
-    if(any(x == tag for x in project.data.tags)):
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Duplicate tag")
-    else:
-        project.data.tags.append(tag)
-        await project.save()
-        return f"Tag created: {tag}"
+# @router.post("/{project_id}/tag", responses={
+#     status.HTTP_409_CONFLICT: {"description": "Duplicate tag"}
+# })
+# async def add_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
+#     tag = tag.tag.casefold()
+#     if(any(x == tag for x in project.data.tags)):
+#         raise HTTPException(
+#             status_code=status.HTTP_409_CONFLICT,
+#             detail="Duplicate tag")
+#     else:
+#         project.data.tags.append(tag)
+#         await project.save()
+#         return f"Tag created: {tag}"
 
 
-@router.delete("/{project_id}/tag", responses={
-    status.HTTP_404_NOT_FOUND: {"description": "Tag not present in list"}
-})
-async def delete_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
-    tag = tag.tag.casefold()
-    if(any(x == tag for x in project.data.tags)):
-        project.data.tags.remove(tag)
-        await project.save()
-        return f"Tag deleted: {tag}"
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Tag not present")
+# @router.delete("/{project_id}/tag", responses={
+#     status.HTTP_404_NOT_FOUND: {"description": "Tag not present in list"}
+# })
+# async def delete_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
+#     tag = tag.tag.casefold()
+#     if(any(x == tag for x in project.data.tags)):
+#         project.data.tags.remove(tag)
+#         await project.save()
+#         return f"Tag deleted: {tag}"
+#     else:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail="Tag not present")
