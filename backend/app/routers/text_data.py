@@ -1,7 +1,7 @@
 from typing import List
 
 from app.models.project_models import Project
-from app.models.request_models import DataEntry, DatasetResponse
+from app.models.request_models import DatasetResponse
 from bson.objectid import ObjectId
 from fastapi import APIRouter, HTTPException, status
 
@@ -52,8 +52,10 @@ async def get_dataset(project_id: str):
         texts = []
         labels = []
         for text in project.texts:
-            texts.append(text.value)
-            labels.append(list(map(lambda x : project.data.tags.index(x), text.tags)))
+            if(len(text.tags) > 0):
+                texts.append(text.value)
+                labels.append(
+                    list(map(lambda x: project.data.tags.index(x), text.tags)))
         return DatasetResponse(texts=texts, labels=labels)
     except Exception as e:
         print(e)

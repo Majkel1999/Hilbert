@@ -3,7 +3,7 @@ from typing import List
 from app.models.actions import Action
 from app.models.project_models import Project, TextDocument
 from app.models.request_models import FileDeleteRequest, Tag
-from app.utility.connectors.rabbitmq_connector import rabbitBroker
+from app.utility.connectors.rabbitmq_sender import rabbitBroker
 from app.utility.file_helper import handleFile
 from app.utility.security import check_for_project_ownership
 from app.utility.websocket_manager import wsManager

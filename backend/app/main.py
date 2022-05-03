@@ -3,7 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.routers import projects, projects_data, tag, users, text_data
 from app.utility.connectors.database_connector import close_db, init_db
-from app.utility.connectors.rabbitmq_connector import rabbitBroker
+from app.utility.connectors.rabbitmq_sender import rabbitBroker
 
 tags_metadata = [
     {
