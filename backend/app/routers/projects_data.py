@@ -3,7 +3,7 @@ from typing import List
 from app.models.actions import Action
 from app.models.project_models import Project, TextDocument
 from app.models.request_models import FileDeleteRequest, Tag
-from app.utility.connectors.rabbitmq_connector import rabbitBroker
+from app.utility.connectors.rabbitmq_sender import rabbitBroker
 from app.utility.file_helper import handleFile
 from app.utility.security import check_for_project_ownership
 from app.utility.websocket_manager import wsManager
@@ -61,43 +61,50 @@ async def upload_file(files: List[UploadFile], project: Project = Depends(check_
                        "description": "File not found"}
                })
 async def delete_file(file_id: FileDeleteRequest, project: Project = Depends(check_for_project_ownership)):
+    notFoundException = HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="File not found"
+    )
+
     await project.fetch_all_links()
-    fileToDelete = await TextDocument.find_one(TextDocument.id == ObjectId(file_id.file_id))
-    if(fileToDelete and any(file.id == ObjectId(file_id.file_id) for file in project.texts)):
+    try:
+        fileId = ObjectId(file_id.file_id)
+    except:
+        raise notFoundException
+    fileToDelete = await TextDocument.find_one(TextDocument.id == fileId)
+    if(fileToDelete and any(file.id == fileId for file in project.texts)):
         await fileToDelete.delete()
         await wsManager.send_by_projectId(Action.FileDeleted, str(project.id))
     else:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="File not found"
-        )
+        raise notFoundException
 
 
-@router.post("/{project_id}/tag", responses={
-    status.HTTP_409_CONFLICT: {"description": "Duplicate tag"}
-})
-async def add_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
-    tag = tag.tag.casefold()
-    if(any(x == tag for x in project.data.tags)):
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Duplicate tag")
-    else:
-        project.data.tags.append(tag)
-        await project.save()
-        return f"Tag created: {tag}"
+
+# @router.post("/{project_id}/tag", responses={
+#     status.HTTP_409_CONFLICT: {"description": "Duplicate tag"}
+# })
+# async def add_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
+#     tag = tag.tag.casefold()
+#     if(any(x == tag for x in project.data.tags)):
+#         raise HTTPException(
+#             status_code=status.HTTP_409_CONFLICT,
+#             detail="Duplicate tag")
+#     else:
+#         project.data.tags.append(tag)
+#         await project.save()
+#         return f"Tag created: {tag}"
 
 
-@router.delete("/{project_id}/tag", responses={
-    status.HTTP_404_NOT_FOUND: {"description": "Tag not present in list"}
-})
-async def delete_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
-    tag = tag.tag.casefold()
-    if(any(x == tag for x in project.data.tags)):
-        project.data.tags.remove(tag)
-        await project.save()
-        return f"Tag deleted: {tag}"
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Tag not present")
+# @router.delete("/{project_id}/tag", responses={
+#     status.HTTP_404_NOT_FOUND: {"description": "Tag not present in list"}
+# })
+# async def delete_tag(tag: Tag,  project: Project = Depends(check_for_project_ownership)):
+#     tag = tag.tag.casefold()
+#     if(any(x == tag for x in project.data.tags)):
+#         project.data.tags.remove(tag)
+#         await project.save()
+#         return f"Tag deleted: {tag}"
+#     else:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail="Tag not present")

@@ -1,24 +1,24 @@
-import asyncio
-from cgi import test
-from distutils.command.config import config
-import tensorflow
+from fastapi import FastAPI
+from pydantic import BaseModel
+from services.handler_service import classifyText
+from connectors.rabbitmq_consumer import rabbitBroker
 
-from aio_pika.abc import AbstractIncomingMessage
-
-from connectors.rabbitmq_connector import rabbitBroker
+app = FastAPI()
 
 
-async def on_message(message: AbstractIncomingMessage) -> None:
-    print(" [x] Received message %r" % message)
-    print("Message body is: %r" % message.body.decode())
-    await message.ack()
+class TextRequest(BaseModel):
+    text: str
 
 
-async def main() -> None:
-    print(f'GPU avability: {tensorflow.test.is_gpu_available()}')
+@app.post("/{project_id}/classify")
+async def get(project_id: str, text: TextRequest):
+    return await classifyText(project_id, text.text)
+
+@app.on_event("startup")
+async def app_init():
     await rabbitBroker.init()
-    await rabbitBroker.consumeMessages(on_message)
 
 
-if __name__ == "__main__":
-    asyncio.run(main())
+@app.on_event("shutdown")
+async def shutdown():
+    await rabbitBroker.closeConnection()
