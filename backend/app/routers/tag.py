@@ -1,5 +1,4 @@
 import random
-from unicodedata import name
 
 from app.models.project_models import (Project, ProjectOut, TextDocument,
                                        TextOut)
