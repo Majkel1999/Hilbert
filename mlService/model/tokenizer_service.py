@@ -3,7 +3,8 @@ import time
 from typing import Dict, List
 
 import requests
-from model_handler.tokenizer import ModelHandler
+
+from model.tokenizer import ModelHandler
 
 SECONDS = 300
 
@@ -52,7 +53,7 @@ async def get_project_handler(projectId: str) -> ModelHandler:
             return None
 
 
-async def classifyText(projectId: str, text: str) -> str:
+async def classifyText(projectId: str, text: str) -> Dict[str,float]:
     handler = await get_project_handler(projectId)
     return handler.classifyText(text)
 

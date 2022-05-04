@@ -1,7 +1,7 @@
 import asyncio
-import aio_pika
 
-from services.handler_service import trainModel
+import aio_pika
+from model.tokenizer_service import trainModel
 
 RABBIT_HOST = "rabbitmq"
 QUEUE_NAME = "model_training"
