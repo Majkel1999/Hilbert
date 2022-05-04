@@ -5,7 +5,10 @@ from pydantic import BaseModel
 from connectors.rabbitmq_consumer import rabbitBroker
 from model.tokenizer_service import classifyText
 
-app = FastAPI()
+app = FastAPI(
+    docs_url=None,
+    redoc_url=None
+)
 
 
 class TextRequest(BaseModel):

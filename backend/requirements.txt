@@ -12,3 +12,4 @@ pdfminer.six==20211012
 aio-pika==7.1.2
 fastapi_jwt_auth==0.5.0
 websockets==10.2
+requests==2.25.1
