@@ -39,19 +39,19 @@ services:
       - DB_CONN_STRING=mongodb://root:root@mongodb:27017
     restart: always
 
-  mlService:
-    build: ./mlService/
-    image: hilbert_mlservice
-    restart: always
-    volumes:
-      - mldata:/var/results
-      - mlcache:/root/.cache/huggingface
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities:
-                - "gpu"
+  # mlService:
+  #   build: ./mlService/
+  #   image: hilbert_mlservice
+  #   restart: always
+  #   volumes:
+  #     - mldata:/var/results
+  #     - mlcache:/root/.cache/huggingface
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - capabilities:
+  #               - "gpu"
 
   mongodb:
     image: mongo:5.0.6
