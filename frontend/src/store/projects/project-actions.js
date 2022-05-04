@@ -174,7 +174,6 @@ export const tagText =
         tags,
         text_id: textId,
       });
-      console.log(response);
       if (response.status === 200) dispatch(fetchAnnotatorText(inviteUrl));
     } catch (error) {
       console.log(error);
