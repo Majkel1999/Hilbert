@@ -129,7 +129,11 @@ export default function AnnotatorOpenedProject() {
         </div>
 
         <div className="filesWrapper annotator">
-          <FileList files={projectTexts} openedProjectId={params.id} />
+          <FileList
+            files={projectTexts}
+            openedProjectId={params.id}
+            currentTextId={fetchedTextData.id}
+          />
         </div>
       </div>
     </div>
