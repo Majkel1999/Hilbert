@@ -1,16 +1,21 @@
+from typing import Dict
 from fastapi import FastAPI
 from pydantic import BaseModel
-from services.handler_service import classifyText
-from connectors.rabbitmq_consumer import rabbitBroker
 
-app = FastAPI()
+from connectors.rabbitmq_consumer import rabbitBroker
+from model.tokenizer_service import classifyText
+
+app = FastAPI(
+    docs_url=None,
+    redoc_url=None
+)
 
 
 class TextRequest(BaseModel):
     text: str
 
 
-@app.post("/{project_id}/classify")
+@app.post("/{project_id}/classify", response_model=Dict[str,float])
 async def get(project_id: str, text: TextRequest):
     return await classifyText(project_id, text.text)
 

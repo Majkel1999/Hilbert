@@ -1,4 +1,5 @@
 from typing import List
+
 from pydantic import BaseModel
 
 
@@ -13,6 +14,7 @@ class TagRequest(BaseModel):
 
 class FileDeleteRequest(BaseModel):
     file_id: str
+
 
 class DatasetResponse(BaseModel):
     labels: List[List[int]]

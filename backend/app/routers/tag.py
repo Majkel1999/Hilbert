@@ -1,5 +1,6 @@
 import random
-from unicodedata import name
+
+import requests
 
 from app.models.project_models import (Project, ProjectOut, TextDocument,
                                        TextOut)
@@ -7,6 +8,8 @@ from app.models.request_models import TagRequest
 from app.utility.security import check_invite_url
 from bson.objectid import ObjectId
 from fastapi import APIRouter, Depends, HTTPException, status
+
+MLService_URL = "http://mlService"
 
 router = APIRouter(
     prefix="/tag",
@@ -24,22 +27,36 @@ async def get_project_info(project: Project = Depends(check_invite_url)):
 
 @router.get("/{invite_url}/text", response_model=TextOut, responses={
     status.HTTP_406_NOT_ACCEPTABLE: {"description": "All texts in project are tagged"},
+    status.HTTP_400_BAD_REQUEST: {
+        "description": "MLService is offline or not responding"}
 })
 async def get_random_text(predict: bool = False, project: Project = Depends(check_invite_url)):
     try:
         texts = [x for x in project.texts if len(x.tags) == 0]
         document: TextDocument = random.choice(texts)
-        tag = None
-        if(predict):
-            tag = random.choice(project.data.tags)
-        return TextOut(id=document.id, name=document.name, value=document.value, possible_tags=project.data.tags, preferredTag=tag)
     except Exception as e:
         print(e)
         raise HTTPException(
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="All texts have been tagged"
         )
-
+    tag = None
+    if(predict):
+        try:
+            response = requests.post(f'{MLService_URL}/{str(project.id)}/classify',
+                                    json={"text": document.value},
+                                     timeout=5)
+            if(not response.status_code == 200):
+                raise Exception()
+            tag = response.json()
+            print(tag)
+        except Exception as e:
+            print(e)
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="MLService is offline or not responding"
+            )
+    return TextOut(id=document.id, name=document.name, value=document.value, possible_tags=project.data.tags, preferredTag=tag)
 
 @router.post("/{invite_url}/tag", response_model=TextDocument,    responses={
     status.HTTP_400_BAD_REQUEST: {"description": "Tag array cannot be empty or multiple tags in single-label project or text not found"},

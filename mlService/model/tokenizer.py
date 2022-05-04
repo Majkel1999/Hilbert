@@ -1,16 +1,18 @@
 import os
 import shutil
-from typing import List
+from typing import Dict, List
+import numpy as np
 
 from torch import argmax, tensor
 from torch.utils.data import Dataset
 from transformers import (AutoModelForSequenceClassification, AutoTokenizer,
                           DataCollatorWithPadding, Trainer, TrainingArguments)
+
 # Model Arguments
 
 TOKENIZER_NAME = "distilbert-base-uncased"
 MODEL_NAME = "distilbert-base-uncased"
-SAVE_DIR = "/var/results"
+SAVE_DIR = "./results"
 
 # Learning Arguments
 
@@ -63,9 +65,15 @@ class ModelHandler:
                               max_length=512,
                               return_tensors="pt")
 
-    def classifyText(self, text: str) -> str:
+    def classifyText(self, text: str) -> Dict[str,float]:
         classification = self.model(**self.preprocessText(text))
-        return self.tags[argmax(classification.logits)]
+        classified_tags = classification.logits.detach().numpy()
+        d = {}
+        i = 0
+        for tag in self.tags:
+            d[tag] = classified_tags[0][i]
+            i = i+1
+        return d
 
     def trainModel(self, dataset):
         self.isTraining = True
