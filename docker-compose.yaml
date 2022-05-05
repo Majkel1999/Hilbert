@@ -1,124 +1,103 @@
 version: '3'
 services:
   loadbalancer:
-    image: traefik:2.6.1
+    image: 'traefik:2.6.1'
     restart: always
     ports:
       - '${EXTERNAL_PORT}:80'
-      - "8080:8080"
+    #  - '8080:8080'
     command:
-      - "--api.insecure=true"
+    #  - '--api.insecure=true'
       - '--providers.docker'
       - '--providers.docker.exposedbydefault=false'
       - '--entrypoints.web.address=:80'
       - '--metrics.prometheus=true'
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
-
   frontend:
     build: ./frontend/
     image: hilbert_frontend
     restart: always
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.frontend.rule=PathPrefix(`/`)'
-      - 'traefik.http.routers.frontend.entrypoints=web'
-      - 'traefik.http.services.frontend-service.loadBalancer.sticky.cookie=true'
-      - 'traefik.http.services.frontend-service.loadBalancer.sticky.cookie.name=UjFyHvjMxzVCF48BgE0A'
-
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=PathPrefix(`/`)
+      - traefik.http.routers.frontend.entrypoints=web
+      - traefik.http.services.frontend-service.loadBalancer.sticky.cookie=true
+      - traefik.http.services.frontend-service.loadBalancer.sticky.cookie.name=UjFyHvjMxzVCF48BgE0A
   backend:
     build: ./backend/
     image: hilbert_backend
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.backend.rule=PathPrefix(`/api/v1`)'
-      - 'traefik.http.routers.backend.entrypoints=web'
-      - 'traefik.http.routers.backend.middlewares=backend-stripprefix'
-      - 'traefik.http.middlewares.backend-stripprefix.stripprefix.prefixes=/api/v1'
+      - traefik.enable=true
+      - traefik.http.routers.backend.rule=PathPrefix(`/api/v1`)
+      - traefik.http.routers.backend.entrypoints=web
+      - traefik.http.routers.backend.middlewares=backend-stripprefix
+      - traefik.http.middlewares.backend-stripprefix.stripprefix.prefixes=/api/v1
     environment:
-      - DB_CONN_STRING=mongodb://root:root@mongodb:27017
+      - 'DB_CONN_STRING=mongodb://root:root@mongodb:27017'
     restart: always
-
-  # mlService:
-  #   build: ./mlService/
-  #   image: hilbert_mlservice
-  #   restart: always
-  #   volumes:
-  #     - mldata:/var/results
-  #     - mlcache:/root/.cache/huggingface
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - capabilities:
-  #               - "gpu"
-
   mongodb:
-    image: mongo:5.0.6
+    image: 'mongo:5.0.6'
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
     volumes:
-      - mongodbdata:/data/db
-      - mongodbconfig:/data/configdb
+      - 'mongodbdata:/data/db'
+      - 'mongodbconfig:/data/configdb'
     command: mongod --quiet --logpath /dev/null
     ports:
       - '27017:27017'
-
   rabbitmq:
-    image: rabbitmq:3-management
+    image: 'rabbitmq:3-management'
     restart: always
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.rabbitmq.rule=PathPrefix(`/rabbitmq`)'
-      - 'traefik.http.routers.rabbitmq.entrypoints=web'
-      - 'traefik.http.routers.rabbitmq.middlewares=rabbitmq-stripprefix'
-      - 'traefik.http.middlewares.rabbitmq-stripprefix.stripprefix.prefixes=/rabbitmq'
-      - 'traefik.http.services.rabbitmq.loadbalancer.server.port=15672'
+      - traefik.enable=true
+      - traefik.http.routers.rabbitmq.rule=PathPrefix(`/rabbitmq`)
+      - traefik.http.routers.rabbitmq.entrypoints=web
+      - traefik.http.routers.rabbitmq.middlewares=rabbitmq-stripprefix
+      - traefik.http.middlewares.rabbitmq-stripprefix.stripprefix.prefixes=/rabbitmq
+      - traefik.http.services.rabbitmq.loadbalancer.server.port=15672
     ports:
-      - "5672:5672"
+      - '5672:5672'
     volumes:
-      - rabbitmq:/var/lib/rabbitmq
-
+      - 'rabbitmq:/var/lib/rabbitmq'
   prometheus:
-    image: prom/prometheus:v2.34.0
+    image: 'prom/prometheus:v2.34.0'
     volumes:
-      - ./monitoring/prometheus:/etc/prometheus
-      - prometheus-data:/prometheus
+      - './monitoring/prometheus:/etc/prometheus'
+      - 'prometheus-data:/prometheus'
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.prometheus.rule=PathPrefix(`/prometheus`)'
-      - 'traefik.http.routers.prometheus.entrypoints=web'
-      - 'traefik.http.services.prometheus.loadbalancer.server.port=9090'
-    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml --web.external-url=/prometheus/
+      - traefik.enable=true
+      - traefik.http.routers.prometheus.rule=PathPrefix(`/prometheus`)
+      - traefik.http.routers.prometheus.entrypoints=web
+      - traefik.http.services.prometheus.loadbalancer.server.port=9090
+    command: '--web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml --web.external-url=/prometheus/'
     profiles:
-      - "production"
-
+      - production
   grafana:
-    image: grafana/grafana-oss:8.4.5
+    image: 'grafana/grafana-oss:8.4.5'
     volumes:
-      - grafana-data:/var/lib/grafana
-      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
-      - ./monitoring/grafana/dashboards_config:/etc/grafana/provisioning/dashboards
-      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+      - 'grafana-data:/var/lib/grafana'
+      - './monitoring/grafana/datasources:/etc/grafana/provisioning/datasources'
+      - './monitoring/grafana/dashboards_config:/etc/grafana/provisioning/dashboards'
+      - './monitoring/grafana/dashboards:/var/lib/grafana/dashboards'
     environment:
-      - GF_SERVER_DOMAIN=${HOST}
-      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:${EXTERNAL_PORT}/grafana/
-      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - 'GF_SERVER_DOMAIN=${HOST}'
+      - 'GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:${EXTERNAL_PORT}/grafana/'
+      - 'GF_SERVER_SERVE_FROM_SUB_PATH=true'
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.grafana.entrypoints=web'
-      - 'traefik.http.routers.grafana.rule=PathPrefix(`/grafana`)'
-      - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
+      - traefik.enable=true
+      - traefik.http.routers.grafana.entrypoints=web
+      - traefik.http.routers.grafana.rule=PathPrefix(`/grafana`)
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
     profiles:
-      - "production"
-
+      - production
 volumes:
-  mongodbdata:
-  mongodbconfig:
-  rabbitmq:
-  prometheus-data:
-  grafana-data:
-  mldata:
-  mlcache:
+  mongodbdata: null
+  mongodbconfig: null
+  rabbitmq: null
+  prometheus-data: null
+  grafana-data: null
+  mldata: null
+  mlcache: null
