@@ -35,6 +35,20 @@ services:
       - 'DB_CONN_STRING=mongodb://${DB_USER}:${DB_PASS}@mongodb:27017'
       - 'RABBITMQ_CONN_STRING=ampq://${RABBITMQ_USER}:${RABBITMQ_PASS}@rabbitmq:5672'
     restart: always
+  mlService:
+    build: ./mlService/
+    image: hilbert_mlservice
+    restart: always
+    volumes:
+      - mldata:/var/results
+      - mlcache:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - "gpu"
+
   mongodb:
     image: 'mongo:5.0.6'
     restart: always
