@@ -5,9 +5,7 @@ services:
     restart: always
     ports:
       - '${EXTERNAL_PORT}:80'
-    #  - '8080:8080'
     command:
-    #  - '--api.insecure=true'
       - '--providers.docker'
       - '--providers.docker.exposedbydefault=false'
       - '--entrypoints.web.address=:80'
@@ -34,14 +32,15 @@ services:
       - traefik.http.routers.backend.middlewares=backend-stripprefix
       - traefik.http.middlewares.backend-stripprefix.stripprefix.prefixes=/api/v1
     environment:
-      - 'DB_CONN_STRING=mongodb://root:root@mongodb:27017'
+      - 'DB_CONN_STRING=mongodb://${DB_USER}:${DB_PASS}@mongodb:27017'
+      - 'RABBITMQ_CONN_STRING=ampq://${RABBITMQ_USER}:${RABBITMQ_PASS}@rabbitmq:5672'
     restart: always
   mongodb:
     image: 'mongo:5.0.6'
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
     volumes:
       - 'mongodbdata:/data/db'
       - 'mongodbconfig:/data/configdb'
@@ -58,6 +57,9 @@ services:
       - traefik.http.routers.rabbitmq.middlewares=rabbitmq-stripprefix
       - traefik.http.middlewares.rabbitmq-stripprefix.stripprefix.prefixes=/rabbitmq
       - traefik.http.services.rabbitmq.loadbalancer.server.port=15672
+    environment:
+      - 'RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}'
+      - 'RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASS}'
     ports:
       - '5672:5672'
     volumes:
@@ -85,7 +87,7 @@ services:
     environment:
       - 'GF_SERVER_DOMAIN=${HOST}'
       - 'GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:${EXTERNAL_PORT}/grafana/'
-      - 'GF_SERVER_SERVE_FROM_SUB_PATH=true'
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
     labels:
       - traefik.enable=true
       - traefik.http.routers.grafana.entrypoints=web
