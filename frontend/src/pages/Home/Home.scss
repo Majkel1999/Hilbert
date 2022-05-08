@@ -1,0 +1,85 @@
+.homeContainer {
+  .wrapper {
+    padding: 180px 150px;
+
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+
+    .homeAboutText {
+      flex-direction: column;
+      flex: 70%;
+
+      animation: fadeIn 3s;
+      -webkit-animation: fadeIn 3s;
+      -moz-animation: fadeIn 3s;
+      -o-animation: fadeIn 3s;
+      -ms-animation: fadeIn 3s;
+    }
+    .aboutTitle {
+      font-size: 50px;
+      font-weight: 600;
+      color: #07668c;
+      text-transform: uppercase;
+    }
+    .aboutText {
+      font-size: 24px;
+      padding-right: 250px;
+    }
+
+    .homeImage {
+      flex: 30%;
+      width: 35%;
+      animation: fadeIn 3s;
+      -webkit-animation: fadeIn 3s;
+      -moz-animation: fadeIn 53s;
+      -o-animation: fadeIn 3s;
+      -ms-animation: fadeIn 3s;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

@@ -1,13 +1,13 @@
 .headerContainer {
   height: 8%;
-  background-color: #364958;
+  background-color: #024873;
   display: flex;
   justify-content: space-between;
   a {
     display: flex;
     align-items: center;
     font-size: 3.2rem;
-    color: #c9e4ca;
+    color: #f2f2f2;
     margin-left: 3rem;
     height: 100%;
     text-decoration: none;
@@ -26,15 +26,17 @@
         font-size: 1.4rem;
         min-width: 100px;
         height: 50%;
-        background-color: #55828b;
+        background-color: #7e9abf;
+        opacity: 0.8;
         margin: 0 10px;
         border-radius: 8px;
-        color: #ffffff;
+        color: #fff;
         padding: 3px;
         text-decoration: none;
 
         span {
-          background-color: rgb(5, 6, 45);
+          background-color: #024873;
+
           padding: 5px 20px;
           border-radius: 6px;
           width: 100%;
