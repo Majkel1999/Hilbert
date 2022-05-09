@@ -318,12 +318,13 @@ export const tagText =
         dispatch(
           snackBarActions.setSnackBarData({
             type: STATUS.SUCCESS,
-            message: `Tag ${tags} have been submited`,
+            message: 'Tags have been submited',
           }),
         );
       }
     } catch (error) {
       const message = JSON.parse(error.request.response).detail;
+
       dispatch(
         snackBarActions.setSnackBarData({
           type: STATUS.ERROR,
