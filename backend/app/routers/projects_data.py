@@ -1,5 +1,4 @@
 from typing import List
-
 from app.models.actions import Action
 from app.models.project_models import Project, TextDocument
 from app.models.request_models import FileDeleteRequest
@@ -43,16 +42,22 @@ async def queue_model_training(project: Project = Depends(check_for_project_owne
 
 @router.post("/{project_id}/file")
 async def upload_file(files: List[UploadFile], project: Project = Depends(check_for_project_ownership)):
-    response = list()
+    documents : List[TextDocument] = list()
     for file in files:
         result = await handleFile(file)
-        response.extend(result)
-    for document in response:
+        documents.extend(result)
+    for document in documents:
+        if(not all(tag in project.data.tags for tag in document.tags)):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f'Tags: {document.tags} are not compatible with project'
+            )
+    for document in documents:
         await document.insert()
         project.texts.append(document)
     await project.save(link_rule=WriteRules.WRITE)
     await wsManager.send_by_projectId(Action.FileAdded, str(project.id))
-    return response
+    return documents
 
 
 @router.delete("/{project_id}/file",

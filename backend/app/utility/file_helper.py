@@ -1,28 +1,29 @@
 import re
-from venv import create
 import zipfile
 import csv
 from io import BytesIO, StringIO
 from os import path
-from typing import List, final
+from typing import List
 
-# from app.models.project_models import TextDocument
+from app.models.project_models import TextDocument
 from fastapi import HTTPException, UploadFile, status
 from pdfminer.high_level import extract_text
 
 
-def createDocument(content: str, name: str, tag: List[str] = None):
-    text = {"name": name, "value": content, "tags" : tag}
+def createDocument(content: str, name: str, tag: List[str] = []) -> TextDocument:
+    if(tag == None):
+        tag = []
+    text = TextDocument(name=name, value=content, tags=tag)
     return text
 
 
-def handlePdf(file: bytes, name: str):
+def handlePdf(file: bytes, name: str) -> TextDocument:
     content = extract_text(BytesIO(file))
     content = re.sub('\s\s+', ' ', content)
     return createDocument(content, name)
 
 
-async def handleZip(file: bytes):
+async def handleZip(file: bytes) -> List[TextDocument]:
     result = list()
     fileIo = BytesIO(file)
     with zipfile.ZipFile(fileIo) as archive:
@@ -33,7 +34,7 @@ async def handleZip(file: bytes):
     return result
 
 
-def handleCsv(file: bytes, fileName: str):
+def handleCsv(file: bytes, fileName: str) -> List[TextDocument]:
     file = StringIO(file.decode())
     reader = csv.reader(file, delimiter=';')
     header = next(reader)
@@ -44,22 +45,23 @@ def handleCsv(file: bytes, fileName: str):
     texts = []
     idx = 1
     for row in reader:
-        print(row)
         tag = []
         name = f'{fileName}_{idx}'
         text = row[textIndex]
         if(tagIndex != -1):
             try:
-                tag = row[tagIndex].split(',')
+                tag = row[tagIndex].casefold().split(',')
             except:
                 pass
         if(nameIndex != -1):
             try:
-                name = row[nameIndex]
+                if(row[nameIndex]):
+                    name = row[nameIndex]
             except:
                 pass
         idx = idx + 1
-        texts.append(createDocument(text,name,[value.casefold().strip() for value in tag]))
+        texts.append(createDocument(
+            text, name, [value.casefold().strip() for value in tag]))
     return texts
 
 
@@ -79,7 +81,7 @@ def findIndex(list: List[str], header: str, throw: bool = True) -> int:
     return index
 
 
-async def checkExtensios(file: bytes, name: str, extension: str):
+async def checkExtensios(file: bytes, name: str, extension: str) -> List[TextDocument]:
     result = list()
     if(extension == ".txt"):
         result.append(createDocument(file, name))
@@ -88,7 +90,7 @@ async def checkExtensios(file: bytes, name: str, extension: str):
     elif(extension == ".zip"):
         result.extend(await handleZip(file))
     elif(extension == ".csv"):
-        result.extend(handleCsv(file))
+        result.extend(handleCsv(file, name))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -97,10 +99,7 @@ async def checkExtensios(file: bytes, name: str, extension: str):
     return result
 
 
-async def handleFile(file: UploadFile):
+async def handleFile(file: UploadFile) -> List[TextDocument]:
     name, file_ext = path.splitext(file.filename)
     content = await file.read()
     return await checkExtensios(content, name, file_ext)
-
-
-print(handleCsv(b'text;tag \n"tekst jest; taki";1 \n Taki tez jest;123l,123;0', "dupa"))
