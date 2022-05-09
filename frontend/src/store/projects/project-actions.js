@@ -295,6 +295,7 @@ export const fetchAnnotatorText = (inviteUrl) => async (dispatch) => {
         preferredTag,
       }),
     );
+    return response;
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
@@ -303,6 +304,7 @@ export const fetchAnnotatorText = (inviteUrl) => async (dispatch) => {
         message,
       }),
     );
+    return error;
   }
 };
 export const tagText =
