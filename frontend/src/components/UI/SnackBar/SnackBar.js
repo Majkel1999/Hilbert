@@ -7,21 +7,13 @@ import { STATUS } from '../../../constants/snackBarStatus';
 const SnackBar = ({ type, show, message }) => {
   const snackBarContainers = {
     [STATUS.SUCCESS]: (
-      <FontAwesomeIcon icon="fa-solid fa-check" color="white" fontSize="6x" />
+      <FontAwesomeIcon icon="fa-solid fa-check" color="white" />
     ),
     [STATUS.ERROR]: (
-      <FontAwesomeIcon
-        icon="fa-solid fa-exclamation"
-        color="white"
-        fontSize="6x"
-      />
+      <FontAwesomeIcon icon="fa-solid fa-circle-exclamation" color="white" />
     ),
     [STATUS.INFO]: (
-      <FontAwesomeIcon
-        icon="fa-solid fa-circle-info"
-        color="white"
-        fontSize="6x"
-      />
+      <FontAwesomeIcon icon="fa-solid fa-circle-info" color="white" />
     ),
   };
   const selectedSnackBar = (type) => snackBarContainers[type];

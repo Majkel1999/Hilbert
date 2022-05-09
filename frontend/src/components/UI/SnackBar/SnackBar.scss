@@ -21,12 +21,16 @@
   }
   .symbol {
     flex: 20%;
+    svg {
+      font-size: 20px;
+    }
   }
   .message {
     flex: 80%;
     white-space: nowrap;
     padding: 0 20px;
     font-size: 1.15em;
+    font-weight: 700;
   }
 }
 #show {

@@ -1,8 +1,8 @@
 import {
   faCheck,
+  faCircleExclamation,
   faCircleInfo,
   faCopy,
-  faExclamation,
   faMinus,
   faPlusCircle,
   faTrashAlt,
@@ -21,6 +21,6 @@ library.add(
   faXmark,
   faPlusCircle,
   faCheck,
-  faExclamation,
+  faCircleExclamation,
   faCircleInfo,
 );
