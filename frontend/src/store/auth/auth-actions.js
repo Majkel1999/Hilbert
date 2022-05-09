@@ -1,6 +1,7 @@
 import { LOGIN_URL, REGISTER_URL } from '../../constants/apiUrls';
 import axios from '../../api/axios';
 import { authActions } from './auth-slice';
+import { snackBarActions } from '../snackBar/snackBar-slice';
 
 export const login = (loginData) => async (dispatch) => {
   try {
@@ -12,7 +13,13 @@ export const login = (loginData) => async (dispatch) => {
       }),
     );
   } catch (error) {
-    console.log(error);
+    const message = error.request.response;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: 'error',
+        message,
+      }),
+    );
   }
 };
 
