@@ -95,6 +95,7 @@ class ModelHandler:
             per_device_eval_batch_size=PER_DEVICE_EVAL_BATCH_SIZE,
             num_train_epochs=EPOCHS,
             weight_decay=WEIGHT_DECAY,
+            label_names=self.tags
         )
 
         trainer = Trainer(
@@ -102,7 +103,7 @@ class ModelHandler:
             tokenizer=self.tokenizer,
             args=training_args,
             data_collator=data_collator,
-            train_dataset=data,
+            train_dataset=data
         )
         trainer.train()
         self.model.save_pretrained(f'{SAVE_DIR}/{self.projectId}')
