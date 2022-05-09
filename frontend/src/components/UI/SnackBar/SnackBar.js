@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import './SnackBar.scss';
@@ -5,7 +6,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
 
 const SnackBar = forwardRef((props, ref) => {
-  const [showSnackbar, setShowSnackbar] = useState(true);
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   useImperativeHandle(ref, () => ({
     show() {
