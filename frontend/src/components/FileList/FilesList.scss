@@ -33,7 +33,9 @@
       width: 100%;
       border-radius: 10px;
       border: 1px solid aqua;
-
+      &.selected {
+        border: 2px solid green;
+      }
       .fileContainer {
         display: flex;
         align-items: center;

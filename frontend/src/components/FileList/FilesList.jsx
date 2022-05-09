@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { deleteFileFromProject } from '../../store/projects/project-actions';
 import './FilesList.scss';
 
-export default function FilesList({ files, openedProjectId }) {
+export default function FilesList({ files, openedProjectId, currentTextId }) {
   const dispatch = useDispatch();
 
   const removeFile = (file) => {
@@ -16,7 +16,12 @@ export default function FilesList({ files, openedProjectId }) {
       <h2>Files uploaded to project</h2>
       <ul className="listWrapper">
         {files.map((element, index) => (
-          <li className="listItem" key={index.toString() + 2}>
+          <li
+            className={`listItem ${
+              element.id === currentTextId ? 'selected' : ''
+            }`}
+            key={index.toString() + 2}
+          >
             <div className="fileContainer">
               <span>{element.name}</span>
               {openedProjectId && (
@@ -42,9 +47,11 @@ FilesList.propTypes = {
     }),
   ),
   openedProjectId: PropTypes.string,
+  currentTextId: PropTypes.string,
 };
 
 FilesList.defaultProps = {
   files: [],
   openedProjectId: '',
+  currentTextId: '',
 };

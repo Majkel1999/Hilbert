@@ -9,7 +9,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 SECRET_KEY = "80c3327f78d73bc932a28aa87d484e20e3a1999a2fd1f8e133abf81f924ec8c0"
-ACCESS_TOKEN_EXPIRE = timedelta(minutes=30)
+ACCESS_TOKEN_EXPIRE = timedelta(hours=24)
 REFRESH_TOKEN_EXPIRE = timedelta(days=30)
 
 
@@ -38,7 +38,10 @@ async def get_user(username: str) -> User:
 
 
 async def get_user_by_id(id: str) -> User:
-    return await User.find_one(User.id == ObjectId(id))
+    try:
+        return await User.find_one(User.id == ObjectId(id))
+    except:
+        return None
 
 
 def create_access_token(user_id: str, Authorize: AuthJWT) -> AccessToken:
@@ -99,7 +102,13 @@ async def get_current_active_user(Authorize: AuthJWT = Depends()) -> User:
 
 
 async def check_for_project_ownership(project_id: str, user: User = Depends(get_current_active_user)) -> Project:
-    project = await Project.find_one(Project.owner == str(user.id), Project.id == ObjectId(project_id))
+    try:
+        project = await Project.find_one(Project.owner == str(user.id), Project.id == ObjectId(project_id))
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Project not found by Id"
+        )
     if(project):
         return project
     else:

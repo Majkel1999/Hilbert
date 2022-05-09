@@ -18,6 +18,7 @@ export const fetchProjectsData = () => async (dispatch) => {
             id: item['_id'],
             tags: item.data.tags,
             inviteUrl: item.data.invite_url_postfix,
+            isMultiLabel: item.is_multi_label,
           })) || [],
       }),
     );
@@ -62,6 +63,7 @@ export const fetchSingleProjectData = (projectId) => async (dispatch) => {
           tags: response.data.data.tags,
           texts: response.data.texts,
           inviteUrl: response.data.data.invite_url_postfix,
+          isMultiLabel: response.data.is_multi_label,
         }),
       );
   } catch (error) {
@@ -131,16 +133,26 @@ export const trainModel = (projectId) => async () => {
   }
 };
 
+export const clearTags = (projectId) => async () => {
+  try {
+    const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/clear`);
+    console.log(response);
+  }
+  catch (error) {
+    console.log(error)
+  }
+}
+
 export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
   try {
     const response = await axios.get(TAG_URL(inviteUrl));
-
     dispatch(
       projectsActions.setCurrentProjectData({
         name: response.data.name,
         tags: response.data.data.tags,
         texts: response.data.texts,
         inviteUrl: response.data.data.invite_url_postfix,
+        isMultiLabel: response.data.is_multi_label,
       }),
     );
   } catch (error) {
@@ -150,7 +162,7 @@ export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
 
 export const fetchAnnotatorText = (inviteUrl) => async (dispatch) => {
   try {
-    const response = await axios.get(`${TAG_URL(inviteUrl)}/text`);
+    const response = await axios.get(`${TAG_URL(inviteUrl)}/text?predict=true`);
     const { name, _id, value, preferredTag } = response.data;
     dispatch(
       projectsActions.setFetchedTextData({
@@ -166,13 +178,13 @@ export const fetchAnnotatorText = (inviteUrl) => async (dispatch) => {
 };
 export const tagText =
   ({ inviteUrl, tags, textId }) =>
-  async () => {
+  async (dispatch) => {
     try {
       const response = await axios.post(`${TAG_URL(inviteUrl)}/tag`, {
         tags,
         text_id: textId,
       });
-      console.log(response);
+      if (response.status === 200) dispatch(fetchAnnotatorText(inviteUrl));
     } catch (error) {
       console.log(error);
     }

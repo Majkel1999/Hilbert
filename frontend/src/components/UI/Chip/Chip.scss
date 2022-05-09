@@ -1,6 +1,5 @@
 .chipContainer {
   margin: 3px 0;
-  padding: 6px 18px;
   background-color: #eaeaea;
   font-size: 1.3rem;
   border-radius: 28px;
@@ -11,6 +10,7 @@
 
   span {
     margin: 0 5px;
+    padding: 6px 18px;
   }
   svg {
     cursor: pointer;
