@@ -34,10 +34,11 @@ export default function AnnotatorOpenedProject() {
       updatedTags = tagsWithAddedProps.map((tag) =>
         tag.name === tagName ? { ...tag, selected: !tag.selected } : tag,
       );
-    }
-    else {
+    } else {
       updatedTags = tagsWithAddedProps.map((tag) =>
-        tag.name === tagName ? { ...tag, selected: true } : { ...tag, selected: false },
+        tag.name === tagName
+          ? { ...tag, selected: true }
+          : { ...tag, selected: false },
       );
     }
     setSelectedTags(updatedTags.filter((item) => item.selected));
@@ -79,11 +80,7 @@ export default function AnnotatorOpenedProject() {
       }));
       setTagsWithAddedProps(tagArr);
     }
-    console.log(currentProjectData);
-    if (currentProjectData.isMultiLabel) {
-      setIsMultiLabel(true);
-      console.log("Is multi label");
-    }
+    if (currentProjectData.isMultiLabel) setIsMultiLabel(true);
   }, [currentProjectData]);
 
   return (
@@ -132,7 +129,11 @@ export default function AnnotatorOpenedProject() {
         </div>
 
         <div className="filesWrapper annotator">
-          <FileList files={projectTexts} openedProjectId={params.id} />
+          <FileList
+            files={projectTexts}
+            openedProjectId={params.id}
+            currentTextId={fetchedTextData.id}
+          />
         </div>
       </div>
     </div>
