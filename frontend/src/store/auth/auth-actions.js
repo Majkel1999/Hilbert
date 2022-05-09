@@ -14,7 +14,7 @@ export const login = (loginData) => async (dispatch) => {
       }),
     );
   } catch (error) {
-    const message = error.request.response;
+    const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
         type: STATUS.ERROR,
@@ -36,7 +36,8 @@ export const register = (registerData) => async (dispatch) => {
       );
     return response;
   } catch (error) {
-    const message = error.request.response;
+    const message = JSON.parse(error.request.response).detail;
+
     dispatch(
       snackBarActions.setSnackBarData({
         type: STATUS.ERROR,

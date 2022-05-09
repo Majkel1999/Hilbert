@@ -25,7 +25,7 @@ export const fetchProjectsData = () => async (dispatch) => {
       }),
     );
   } catch (error) {
-    const message = error.request.response;
+    const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
         type: STATUS.ERROR,
@@ -46,7 +46,7 @@ export const sendProjectsData = (project) => async (dispatch) => {
         projectsActions.createNewProject({ id: response.data['_id'], name }),
       );
   } catch (error) {
-    const message = error.request.response;
+    const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
         type: STATUS.ERROR,
@@ -62,7 +62,7 @@ export const deleteProject = (projectId) => async (dispatch) => {
     if (response.status === 200)
       dispatch(projectsActions.removeProject(projectId));
   } catch (error) {
-    const message = error.request.response;
+    const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
         type: STATUS.ERROR,
@@ -86,7 +86,7 @@ export const fetchSingleProjectData = (projectId) => async (dispatch) => {
         }),
       );
   } catch (error) {
-    const message = error.request.response;
+    const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
         type: STATUS.ERROR,
@@ -102,7 +102,13 @@ export const addTagToProject = (projectId, tag) => async (dispatch) => {
     });
     if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
   } catch (error) {
-    console.log(error);
+    const message = JSON.parse(error.request.response).detail;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: STATUS.ERROR,
+        message,
+      }),
+    );
   }
 };
 
@@ -113,7 +119,7 @@ export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
     });
     if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
   } catch (error) {
-    const message = error.request.response;
+    const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
         type: STATUS.ERROR,
@@ -136,7 +142,7 @@ export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
     );
     if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
   } catch (error) {
-    const message = error.request.response;
+    const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
         type: STATUS.ERROR,
@@ -157,7 +163,7 @@ export const deleteFileFromProject =
       );
       if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
     } catch (error) {
-      const message = error.request.response;
+      const message = JSON.parse(error.request.response).detail;
       dispatch(
         snackBarActions.setSnackBarData({
           type: STATUS.ERROR,
@@ -172,7 +178,7 @@ export const trainModel = (projectId) => async (dispatch) => {
     const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/train`);
     console.log(response);
   } catch (error) {
-    const message = error.request.response;
+    const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
         type: STATUS.ERROR,
@@ -187,7 +193,7 @@ export const clearTags = (projectId) => async (dispatch) => {
     const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/clear`);
     console.log(response);
   } catch (error) {
-    const message = error.request.response;
+    const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
         type: STATUS.ERROR,
@@ -210,7 +216,7 @@ export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
       }),
     );
   } catch (error) {
-    const message = error.request.response;
+    const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
         type: STATUS.ERROR,
@@ -233,7 +239,7 @@ export const fetchAnnotatorText = (inviteUrl) => async (dispatch) => {
       }),
     );
   } catch (error) {
-    const message = error.request.response;
+    const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
         type: STATUS.ERROR,
@@ -252,7 +258,7 @@ export const tagText =
       });
       if (response.status === 200) dispatch(fetchAnnotatorText(inviteUrl));
     } catch (error) {
-      const message = error.request.response;
+      const message = JSON.parse(error.request.response).detail;
       dispatch(
         snackBarActions.setSnackBarData({
           type: STATUS.ERROR,
