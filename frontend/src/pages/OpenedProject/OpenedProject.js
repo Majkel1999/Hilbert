@@ -6,6 +6,7 @@ import TagList from '../../components/Tags/TagList';
 import Button from '../../components/UI/Button/Button';
 import FileList from '../../components/FileList/FilesList';
 import {
+  clearTags,
   fetchSingleProjectData,
   trainModel,
 } from '../../store/projects/project-actions';
@@ -28,6 +29,11 @@ export default function OpenedProject() {
     const projectId = params.id;
     dispatch(trainModel(projectId));
   };
+
+  const clearTagsHandler = () => {
+    const projectId = params.id;
+    dispatch(clearTags(projectId));
+  }
 
   useEffect(() => {
     const projectId = params.id;
@@ -61,7 +67,7 @@ export default function OpenedProject() {
               icon="fa-solid fa-copy"
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `${process.env.REACT_APP_WEB_URL}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
+                  `${window.location.host}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
                 );
               }}
               size="lg"
@@ -70,9 +76,12 @@ export default function OpenedProject() {
 
           <div className="textWrapper" />
           <Button
+            text="Clear tags data"
+            onClickHandler={clearTagsHandler}
+          />
+          <Button
             text="Train model"
             onClickHandler={trainModelHandler}
-            isDisabled // Disabled untill model didn't work
           />
         </div>
         <div className="filesWrapper">

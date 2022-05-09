@@ -1,25 +1,28 @@
 import asyncio
-from typing import Callable
+import os
 import aio_pika
 
-RABBIT_HOST = "rabbitmq"
+
 QUEUE_NAME = "model_training"
 
+RABBITMQ_CONN_STRING = os.environ.get('RABBITMQ_CONN_STRING', False)
+
+if RABBITMQ_CONN_STRING is False:
+    raise Exception("RABBITMQ_CONN_STRING env variable is not set")
 
 class RabbitMQHandler:
 
     def __init__(self):
         self._connection = None
         self._channel = None
-        self._queue = None
 
     async def init(self):
         print("Initializing RabbitMQ connection")
         while(True):
             try:
-                self._connection = await aio_pika.connect_robust(host=RABBIT_HOST)
-                self._channel = await self._connection.channel()
-                self._queue = await self._channel.declare_queue(QUEUE_NAME)
+                self._connection: aio_pika.RobustConnection = await aio_pika.connect_robust(RABBITMQ_CONN_STRING)
+                self._channel: aio_pika.RobustChannel = await self._connection.channel()
+                await self._channel.declare_queue(QUEUE_NAME)
                 print("RabbitMQ connection initialized")
                 return
             except:
@@ -32,14 +35,8 @@ class RabbitMQHandler:
             routing_key=queue_name
         )
 
-    async def consumeMessages(self, process_message : Callable[[aio_pika.abc.AbstractIncomingMessage],None] ):
-        await self._queue.consume(process_message)
-        try:
-            await asyncio.Future()
-        finally:
-            await self.closeConnection()
-
     async def closeConnection(self):
+        await self._channel.close()
         await self._connection.close()
 
 

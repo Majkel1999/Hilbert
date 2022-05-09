@@ -14,16 +14,16 @@ class Database:
 DB_CONN_STRING = os.environ.get('DB_CONN_STRING', False)
 
 if DB_CONN_STRING is False:
-    DB_CONN_STRING = "mongodb://root:root@localhost:27017"
+    raise Exception("DB_CONN_STRING env variable is not set")
 
 db = Database()
 
 
 async def init_db():
-    print("Initializing database connection", flush=True)
+    print("Initializing database connection")
     db.client = AsyncIOMotorClient(DB_CONN_STRING)
     await init_beanie(db.client.test, document_models=[User, Project, TextDocument, MLModel])
-    print("Database connection initialized", flush=True)
+    print("Database connection initialized")
 
 
 async def close_db():

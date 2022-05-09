@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from beanie import Document, Link
 from pydantic import BaseModel
@@ -11,7 +11,7 @@ class TextDocument(Document):
 
 class TextOut(TextDocument):
     possible_tags: List[str]
-    preferredTag: Optional[str] = None
+    preferredTag: Dict[str,float] = None
 
 
 class MLModel(Document):

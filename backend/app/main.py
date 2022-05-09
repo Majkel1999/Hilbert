@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from app.routers import projects, projects_data, tag, users
+from app.routers import projects, projects_data, tag, users, text_data
 from app.utility.connectors.database_connector import close_db, init_db
-from app.utility.connectors.rabbitmq_connector import rabbitBroker
+from app.utility.connectors.rabbitmq_sender import rabbitBroker
 
 tags_metadata = [
     {
@@ -41,6 +41,7 @@ app.include_router(users.router)
 app.include_router(projects.router)
 app.include_router(projects_data.router)
 app.include_router(tag.router)
+app.include_router(text_data.router)
 
 
 @app.on_event("startup")

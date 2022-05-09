@@ -1,16 +1,26 @@
 .formContainer {
   width: 20vw;
   border-radius: 5px;
-  background: white;
-  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+  background: none;
+  // opacity: 0.6;
+  //box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+
   .formContent {
     width: 80%;
     display: flex;
     flex-direction: column;
     padding: 20px;
     margin: 0 auto;
+    .input {
+      color: #f2f2f2;
+    }
+
     .formName {
       margin: 0 auto 10px;
+      color: #f2f2f2;
+      font-size: 2.9em;
+      font-weight: 100;
     }
     .form {
       display: flex;
@@ -18,6 +28,30 @@
       align-items: center;
       button {
         margin: 30px 30px 10px;
+        padding: 7px 70px;
+        background: none;
+        border: 1px solid;
+        &:hover {
+          transform: scale(0.98);
+        }
+      }
+      .label {
+        color: #f2f2f2;
+        font-size: 0.8em;
+        font-weight: 100;
+      }
+      .input {
+        background: none;
+        border: #f2f2f2 1px solid;
+        //opacity: 0.8;
+        border-radius: 20px;
+        border-color: #f2f2f2;
+        color: #f2f2f2;
+        font-size: 1.1em;
+        font-weight: 50;
+      }
+      .inputContainer {
+        color: #f2f2f2;
       }
     }
   }

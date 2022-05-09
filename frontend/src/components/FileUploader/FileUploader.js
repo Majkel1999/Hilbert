@@ -13,7 +13,7 @@ export default function FileUploader({ openedProjectId }) {
 
   const onFileChange = (event) => {
     const selectedFiles = event.target.files;
-    const allowedExtensions = /(\.txt|\.pdf|\.zip)$/i;
+    const allowedExtensions = /(\.txt|\.pdf|\.zip|\.csv)$/i;
 
     if (
       Object.values(selectedFiles).some(

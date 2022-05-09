@@ -34,10 +34,11 @@ export default function AnnotatorOpenedProject() {
       updatedTags = tagsWithAddedProps.map((tag) =>
         tag.name === tagName ? { ...tag, selected: !tag.selected } : tag,
       );
-    }
-    else {
+    } else {
       updatedTags = tagsWithAddedProps.map((tag) =>
-        tag.name === tagName ? { ...tag, selected: true } : { ...tag, selected: false },
+        tag.name === tagName
+          ? { ...tag, selected: true }
+          : { ...tag, selected: false },
       );
     }
     setSelectedTags(updatedTags.filter((item) => item.selected));
@@ -79,9 +80,7 @@ export default function AnnotatorOpenedProject() {
       }));
       setTagsWithAddedProps(tagArr);
     }
-    if (currentProjectData.is_multi_label) {
-      setIsMultiLabel(true);
-    }
+    if (currentProjectData.isMultiLabel) setIsMultiLabel(true);
   }, [currentProjectData]);
 
   return (
@@ -102,7 +101,7 @@ export default function AnnotatorOpenedProject() {
               icon="fa-solid fa-copy"
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `${process.env.REACT_APP_WEB_URL}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
+                  `${window.location.host}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
                 );
               }}
               size="lg"
@@ -115,10 +114,7 @@ export default function AnnotatorOpenedProject() {
             </div>
             <div className="textValue">
               <p>
-                {fetchedTextData.value} loremipsumloremipsum loremipsum
-                loremipsum loremipsum loremipsum loremipsum loremipsum
-                loremipsum loremipsum loremipsum loremipsum loremipsum
-                loremipsum loremipsum loremipsum loremipsum loremipsum
+                {fetchedTextData.value}
               </p>
             </div>
           </div>
@@ -130,7 +126,11 @@ export default function AnnotatorOpenedProject() {
         </div>
 
         <div className="filesWrapper annotator">
-          <FileList files={projectTexts} openedProjectId={params.id} />
+          <FileList
+            files={projectTexts}
+            openedProjectId={params.id}
+            currentTextId={fetchedTextData.id}
+          />
         </div>
       </div>
     </div>

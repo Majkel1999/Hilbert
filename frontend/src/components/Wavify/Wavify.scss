@@ -1,0 +1,21 @@
+.waveContainer {
+  display: grid;
+  position: absolute;
+  bottom: 0px !important;
+  grid-template-rows: auto 1fr auto;
+  width: 100%;
+  grid-area: footer;
+
+  .firstWave {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .secondWave {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .thirdWave {
+    grid-row: 1;
+    grid-column: 1;
+  }
+}
