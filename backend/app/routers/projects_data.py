@@ -1,5 +1,4 @@
 from typing import List
-
 from app.models.actions import Action
 from app.models.project_models import Project, TextDocument
 from app.models.request_models import FileDeleteRequest
@@ -33,6 +32,14 @@ async def project_websocket(projectId: str, websocket: WebSocket):
     except WebSocketDisconnect:
         wsManager.disconnect(connection)
 
+@router.post("/{project_id}/clear")
+async def clear_tags(project: Project = Depends(check_for_project_ownership)):
+    await project.fetch_all_links()
+    for text in project.texts:
+        text.tags = []
+        await text.save()
+    return "OK"
+
 
 @router.post("/{project_id}/train")
 async def queue_model_training(project: Project = Depends(check_for_project_ownership)):
@@ -41,18 +48,33 @@ async def queue_model_training(project: Project = Depends(check_for_project_owne
     return await rabbitBroker.sendMessage(projectId)
 
 
+@router.get("/{project_id}/file")
+async def get_files(project: Project = Depends(check_for_project_ownership)):
+    await project.fetch_all_links()
+    response = "name; text; tag \n"
+    for text in project.texts:
+        response += f'{text.name}; {text.value}; {", ".join(tag for tag in text.tags)}\n'
+    return response
+
+
 @router.post("/{project_id}/file")
 async def upload_file(files: List[UploadFile], project: Project = Depends(check_for_project_ownership)):
-    response = list()
+    documents: List[TextDocument] = list()
     for file in files:
         result = await handleFile(file)
-        response.extend(result)
-    for document in response:
+        documents.extend(result)
+    for document in documents:
+        if(not all(tag in project.data.tags for tag in document.tags)):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f'Tags: {document.tags} are not compatible with project'
+            )
+    for document in documents:
         await document.insert()
         project.texts.append(document)
     await project.save(link_rule=WriteRules.WRITE)
     await wsManager.send_by_projectId(Action.FileAdded, str(project.id))
-    return response
+    return documents
 
 
 @router.delete("/{project_id}/file",
@@ -77,7 +99,6 @@ async def delete_file(file_id: FileDeleteRequest, project: Project = Depends(che
         await wsManager.send_by_projectId(Action.FileDeleted, str(project.id))
     else:
         raise notFoundException
-
 
 
 # @router.post("/{project_id}/tag", responses={

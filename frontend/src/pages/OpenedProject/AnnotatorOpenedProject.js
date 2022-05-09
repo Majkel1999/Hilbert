@@ -114,10 +114,7 @@ export default function AnnotatorOpenedProject() {
             </div>
             <div className="textValue">
               <p>
-                {fetchedTextData.value} loremipsumloremipsum loremipsum
-                loremipsum loremipsum loremipsum loremipsum loremipsum
-                loremipsum loremipsum loremipsum loremipsum loremipsum
-                loremipsum loremipsum loremipsum loremipsum loremipsum
+                {fetchedTextData.value}
               </p>
             </div>
           </div>

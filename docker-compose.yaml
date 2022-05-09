@@ -32,6 +32,7 @@ services:
       - traefik.http.routers.backend.middlewares=backend-stripprefix
       - traefik.http.middlewares.backend-stripprefix.stripprefix.prefixes=/api/v1
     environment:
+      - 'PYTHONUNBUFFERED=TRUE'
       - 'DB_CONN_STRING=mongodb://${DB_USER}:${DB_PASS}@mongodb:27017'
       - 'RABBITMQ_CONN_STRING=ampq://${RABBITMQ_USER}:${RABBITMQ_PASS}@rabbitmq:5672'
     restart: always
@@ -42,6 +43,9 @@ services:
     volumes:
       - mldata:/var/results
       - mlcache:/root/.cache/huggingface
+    environment:
+      - 'PYTHONUNBUFFERED=TRUE'
+      - 'RABBITMQ_CONN_STRING=ampq://${RABBITMQ_USER}:${RABBITMQ_PASS}@rabbitmq:5672'
     deploy:
       resources:
         reservations:
@@ -60,7 +64,7 @@ services:
       - 'mongodbconfig:/data/configdb'
     command: mongod --quiet --logpath /dev/null
     ports:
-      - '27017:27017'
+      - "27017:27017"
   rabbitmq:
     image: 'rabbitmq:3-management'
     restart: always

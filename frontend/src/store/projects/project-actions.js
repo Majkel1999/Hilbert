@@ -133,6 +133,16 @@ export const trainModel = (projectId) => async () => {
   }
 };
 
+export const clearTags = (projectId) => async () => {
+  try {
+    const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/clear`);
+    console.log(response);
+  }
+  catch (error) {
+    console.log(error)
+  }
+}
+
 export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
   try {
     const response = await axios.get(TAG_URL(inviteUrl));
@@ -152,7 +162,7 @@ export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
 
 export const fetchAnnotatorText = (inviteUrl) => async (dispatch) => {
   try {
-    const response = await axios.get(`${TAG_URL(inviteUrl)}/text`);
+    const response = await axios.get(`${TAG_URL(inviteUrl)}/text?predict=true`);
     const { name, _id, value, preferredTag } = response.data;
     dispatch(
       projectsActions.setFetchedTextData({
