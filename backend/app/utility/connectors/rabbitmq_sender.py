@@ -17,16 +17,16 @@ class RabbitMQHandler:
         self._channel = None
 
     async def init(self):
-        print("Initializing RabbitMQ connection", flush=True)
+        print("Initializing RabbitMQ connection")
         while(True):
             try:
                 self._connection: aio_pika.RobustConnection = await aio_pika.connect_robust(RABBITMQ_CONN_STRING)
                 self._channel: aio_pika.RobustChannel = await self._connection.channel()
                 await self._channel.declare_queue(QUEUE_NAME)
-                print("RabbitMQ connection initialized", flush=True)
+                print("RabbitMQ connection initialized")
                 return
             except:
-                print('RabbitMQ connection failed. Retrying in 5s...', flush=True)
+                print('RabbitMQ connection failed. Retrying in 5s...')
                 await asyncio.sleep(5)
 
     async def sendMessage(self, body: str, queue_name: str = QUEUE_NAME):

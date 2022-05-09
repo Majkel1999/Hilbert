@@ -45,7 +45,7 @@ async def get_random_text(predict: bool = False, project: Project = Depends(chec
         try:
             response = requests.post(f'{MLService_URL}/{str(project.id)}/classify',
                                     json={"text": document.value},
-                                     timeout=5)
+                                    timeout=10)
             if(not response.status_code == 200):
                 raise Exception()
             tag = response.json()
