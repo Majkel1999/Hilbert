@@ -42,6 +42,8 @@ services:
     volumes:
       - mldata:/var/results
       - mlcache:/root/.cache/huggingface
+    environment:
+      - 'RABBITMQ_CONN_STRING=ampq://${RABBITMQ_USER}:${RABBITMQ_PASS}@rabbitmq:5672'
     deploy:
       resources:
         reservations:
