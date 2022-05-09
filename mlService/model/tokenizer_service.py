@@ -33,9 +33,7 @@ def get_project_tags(projectId: str) -> List[str]:
 def get_project_dataset(projectId: str):
     response = requests.get(
         f'{API_URL}/data/{projectId}/dataset')
-    print(response)
     value = response.json()
-    print(value)
     return value
 
 
