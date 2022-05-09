@@ -1,8 +1,9 @@
-import { useLocation } from 'react-router-dom';
-import Login from '../../components/Auth/Login';
-import Register from '../../components/Auth/Register';
-import * as routes from '../../constants/routes';
-import './Auth.scss';
+import { useLocation } from "react-router-dom";
+import Login from "../../components/Auth/Login";
+import Register from "../../components/Auth/Register";
+import * as routes from "../../constants/routes";
+import "./Auth.scss";
+import loginImage from "../../img/login.svg";
 
 const AuthComponents = [
   {
@@ -22,9 +23,10 @@ export default function Auth() {
     <div className="authContainer">
       {
         AuthComponents.find(
-          (authObject) => authObject.path === location.pathname,
+          (authObject) => authObject.path === location.pathname
         ).component
       }
+      <img src={loginImage} alt="loginImage" className="loginImage" />
     </div>
   );
 }

@@ -1,8 +1,40 @@
 .authContainer {
   height: 100%;
+  margin-bottom: 0;
   display: flex;
   justify-content: center;
+
+  background: #08668c;
+  background: -webkit-linear-gradient(bottom right, #08668c, #b6e3f5);
+  background: -moz-linear-gradient(bottom right, #08668c, #b6e3f5);
+  background: linear-gradient(to top left, #08668c, #b6e3f5);
+
+  background-size: 400% 400%;
+  animation: gradient 10s ease infinite;
+  z-index: -1;
+
   div {
     margin-top: 8%;
+  }
+
+  .loginImage {
+    position: absolute;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 40%;
+    height: auto;
+    z-index: 2;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
