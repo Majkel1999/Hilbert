@@ -101,7 +101,7 @@ services:
     environment:
       - 'GF_SERVER_DOMAIN=${HOST}'
       - 'GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:${EXTERNAL_PORT}/grafana/'
-      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - 'GF_SERVER_SERVE_FROM_SUB_PATH=true'
     labels:
       - traefik.enable=true
       - traefik.http.routers.grafana.entrypoints=web
