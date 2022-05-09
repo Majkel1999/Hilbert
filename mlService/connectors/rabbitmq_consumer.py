@@ -1,11 +1,14 @@
 import asyncio
+import os
 
 import aio_pika
 from model.tokenizer_service import trainModel
 
-RABBIT_HOST = "rabbitmq"
 QUEUE_NAME = "model_training"
+RABBITMQ_CONN_STRING = os.environ.get('RABBITMQ_CONN_STRING', False)
 
+if RABBITMQ_CONN_STRING is False:
+    raise Exception("RABBITMQ_CONN_STRING env variable is not set")
 
 class RabbitMQHandler:
 
@@ -19,7 +22,7 @@ class RabbitMQHandler:
         print("Initializing RabbitMQ connection")
         while(True):
             try:
-                self._connection = await aio_pika.connect_robust(host=RABBIT_HOST)
+                self._connection = await aio_pika.connect_robust(RABBITMQ_CONN_STRING)
                 self._channel = await self._connection.channel()
                 await self._channel.set_qos(1)
                 self._queue = await self._channel.declare_queue(QUEUE_NAME)

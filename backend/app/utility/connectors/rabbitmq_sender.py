@@ -1,9 +1,14 @@
 import asyncio
+import os
 import aio_pika
 
-RABBIT_HOST = "rabbitmq"
+
 QUEUE_NAME = "model_training"
 
+RABBITMQ_CONN_STRING = os.environ.get('RABBITMQ_CONN_STRING', False)
+
+if RABBITMQ_CONN_STRING is False:
+    raise Exception("RABBITMQ_CONN_STRING env variable is not set")
 
 class RabbitMQHandler:
 
@@ -15,7 +20,7 @@ class RabbitMQHandler:
         print("Initializing RabbitMQ connection", flush=True)
         while(True):
             try:
-                self._connection: aio_pika.RobustConnection = await aio_pika.connect_robust(host=RABBIT_HOST)
+                self._connection: aio_pika.RobustConnection = await aio_pika.connect_robust(RABBITMQ_CONN_STRING)
                 self._channel: aio_pika.RobustChannel = await self._connection.channel()
                 await self._channel.declare_queue(QUEUE_NAME)
                 print("RabbitMQ connection initialized", flush=True)
