@@ -227,7 +227,6 @@ export const deleteFileFromProject =
 export const trainModel = (projectId) => async (dispatch) => {
   try {
     const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/train`);
-    console.log(response);
     if (response.status === 200)
       dispatch(
         snackBarActions.setSnackBarData({
