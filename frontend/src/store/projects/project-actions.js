@@ -11,19 +11,21 @@ import {
 export const fetchProjectsData = () => async (dispatch) => {
   try {
     const projectsData = await axios.get(PROJECT_URL);
-    dispatch(
-      projectsActions.replaceProjectList({
-        items:
-          projectsData.data.map((item) => ({
-            name: item.name,
-            // eslint-disable-next-line dot-notation
-            id: item['_id'],
-            tags: item.data.tags,
-            inviteUrl: item.data.invite_url_postfix,
-            isMultiLabel: item.is_multi_label,
-          })) || [],
-      }),
-    );
+
+    if (projectsData.status === 200)
+      dispatch(
+        projectsActions.replaceProjectList({
+          items:
+            projectsData.data.map((item) => ({
+              name: item.name,
+              // eslint-disable-next-line dot-notation
+              id: item['_id'],
+              tags: item.data.tags,
+              inviteUrl: item.data.invite_url_postfix,
+              isMultiLabel: item.is_multi_label,
+            })) || [],
+        }),
+      );
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
@@ -40,11 +42,18 @@ export const sendProjectsData = (project) => async (dispatch) => {
     const response = await axios.post(PROJECT_URL, project);
     const { name } = response.data;
 
-    if (response.status === 200)
+    if (response.status === 200) {
       dispatch(
         // eslint-disable-next-line dot-notation
         projectsActions.createNewProject({ id: response.data['_id'], name }),
       );
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: STATUS.SUCCESS,
+          message: `Project ${name} has been created`,
+        }),
+      );
+    }
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
@@ -59,8 +68,15 @@ export const sendProjectsData = (project) => async (dispatch) => {
 export const deleteProject = (projectId) => async (dispatch) => {
   try {
     const response = await axios.delete(PROJECT_DATA_URL(projectId));
-    if (response.status === 200)
+    if (response.status === 200) {
       dispatch(projectsActions.removeProject(projectId));
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: STATUS.SUCCESS,
+          message: 'Project has been deleted',
+        }),
+      );
+    }
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
@@ -100,7 +116,17 @@ export const addTagToProject = (projectId, tag) => async (dispatch) => {
     const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/tag`, {
       tag,
     });
-    if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
+    if (response.status === 200) {
+      if (response.status === 200) {
+        dispatch(fetchSingleProjectData(projectId));
+        dispatch(
+          snackBarActions.setSnackBarData({
+            type: STATUS.SUCCESS,
+            message: `Tag ${tag} has been added`,
+          }),
+        );
+      }
+    }
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
@@ -117,7 +143,16 @@ export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
     const response = await axios.delete(`${PROJECT_DATA_URL(projectId)}/tag`, {
       data: { tag },
     });
-    if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
+    if (response.status === 200) {
+      dispatch(fetchSingleProjectData(projectId));
+      if (response.status === 200)
+        dispatch(
+          snackBarActions.setSnackBarData({
+            type: STATUS.SUCCESS,
+            message: `Tag ${tag} has been removed`,
+          }),
+        );
+    }
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
@@ -140,7 +175,15 @@ export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
         },
       },
     );
-    if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
+    if (response.status === 200) {
+      dispatch(fetchSingleProjectData(projectId));
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: STATUS.SUCCESS,
+          message: 'Upload finished successfully',
+        }),
+      );
+    }
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
@@ -161,7 +204,15 @@ export const deleteFileFromProject =
           data: { file_id: fileId },
         },
       );
-      if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
+      if (response.status === 200) {
+        dispatch(fetchSingleProjectData(projectId));
+        dispatch(
+          snackBarActions.setSnackBarData({
+            type: STATUS.SUCCESS,
+            message: 'File has been deleted',
+          }),
+        );
+      }
     } catch (error) {
       const message = JSON.parse(error.request.response).detail;
       dispatch(
@@ -177,6 +228,13 @@ export const trainModel = (projectId) => async (dispatch) => {
   try {
     const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/train`);
     console.log(response);
+    if (response.status === 200)
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: STATUS.INFO,
+          message: 'Model training started',
+        }),
+      );
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
@@ -256,7 +314,15 @@ export const tagText =
         tags,
         text_id: textId,
       });
-      if (response.status === 200) dispatch(fetchAnnotatorText(inviteUrl));
+      if (response.status === 200) {
+        dispatch(fetchAnnotatorText(inviteUrl));
+        dispatch(
+          snackBarActions.setSnackBarData({
+            type: STATUS.SUCCESS,
+            message: `Tag ${tags} have been submited`,
+          }),
+        );
+      }
     } catch (error) {
       const message = JSON.parse(error.request.response).detail;
       dispatch(

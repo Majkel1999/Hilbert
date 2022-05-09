@@ -8,11 +8,19 @@ export const login = (loginData) => async (dispatch) => {
   try {
     const response = await axios.post(LOGIN_URL, loginData);
 
-    dispatch(
-      authActions.login({
-        token: response.data,
-      }),
-    );
+    if (response.status === 200) {
+      dispatch(
+        authActions.login({
+          token: response.data,
+        }),
+      );
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: STATUS.SUCCESS,
+          message: 'User logged in',
+        }),
+      );
+    }
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
