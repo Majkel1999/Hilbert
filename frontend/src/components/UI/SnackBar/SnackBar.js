@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './SnackBar.scss';
-import DoneIcon from '@mui/icons-material/Done';
-import ClearIcon from '@mui/icons-material/Clear';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const SnackBar = ({ type, show, message }) => (
   <div className={`snackbar ${type}`} id={show ? 'show' : 'hide'}>
     <div className="symbol">
       {type === 'success' ? (
-        <DoneIcon color="success" fontSize="large" />
+        <FontAwesomeIcon icon="fa-solid fa-check" color="white" fontSize="6x" />
       ) : (
-        <ClearIcon color="warning" fontSize="large" />
+        <FontAwesomeIcon icon="fa-solid fa-xmark" color="white" fontSize="6x" />
       )}
     </div>
     <div className="message">{message}</div>
