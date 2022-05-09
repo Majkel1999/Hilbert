@@ -32,6 +32,14 @@ async def project_websocket(projectId: str, websocket: WebSocket):
     except WebSocketDisconnect:
         wsManager.disconnect(connection)
 
+@router.post("/{project_id}/clear")
+async def clear_tags(project: Project = Depends(check_for_project_ownership)):
+    await project.fetch_all_links()
+    for text in project.texts:
+        text.tags = []
+        await text.save()
+    return "OK"
+
 
 @router.post("/{project_id}/train")
 async def queue_model_training(project: Project = Depends(check_for_project_ownership)):
@@ -40,9 +48,18 @@ async def queue_model_training(project: Project = Depends(check_for_project_owne
     return await rabbitBroker.sendMessage(projectId)
 
 
+@router.get("/{project_id}/file")
+async def get_files(project: Project = Depends(check_for_project_ownership)):
+    await project.fetch_all_links()
+    response = "name; text; tag \n"
+    for text in project.texts:
+        response += f'{text.name}; {text.value}; {", ".join(tag for tag in text.tags)}\n'
+    return response
+
+
 @router.post("/{project_id}/file")
 async def upload_file(files: List[UploadFile], project: Project = Depends(check_for_project_ownership)):
-    documents : List[TextDocument] = list()
+    documents: List[TextDocument] = list()
     for file in files:
         result = await handleFile(file)
         documents.extend(result)
@@ -82,7 +99,6 @@ async def delete_file(file_id: FileDeleteRequest, project: Project = Depends(che
         await wsManager.send_by_projectId(Action.FileDeleted, str(project.id))
     else:
         raise notFoundException
-
 
 
 # @router.post("/{project_id}/tag", responses={
