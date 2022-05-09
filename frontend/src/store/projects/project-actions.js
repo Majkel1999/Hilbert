@@ -1,5 +1,7 @@
 import axios from '../../api/axios';
 import { projectsActions } from './projects-slice';
+import { snackBarActions } from '../snackBar/snackBar-slice';
+import { STATUS } from '../../constants/snackBarStatus';
 import {
   PROJECT_URL,
   PROJECT_DATA_URL,
@@ -23,8 +25,13 @@ export const fetchProjectsData = () => async (dispatch) => {
       }),
     );
   } catch (error) {
-    console.log(error);
-    // dispatching some notification actions
+    const message = error.request.response;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: STATUS.ERROR,
+        message,
+      }),
+    );
   }
 };
 
@@ -39,7 +46,13 @@ export const sendProjectsData = (project) => async (dispatch) => {
         projectsActions.createNewProject({ id: response.data['_id'], name }),
       );
   } catch (error) {
-    console.log(error);
+    const message = error.request.response;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: STATUS.ERROR,
+        message,
+      }),
+    );
   }
 };
 
@@ -49,7 +62,13 @@ export const deleteProject = (projectId) => async (dispatch) => {
     if (response.status === 200)
       dispatch(projectsActions.removeProject(projectId));
   } catch (error) {
-    console.log(error);
+    const message = error.request.response;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: STATUS.ERROR,
+        message,
+      }),
+    );
   }
 };
 
@@ -67,7 +86,13 @@ export const fetchSingleProjectData = (projectId) => async (dispatch) => {
         }),
       );
   } catch (error) {
-    console.log(error);
+    const message = error.request.response;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: STATUS.ERROR,
+        message,
+      }),
+    );
   }
 };
 export const addTagToProject = (projectId, tag) => async (dispatch) => {
@@ -88,7 +113,13 @@ export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
     });
     if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
   } catch (error) {
-    console.log(error);
+    const message = error.request.response;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: STATUS.ERROR,
+        message,
+      }),
+    );
   }
 };
 
@@ -105,7 +136,13 @@ export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
     );
     if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
   } catch (error) {
-    console.log(error);
+    const message = error.request.response;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: STATUS.ERROR,
+        message,
+      }),
+    );
   }
 };
 
@@ -120,28 +157,45 @@ export const deleteFileFromProject =
       );
       if (response.status === 200) dispatch(fetchSingleProjectData(projectId));
     } catch (error) {
-      console.log(error);
+      const message = error.request.response;
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: STATUS.ERROR,
+          message,
+        }),
+      );
     }
   };
 
-export const trainModel = (projectId) => async () => {
+export const trainModel = (projectId) => async (dispatch) => {
   try {
     const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/train`);
     console.log(response);
   } catch (error) {
-    console.log(error);
+    const message = error.request.response;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: STATUS.ERROR,
+        message,
+      }),
+    );
   }
 };
 
-export const clearTags = (projectId) => async () => {
+export const clearTags = (projectId) => async (dispatch) => {
   try {
     const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/clear`);
     console.log(response);
+  } catch (error) {
+    const message = error.request.response;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: STATUS.ERROR,
+        message,
+      }),
+    );
   }
-  catch (error) {
-    console.log(error)
-  }
-}
+};
 
 export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
   try {
@@ -156,7 +210,13 @@ export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
       }),
     );
   } catch (error) {
-    console.log(error);
+    const message = error.request.response;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: STATUS.ERROR,
+        message,
+      }),
+    );
   }
 };
 
@@ -173,7 +233,13 @@ export const fetchAnnotatorText = (inviteUrl) => async (dispatch) => {
       }),
     );
   } catch (error) {
-    console.log(error);
+    const message = error.request.response;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: STATUS.ERROR,
+        message,
+      }),
+    );
   }
 };
 export const tagText =
@@ -186,6 +252,12 @@ export const tagText =
       });
       if (response.status === 200) dispatch(fetchAnnotatorText(inviteUrl));
     } catch (error) {
-      console.log(error);
+      const message = error.request.response;
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: STATUS.ERROR,
+          message,
+        }),
+      );
     }
   };

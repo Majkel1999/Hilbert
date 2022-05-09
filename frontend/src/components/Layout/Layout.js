@@ -15,7 +15,6 @@ const Layout = () => {
       setTimeout(() => dispatch(snackBarActions.resetSnackBarData()), 3000);
   }, [snackBarData.show]);
 
-  console.log(snackBarData);
   return (
     <>
       <Header />
