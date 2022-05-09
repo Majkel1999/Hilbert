@@ -10,10 +10,18 @@ const SnackBar = ({ type, show, message }) => {
       <FontAwesomeIcon icon="fa-solid fa-check" color="white" fontSize="6x" />
     ),
     [STATUS.ERROR]: (
-      <FontAwesomeIcon icon="fa-solid fa-xmark" color="white" fontSize="6x" />
+      <FontAwesomeIcon
+        icon="fa-solid fa-exclamation"
+        color="white"
+        fontSize="6x"
+      />
     ),
     [STATUS.INFO]: (
-      <FontAwesomeIcon icon="fa-solid fa-xmark" color="white" fontSize="6x" />
+      <FontAwesomeIcon
+        icon="fa-solid fa-circle-info"
+        color="white"
+        fontSize="6x"
+      />
     ),
   };
   const selectedSnackBar = (type) => snackBarContainers[type];
