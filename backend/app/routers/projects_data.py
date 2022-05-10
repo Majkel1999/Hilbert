@@ -1,6 +1,7 @@
 import io
 import os
 import zipfile
+import csv
 from typing import List
 
 from app.models.actions import Action
@@ -60,17 +61,17 @@ async def queue_model_training(project: Project = Depends(check_for_project_owne
                 status.HTTP_400_BAD_REQUEST: {
                     "description": "Model not found on server"}
             })
-async def download_model(project_id: str):
-    folderpath = f'/var/results/{project_id}'
+async def download_model(project: Project = Depends(check_for_project_ownership)):
+    folderpath = f'/var/results/{str(project.id)}'
     if(os.path.isdir(folderpath)):
         zip_filename = "model.zip"
-        s = io.BytesIO()
-        zf = zipfile.ZipFile(s, "w")
+        stream = io.BytesIO()
+        zipFile = zipfile.ZipFile(stream, "w")
         for root, dirs, files in os.walk(folderpath):
             for file in files:
-                zf.write(os.path.join(root, file), file)
-        zf.close()
-        return Response(s.getvalue(), media_type="application/x-zip-compressed", headers={
+                zipFile.write(os.path.join(root, file), file)
+        zipFile.close()
+        return Response(stream.getvalue(), media_type="application/x-zip-compressed", headers={
             'Content-Disposition': f'attachment;filename={zip_filename}'
         })
     else:
@@ -83,10 +84,12 @@ async def download_model(project_id: str):
 @router.get("/{project_id}/file")
 async def get_files(project: Project = Depends(check_for_project_ownership)):
     await project.fetch_all_links()
-    response = "name; text; tag \n"
+    stream = io.StringIO()
+    csvFile = csv.writer(stream, delimiter=';')
+    csvFile.writerow(["name","text","tag"])
     for text in project.texts:
-        response += f'{text.name}; {text.value}; {", ".join(tag for tag in text.tags)}\n'
-    return response
+        csvFile.writerow([text.name,text.value,", ".join(tag for tag in text.tags)])
+    return Response(stream.getvalue(), media_type="text/csv")
 
 
 @router.post("/{project_id}/file")
