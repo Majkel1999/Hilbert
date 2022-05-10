@@ -19,6 +19,7 @@ export default function AnnotatorOpenedProject() {
   const [tagsWithAddedProps, setTagsWithAddedProps] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [isMultiLabel, setIsMultiLabel] = useState(false);
+  const [enableButton, setEnableButton] = useState(false);
   const dispatch = useDispatch();
   const params = useParams();
   const currentProjectData = useSelector(
@@ -30,6 +31,7 @@ export default function AnnotatorOpenedProject() {
 
   const selectTag = (tagName) => {
     let updatedTags;
+
     if (isMultiLabel) {
       updatedTags = tagsWithAddedProps.map((tag) =>
         tag.name === tagName ? { ...tag, selected: !tag.selected } : tag,
@@ -59,7 +61,10 @@ export default function AnnotatorOpenedProject() {
     if (!fetchedData) {
       const url = params.inviteUrl;
       dispatch(fetchAnnotatorData(url));
-      dispatch(fetchAnnotatorText(url));
+      const textResponsePromise = dispatch(fetchAnnotatorText(url));
+      textResponsePromise.then((response) => {
+        if (response.status === 200) setEnableButton(true);
+      });
     }
 
     setFetchedData(true);
@@ -113,15 +118,13 @@ export default function AnnotatorOpenedProject() {
               <span> {fetchedTextData.name}</span>{' '}
             </div>
             <div className="textValue">
-              <p>
-                {fetchedTextData.value}
-              </p>
+              <p>{fetchedTextData.value}</p>
             </div>
           </div>
           <Button
             text="Submit tags"
             onClickHandler={tagTextHandler}
-            isDisabled={!selectedTags.length > 0} // Disabled untill model didn't work
+            isDisabled={!selectedTags.length > 0 || !enableButton}
           />
         </div>
 
