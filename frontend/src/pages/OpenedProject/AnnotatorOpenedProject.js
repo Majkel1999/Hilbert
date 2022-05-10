@@ -124,7 +124,7 @@ export default function AnnotatorOpenedProject() {
           <Button
             text="Submit tags"
             onClickHandler={tagTextHandler}
-            isDisabled={!selectedTags.length > 0 || !enableButton}
+            isDisabled={!selectedTags.length > 0 && !enableButton}
           />
         </div>
 
