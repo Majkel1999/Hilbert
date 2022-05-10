@@ -286,13 +286,12 @@ export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
 export const fetchAnnotatorText =
   (inviteUrl, predict = true) =>
   async (dispatch) => {
-    console.log('[pdsadsadsa');
     try {
       const response = await axios.get(
         `${TAG_URL(inviteUrl)}/text?predict=${predict}`,
       );
       const { name, _id, value, preferredTag } = response.data;
-      console.log(response);
+
       dispatch(
         projectsActions.setFetchedTextData({
           name,
