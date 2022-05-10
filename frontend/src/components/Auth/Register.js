@@ -33,7 +33,7 @@ export default function Register() {
     registerFormData.set('password', password);
     const responsePromise = dispatch(register(registerFormData));
     responsePromise.then((response) => {
-      if (response.status === 200) navigate(routes.LOGIN, { replace: true }); // need to fix
+      if (response.status === 200) navigate(routes.LOGIN, { replace: true });
     });
   };
 
