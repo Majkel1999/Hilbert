@@ -3,7 +3,8 @@ import shutil
 from typing import Dict, List
 import numpy as np
 
-from torch import argmax, tensor
+from torch import tensor
+import torch
 from torch.utils.data import Dataset
 from transformers import (AutoModelForSequenceClassification, AutoTokenizer,
                           DataCollatorWithPadding, Trainer, TrainingArguments)
@@ -17,10 +18,11 @@ SAVE_DIR = "./results"
 # Learning Arguments
 
 LEARNING_RATE=2e-5
-PER_DEVICE_TRAIN_BATCH_SIZE=16
-PER_DEVICE_EVAL_BATCH_SIZE=16
+PER_DEVICE_TRAIN_BATCH_SIZE=1
+PER_DEVICE_EVAL_BATCH_SIZE=1
 EPOCHS=20
 WEIGHT_DECAY=0.01
+TOKENIZER_MAX_LENGTH=256
 
 class TextDataset(Dataset):
     def __init__(self, encodings, labels):
@@ -62,7 +64,7 @@ class ModelHandler:
         return self.tokenizer(data,
                               padding=True,
                               truncation=True,
-                              max_length=512,
+                              max_length=TOKENIZER_MAX_LENGTH,
                               return_tensors="pt")
 
     def classifyText(self, text: str) -> Dict[str,float]:
@@ -76,6 +78,7 @@ class ModelHandler:
         return d
 
     def trainModel(self, dataset):
+        torch.cuda.empty_cache()
         self.isTraining = True
         texts = dataset["texts"]
         labels = dataset["labels"]

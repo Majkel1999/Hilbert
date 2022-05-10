@@ -66,8 +66,8 @@ class TokenizerService:
         try:
             dataset = self.get_project_dataset(projectId)
             handler.trainModel(dataset)
-        except:
-            pass
+        except Exception as e:
+            print(e)
         finally:
             del self.handlers[projectId]
 
