@@ -1,4 +1,8 @@
+import io
+import os
+import zipfile
 from typing import List
+
 from app.models.actions import Action
 from app.models.project_models import Project, TextDocument
 from app.models.request_models import FileDeleteRequest
@@ -8,8 +12,9 @@ from app.utility.security import check_for_project_ownership
 from app.utility.websocket_manager import wsManager
 from beanie import WriteRules
 from bson import ObjectId
-from fastapi import (APIRouter, Depends, HTTPException, UploadFile,
+from fastapi import (APIRouter, Depends, HTTPException, Response, UploadFile,
                      WebSocketDisconnect, status)
+from fastapi.responses import FileResponse
 from starlette.websockets import WebSocket
 
 router = APIRouter(
@@ -32,6 +37,7 @@ async def project_websocket(projectId: str, websocket: WebSocket):
     except WebSocketDisconnect:
         wsManager.disconnect(connection)
 
+
 @router.post("/{project_id}/clear")
 async def clear_tags(project: Project = Depends(check_for_project_ownership)):
     await project.fetch_all_links()
@@ -46,6 +52,32 @@ async def queue_model_training(project: Project = Depends(check_for_project_owne
     projectId = str(project.id)
     await wsManager.send_by_projectId(Action.ModelTrainig, projectId)
     return await rabbitBroker.sendMessage(projectId)
+
+
+@router.get("/{project_id}/model",
+            response_class=FileResponse,
+            responses={
+                status.HTTP_400_BAD_REQUEST: {
+                    "description": "Model not found on server"}
+            })
+async def download_model(project_id: str):
+    folderpath = f'/var/results/{project_id}'
+    if(os.path.isdir(folderpath)):
+        zip_filename = "model.zip"
+        s = io.BytesIO()
+        zf = zipfile.ZipFile(s, "w")
+        for root, dirs, files in os.walk(folderpath):
+            for file in files:
+                zf.write(os.path.join(root, file), file)
+        zf.close()
+        return Response(s.getvalue(), media_type="application/x-zip-compressed", headers={
+            'Content-Disposition': f'attachment;filename={zip_filename}'
+        })
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No model found on server. Please train your model first."
+        )
 
 
 @router.get("/{project_id}/file")

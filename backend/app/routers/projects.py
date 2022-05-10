@@ -68,8 +68,6 @@ async def delete_project(project: Project = Depends(check_for_project_ownership)
 
 async def removeProject(project: Project) -> str:
     await project.fetch_all_links()
-    if(project.model is not None):
-        await project.model.delete()
     for text in project.texts:
         await text.delete()
     projectName = project.name
