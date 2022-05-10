@@ -283,30 +283,40 @@ export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
   }
 };
 
-export const fetchAnnotatorText = (inviteUrl) => async (dispatch) => {
-  try {
-    const response = await axios.get(`${TAG_URL(inviteUrl)}/text?predict=true`);
-    const { name, _id, value, preferredTag } = response.data;
-    dispatch(
-      projectsActions.setFetchedTextData({
-        name,
-        id: _id,
-        value,
-        preferredTag,
-      }),
-    );
-    return response;
-  } catch (error) {
-    const message = JSON.parse(error.request.response).detail;
-    dispatch(
-      snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
-        message,
-      }),
-    );
-    return error;
-  }
-};
+export const fetchAnnotatorText =
+  (inviteUrl, predict = true) =>
+  async (dispatch) => {
+    console.log('[pdsadsadsa');
+    try {
+      const response = await axios.get(
+        `${TAG_URL(inviteUrl)}/text?predict=${predict}`,
+      );
+      const { name, _id, value, preferredTag } = response.data;
+      console.log(response);
+      dispatch(
+        projectsActions.setFetchedTextData({
+          name,
+          id: _id,
+          value,
+          preferredTag,
+        }),
+      );
+      return response;
+    } catch (error) {
+      const message = JSON.parse(error.request.response).detail;
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: STATUS.ERROR,
+          message,
+        }),
+      );
+      if (error.response.status === 400) {
+        dispatch(fetchAnnotatorText(inviteUrl, false));
+      }
+
+      return error;
+    }
+  };
 export const tagText =
   ({ inviteUrl, tags, textId }) =>
   async (dispatch) => {
