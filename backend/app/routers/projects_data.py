@@ -51,6 +51,8 @@ async def clear_tags(project: Project = Depends(check_for_project_ownership)):
 @router.post("/{project_id}/train")
 async def queue_model_training(project: Project = Depends(check_for_project_ownership)):
     projectId = str(project.id)
+    project.model_state = "Training"
+    await project.save()
     await wsManager.send_by_projectId(Action.ModelTrainig, projectId)
     return await rabbitBroker.sendMessage(projectId)
 

@@ -19,3 +19,6 @@ class FileDeleteRequest(BaseModel):
 class DatasetResponse(BaseModel):
     labels: List[List[int]]
     texts: List[str]
+
+class ModelStateRequest(BaseModel):
+    state : str
