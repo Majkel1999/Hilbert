@@ -1,10 +1,11 @@
-/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button';
 import { uploadFilesToProject } from '../../store/projects/project-actions';
+import { snackBarActions } from '../../store/snackBar/snackBar-slice';
+import { STATUS } from '../../constants/snackBarStatus';
 import './FileUploader.scss';
 
 export default function FileUploader({ openedProjectId }) {
@@ -20,12 +21,16 @@ export default function FileUploader({ openedProjectId }) {
         (item) => !allowedExtensions.exec(item.name),
       )
     ) {
-      console.log(
-        `File ${event.target.value.replace(
-          /^.*[\\/]/,
-          '',
-        )} has incorrect extension`,
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: STATUS.ERROR,
+          message: `File ${event.target.value.replace(
+            /^.*[\\/]/,
+            '',
+          )} has incorrect extension`,
+        }),
       );
+
       event.target.value = '';
     } else setFilesToUpload(selectedFiles);
   };
