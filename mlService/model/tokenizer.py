@@ -24,14 +24,31 @@ WEIGHT_DECAY = 0.01
 TOKENIZER_MAX_LENGTH = 256
 
 
+def createDatasets(tokens, labels, tokenizer, test_split: float = 0.25):
+    length = len(tokens)
+    trainTokens = tokens[:int(length*(1-test_split))]
+    testTokens = tokens[int(length*test_split):]
+
+    trainLabels = labels[:int(length*(1-test_split))]
+    testLabels = labels[int(length*test_split):]
+    
+    trainDataset = TextDataset(tokenizer(trainTokens, truncation=True, padding=True,
+                                         max_length=TOKENIZER_MAX_LENGTH,
+                                         return_tensors="pt"), trainLabels)
+    testDataset = TextDataset(tokenizer(testTokens, truncation=True, padding=True,
+                                        max_length=TOKENIZER_MAX_LENGTH,
+                                        return_tensors="pt"), testLabels)
+    return trainDataset, testDataset
+
+
 class TextDataset(Dataset):
-    def __init__(self, encodings, labels):
-        self.encodings = encodings
+    def __init__(self, tokens, labels):
+        self.tokens = tokens
         self.labels = labels
 
     def __getitem__(self, idx):
         item = {key: val[idx].clone().detach()
-                for key, val in self.encodings.items()}
+                for key, val in self.tokens.items()}
         item['labels'] = tensor(self.labels[idx])
         return item
 
@@ -78,10 +95,7 @@ class ModelHandler:
         texts = dataset["texts"]
         labels = dataset["labels"]
 
-        train_enc = self.tokenizer(texts, truncation=True, padding=True,
-                                   max_length=TOKENIZER_MAX_LENGTH,
-                                   return_tensors="pt")
-        data = TextDataset(train_enc, labels)
+        trainData, testData = createDatasets(texts, labels, self.tokenizer)
 
         data_collator = DataCollatorWithPadding(tokenizer=self.tokenizer)
 
@@ -101,9 +115,11 @@ class ModelHandler:
             tokenizer=self.tokenizer,
             args=training_args,
             data_collator=data_collator,
-            train_dataset=data
+            train_dataset=trainData,
+            eval_dataset=testData
         )
         trainer.train()
+        trainer.evaluate()
         self.model.save_pretrained(f'{SAVE_DIR}/{self.projectId}')
         try:
             shutil.rmtree(f'./result_{self.projectId}')
