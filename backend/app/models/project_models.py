@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from beanie import Document, Link
 from pydantic import BaseModel
@@ -9,13 +9,10 @@ class TextDocument(Document):
     value: str
     tags: List[str] = list()
 
+
 class TextOut(TextDocument):
     possible_tags: List[str]
-    preferredTag: Dict[str,float] = None
-
-
-class MLModel(Document):
-    model_data: bytes
+    preferredTag: Dict[str, float] = None
 
 
 class ProjectData(BaseModel):
@@ -27,15 +24,14 @@ class ProjectOut(BaseModel):
     name: str
     texts: List[Link[TextDocument]] = list()
     data: ProjectData = ProjectData()
-    is_multi_label : bool = False
+    is_multi_label: bool = False
 
 
 class Project(Document, ProjectOut):
     owner: str
-    model: Optional[Link[MLModel]]
-
+    model_state: str = 'Uninitialized'
 
 class ProjectCreationData(BaseModel):
     name: str
     tags: List[str] = list()
-    is_multi_label : bool = False
+    is_multi_label: bool = False

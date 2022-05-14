@@ -41,7 +41,7 @@ async def get_random_text(predict: bool = False, project: Project = Depends(chec
             detail="All texts have been tagged"
         )
     tag = None
-    if(predict):
+    if(predict and project.model_state == 'Trained'):
         try:
             response = requests.post(f'{MLService_URL}/{str(project.id)}/classify',
                                     json={"text": document.value},

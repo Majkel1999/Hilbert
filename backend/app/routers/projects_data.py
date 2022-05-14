@@ -1,4 +1,9 @@
+import io
+import os
+import zipfile
+import csv
 from typing import List
+
 from app.models.actions import Action
 from app.models.project_models import Project, TextDocument
 from app.models.request_models import FileDeleteRequest
@@ -8,8 +13,9 @@ from app.utility.security import check_for_project_ownership
 from app.utility.websocket_manager import wsManager
 from beanie import WriteRules
 from bson import ObjectId
-from fastapi import (APIRouter, Depends, HTTPException, UploadFile,
+from fastapi import (APIRouter, Depends, HTTPException, Response, UploadFile,
                      WebSocketDisconnect, status)
+from fastapi.responses import FileResponse
 from starlette.websockets import WebSocket
 
 router = APIRouter(
@@ -32,6 +38,7 @@ async def project_websocket(projectId: str, websocket: WebSocket):
     except WebSocketDisconnect:
         wsManager.disconnect(connection)
 
+
 @router.post("/{project_id}/clear")
 async def clear_tags(project: Project = Depends(check_for_project_ownership)):
     await project.fetch_all_links()
@@ -44,17 +51,47 @@ async def clear_tags(project: Project = Depends(check_for_project_ownership)):
 @router.post("/{project_id}/train")
 async def queue_model_training(project: Project = Depends(check_for_project_ownership)):
     projectId = str(project.id)
+    project.model_state = "Training"
+    await project.save()
     await wsManager.send_by_projectId(Action.ModelTrainig, projectId)
     return await rabbitBroker.sendMessage(projectId)
+
+
+@router.get("/{project_id}/model",
+            response_class=FileResponse,
+            responses={
+                status.HTTP_400_BAD_REQUEST: {
+                    "description": "Model not found on server"}
+            })
+async def download_model(project: Project = Depends(check_for_project_ownership)):
+    folderpath = f'/var/results/{str(project.id)}'
+    if(os.path.isdir(folderpath)):
+        zip_filename = "model.zip"
+        stream = io.BytesIO()
+        zipFile = zipfile.ZipFile(stream, "w")
+        for root, dirs, files in os.walk(folderpath):
+            for file in files:
+                zipFile.write(os.path.join(root, file), file)
+        zipFile.close()
+        return Response(stream.getvalue(), media_type="application/x-zip-compressed", headers={
+            'Content-Disposition': f'attachment;filename={zip_filename}'
+        })
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No model found on server. Please train your model first."
+        )
 
 
 @router.get("/{project_id}/file")
 async def get_files(project: Project = Depends(check_for_project_ownership)):
     await project.fetch_all_links()
-    response = "name; text; tag \n"
+    stream = io.StringIO()
+    csvFile = csv.writer(stream, delimiter=';')
+    csvFile.writerow(["name","text","tag"])
     for text in project.texts:
-        response += f'{text.name}; {text.value}; {", ".join(tag for tag in text.tags)}\n'
-    return response
+        csvFile.writerow([text.name,text.value,", ".join(tag for tag in text.tags)])
+    return Response(stream.getvalue(), media_type="text/csv")
 
 
 @router.post("/{project_id}/file")
