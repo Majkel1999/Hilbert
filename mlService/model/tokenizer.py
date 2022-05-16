@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 from typing import Dict, List
@@ -6,7 +7,7 @@ import torch
 from torch import tensor
 from torch.utils.data import Dataset
 from transformers import (AutoModelForSequenceClassification, AutoTokenizer,
-                          DataCollatorWithPadding, Trainer, TrainingArguments, pipeline)
+                          DataCollatorWithPadding, EvalPrediction, Trainer, TrainingArguments, pipeline)
 
 # Model Arguments
 
@@ -26,12 +27,13 @@ TOKENIZER_MAX_LENGTH = 256
 
 def createDatasets(tokens, labels, tokenizer, test_split: float = 0.25):
     length = len(tokens)
-    trainTokens = tokens[:int(length*(1-test_split))]
-    testTokens = tokens[int(length*test_split):]
+    div = int(length*(1-test_split))
 
-    trainLabels = labels[:int(length*(1-test_split))]
-    testLabels = labels[int(length*test_split):]
-    
+    trainTokens = tokens[:div]
+    trainLabels = labels[:div]
+    testTokens = tokens[div:]
+    testLabels = labels[div:]
+
     trainDataset = TextDataset(tokenizer(trainTokens, truncation=True, padding=True,
                                          max_length=TOKENIZER_MAX_LENGTH,
                                          return_tensors="pt"), trainLabels)
@@ -95,7 +97,8 @@ class ModelHandler:
         texts = dataset["texts"]
         labels = dataset["labels"]
 
-        trainData, testData = createDatasets(texts, labels, self.tokenizer)
+        trainData, testData = createDatasets(
+            texts, labels, self.tokenizer, test_split=0)
 
         data_collator = DataCollatorWithPadding(tokenizer=self.tokenizer)
 
@@ -115,12 +118,13 @@ class ModelHandler:
             tokenizer=self.tokenizer,
             args=training_args,
             data_collator=data_collator,
-            train_dataset=trainData,
-            eval_dataset=testData
+            train_dataset=trainData
         )
-        trainer.train()
-        trainer.evaluate()
+        trainOutput = trainer.train()
         self.model.save_pretrained(f'{SAVE_DIR}/{self.projectId}')
+        f = open(f'{SAVE_DIR}/{self.projectId}/metrics.json','w')
+        f.write(json.dumps(trainOutput))
+        f.close()
         try:
             shutil.rmtree(f'./result_{self.projectId}')
         except Exception as e:

@@ -45,9 +45,12 @@ async def get_project_metrics(project: Project = Depends(check_for_project_owner
     folderpath = f'/var/results/{str(project.id)}'
     if(os.path.isdir(folderpath)):
         f = open(f'{folderpath}/config.json')
-        data = json.load(f)
+        configData = json.load(f)
         f.close()
-        return data
+        f = open(f'{folderpath}/metrics.json')
+        trainData = json.load(f)
+        f.close()
+        return {"config": configData, "trainData": trainData}
     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                         detail="Project model not initialized")
 
