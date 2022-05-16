@@ -73,13 +73,22 @@
         opacity: 0;
         position: absolute;
         display: block;
-        margin-top: 50px;
+        margin-top: 55px;
         right: 20px;
         padding: 0;
         transition: opacity 0.2s, visibility 0.2s;
         list-style: none;
+        li {
+          a {
+            span {
+              font-size: 1.5rem;
+              padding: 6px 20px;
+            }
+          }
+        }
       }
       &:hover {
+        cursor: pointer;
         a {
           color: #f9f8fd;
         }
