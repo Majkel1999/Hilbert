@@ -34,7 +34,7 @@ export default function Header() {
           </div>
         ) : (
           <div className="userIcon">
-            <FontAwesomeIcon icon="fa-solid fa-circle-user" size="4x" />
+            <FontAwesomeIcon icon="fa-solid fa-circle-user" size="3x" />
             <ul>
               <li>
                 <Link to={routes.USER_INFO}>
