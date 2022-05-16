@@ -32,7 +32,7 @@ services:
       - traefik.http.routers.backend.middlewares=backend-stripprefix
       - traefik.http.middlewares.backend-stripprefix.stripprefix.prefixes=/api/v1
     volumes:
-      - mldata:/var/results
+      - 'mldata:/var/results'
     environment:
       - 'PYTHONUNBUFFERED=TRUE'
       - 'DB_CONN_STRING=mongodb://${DB_USER}:${DB_PASS}@mongodb:27017'

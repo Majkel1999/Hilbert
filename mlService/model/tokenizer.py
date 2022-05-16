@@ -12,7 +12,7 @@ from transformers import (AutoModelForSequenceClassification, AutoTokenizer,
 
 TOKENIZER_NAME = "distilbert-base-uncased"
 MODEL_NAME = "distilbert-base-uncased"
-SAVE_DIR = "./results"
+SAVE_DIR = "/var/results"
 
 # Learning Arguments
 
