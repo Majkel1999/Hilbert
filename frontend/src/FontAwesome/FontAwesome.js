@@ -6,6 +6,7 @@ import {
   faMinus,
   faPlusCircle,
   faTrashAlt,
+  faUserCircle,
   faXmark,
   faXmarkCircle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -23,4 +24,5 @@ library.add(
   faCheck,
   faCircleExclamation,
   faCircleInfo,
+  faUserCircle,
 );
