@@ -33,7 +33,7 @@ export default function OpenedProject() {
   const clearTagsHandler = () => {
     const projectId = params.id;
     dispatch(clearTags(projectId));
-  }
+  };
 
   useEffect(() => {
     const projectId = params.id;
@@ -75,14 +75,10 @@ export default function OpenedProject() {
           </div>
 
           <div className="textWrapper" />
-          <Button
-            text="Clear tags data"
-            onClickHandler={clearTagsHandler}
-          />
-          <Button
-            text="Train model"
-            onClickHandler={trainModelHandler}
-          />
+          <div className="buttonWrapper">
+            <Button text="Train model" onClickHandler={trainModelHandler} />
+            <Button text="Clear tags data" onClickHandler={clearTagsHandler} />
+          </div>
         </div>
         <div className="filesWrapper">
           <FileUploader openedProjectId={params.id} />
