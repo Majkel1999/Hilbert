@@ -1,4 +1,5 @@
 // AUTH
+export const USER_URL = '/user';
 export const LOGIN_URL = '/user/login';
 export const REGISTER_URL = '/user/register';
 export const REFRESH_URL = 'user/refresh';

@@ -16,6 +16,11 @@ const userSlice = createSlice({
       state.email = email;
       state.fullName = fullName;
     },
+    removeUserData(state) {
+      state.username = '';
+      state.email = '';
+      state.fullName = '';
+    },
   },
 });
 
