@@ -37,7 +37,7 @@ export default function Header() {
             <FontAwesomeIcon icon="fa-solid fa-circle-user" size="4x" />
             <ul>
               <li>
-                <Link to={routes.LOGIN} onClick={logout}>
+                <Link to={routes.USER_INFO}>
                   <span>Your account</span>
                 </Link>
               </li>

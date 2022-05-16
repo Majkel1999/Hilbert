@@ -12,6 +12,7 @@ import * as routes from './constants/routes';
 // eslint-disable-next-line no-unused-vars
 import FontAwesome from './FontAwesome/FontAwesome';
 import AnnotatorOpenedProject from './pages/OpenedProject/AnnotatorOpenedProject';
+import UserData from './pages/UserData/UserData';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -36,6 +37,8 @@ function App() {
         {/* Requiring to be logged in */}
         <Route element={<ProtectedRoute />}>
           <Route path={routes.HOME} element={<AdminBoard />} />
+          <Route path={routes.USER_INFO} element={<UserData />} />
+
           <Route path={routes.PROJECT_ITEM} element={<OpenedProject />} />
         </Route>
         {/* if none of routes above --> create notFound page */}
