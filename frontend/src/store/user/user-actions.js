@@ -9,7 +9,7 @@ import { STATUS } from '../../constants/snackBarStatus';
 export const getUserDetails = () => async (dispatch) => {
   try {
     const response = await axios.get(USER_URL);
-
+    console.log(response);
     const { username, email, full_name } = response.data;
     if (response.status === 200) {
       dispatch(
