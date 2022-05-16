@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 from typing import Dict, List
@@ -6,13 +7,13 @@ import torch
 from torch import tensor
 from torch.utils.data import Dataset
 from transformers import (AutoModelForSequenceClassification, AutoTokenizer,
-                          DataCollatorWithPadding, Trainer, TrainingArguments, pipeline)
+                          DataCollatorWithPadding, EvalPrediction, Trainer, TrainingArguments, pipeline)
 
 # Model Arguments
 
 TOKENIZER_NAME = "distilbert-base-uncased"
 MODEL_NAME = "distilbert-base-uncased"
-SAVE_DIR = "./results"
+SAVE_DIR = "/var/results"
 
 # Learning Arguments
 
@@ -24,14 +25,32 @@ WEIGHT_DECAY = 0.01
 TOKENIZER_MAX_LENGTH = 256
 
 
+def createDatasets(tokens, labels, tokenizer, test_split: float = 0.25):
+    length = len(tokens)
+    div = int(length*(1-test_split))
+
+    trainTokens = tokens[:div]
+    trainLabels = labels[:div]
+    testTokens = tokens[div:]
+    testLabels = labels[div:]
+
+    trainDataset = TextDataset(tokenizer(trainTokens, truncation=True, padding=True,
+                                         max_length=TOKENIZER_MAX_LENGTH,
+                                         return_tensors="pt"), trainLabels)
+    testDataset = TextDataset(tokenizer(testTokens, truncation=True, padding=True,
+                                        max_length=TOKENIZER_MAX_LENGTH,
+                                        return_tensors="pt"), testLabels)
+    return trainDataset, testDataset
+
+
 class TextDataset(Dataset):
-    def __init__(self, encodings, labels):
-        self.encodings = encodings
+    def __init__(self, tokens, labels):
+        self.tokens = tokens
         self.labels = labels
 
     def __getitem__(self, idx):
         item = {key: val[idx].clone().detach()
-                for key, val in self.encodings.items()}
+                for key, val in self.tokens.items()}
         item['labels'] = tensor(self.labels[idx])
         return item
 
@@ -78,10 +97,8 @@ class ModelHandler:
         texts = dataset["texts"]
         labels = dataset["labels"]
 
-        train_enc = self.tokenizer(texts, truncation=True, padding=True,
-                                   max_length=TOKENIZER_MAX_LENGTH,
-                                   return_tensors="pt")
-        data = TextDataset(train_enc, labels)
+        trainData, testData = createDatasets(
+            texts, labels, self.tokenizer, test_split=0)
 
         data_collator = DataCollatorWithPadding(tokenizer=self.tokenizer)
 
@@ -101,10 +118,13 @@ class ModelHandler:
             tokenizer=self.tokenizer,
             args=training_args,
             data_collator=data_collator,
-            train_dataset=data
+            train_dataset=trainData
         )
-        trainer.train()
+        trainOutput = trainer.train()
         self.model.save_pretrained(f'{SAVE_DIR}/{self.projectId}')
+        f = open(f'{SAVE_DIR}/{self.projectId}/metrics.json','w')
+        f.write(json.dumps(trainOutput))
+        f.close()
         try:
             shutil.rmtree(f'./result_{self.projectId}')
         except Exception as e:
