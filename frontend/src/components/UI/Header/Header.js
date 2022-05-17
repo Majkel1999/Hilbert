@@ -1,5 +1,6 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { authActions } from '../../../store/auth/auth-slice';
 import * as routes from '../../../constants/routes';
 import './Header.scss';
@@ -32,10 +33,20 @@ export default function Header() {
             </Link>
           </div>
         ) : (
-          <div>
-            <Link to={routes.LOGIN} onClick={logout}>
-              <span>Sign out</span>
-            </Link>
+          <div className="userIcon">
+            <FontAwesomeIcon icon="fa-solid fa-circle-user" size="3x" />
+            <ul>
+              <li>
+                <Link to={routes.USER_INFO}>
+                  <span>Your account</span>
+                </Link>
+              </li>
+              <li>
+                <Link to={routes.LOGIN} onClick={logout}>
+                  <span>Sign out</span>
+                </Link>
+              </li>
+            </ul>
           </div>
         )}
       </div>

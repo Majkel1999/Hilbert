@@ -3,10 +3,6 @@
   display: flex;
   flex-direction: column;
   background-color: #deefe7;
-
-  button {
-    margin-bottom: 40px;
-  }
 }
 .textOperationsWrapper {
   height: 100%;
@@ -45,7 +41,12 @@
     align-items: center;
     justify-content: space-between;
     padding-top: 20px;
-
+    .buttonWrapper {
+      display: flex;
+      button {
+        margin: 0 10px 40px;
+      }
+    }
     .textWrapper {
       height: 80%;
       width: 100%;

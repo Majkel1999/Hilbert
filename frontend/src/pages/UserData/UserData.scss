@@ -1,0 +1,38 @@
+.userInfoWrapper {
+  position: absolute;
+  background-color: lightcyan;
+  width: 35vw;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+
+  .header {
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    background-color: cyan;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    h3 {
+      font-size: 2rem;
+    }
+  }
+  .userDataContainer {
+    margin: 15px 0 30px;
+    .userDataItem {
+      margin: 10px 20px;
+      label {
+        margin-right: 10px;
+      }
+    }
+  }
+  button {
+    margin: 0 auto;
+    width: 200px;
+    margin-bottom: 30px;
+  }
+}
