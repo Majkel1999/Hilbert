@@ -1,37 +1,56 @@
+import json
 import os
 import shutil
 from typing import Dict, List
-import numpy as np
 
-from torch import tensor
 import torch
+from torch import tensor
 from torch.utils.data import Dataset
 from transformers import (AutoModelForSequenceClassification, AutoTokenizer,
-                          DataCollatorWithPadding, Trainer, TrainingArguments)
+                          DataCollatorWithPadding, EvalPrediction, Trainer, TrainingArguments, pipeline)
 
 # Model Arguments
 
 TOKENIZER_NAME = "distilbert-base-uncased"
 MODEL_NAME = "distilbert-base-uncased"
-SAVE_DIR = "./results"
+SAVE_DIR = "/var/results"
 
 # Learning Arguments
 
-LEARNING_RATE=2e-5
-PER_DEVICE_TRAIN_BATCH_SIZE=1
-PER_DEVICE_EVAL_BATCH_SIZE=1
-EPOCHS=20
-WEIGHT_DECAY=0.01
-TOKENIZER_MAX_LENGTH=256
+LEARNING_RATE = 2e-5
+PER_DEVICE_TRAIN_BATCH_SIZE = 1
+PER_DEVICE_EVAL_BATCH_SIZE = 1
+EPOCHS = 5
+WEIGHT_DECAY = 0.01
+TOKENIZER_MAX_LENGTH = 256
+
+
+def createDatasets(tokens, labels, tokenizer, test_split: float = 0.25):
+    length = len(tokens)
+    div = int(length*(1-test_split))
+
+    trainTokens = tokens[:div]
+    trainLabels = labels[:div]
+    testTokens = tokens[div:]
+    testLabels = labels[div:]
+
+    trainDataset = TextDataset(tokenizer(trainTokens, truncation=True, padding=True,
+                                         max_length=TOKENIZER_MAX_LENGTH,
+                                         return_tensors="pt"), trainLabels)
+    testDataset = TextDataset(tokenizer(testTokens, truncation=True, padding=True,
+                                        max_length=TOKENIZER_MAX_LENGTH,
+                                        return_tensors="pt"), testLabels)
+    return trainDataset, testDataset
+
 
 class TextDataset(Dataset):
-    def __init__(self, encodings, labels):
-        self.encodings = encodings
+    def __init__(self, tokens, labels):
+        self.tokens = tokens
         self.labels = labels
 
     def __getitem__(self, idx):
         item = {key: val[idx].clone().detach()
-                for key, val in self.encodings.items()}
+                for key, val in self.tokens.items()}
         item['labels'] = tensor(self.labels[idx])
         return item
 
@@ -44,6 +63,7 @@ class ModelHandler:
     tags: List[str]
     tokenizer: AutoTokenizer
     model: AutoModelForSequenceClassification
+    pipe: pipeline
     isTraining: bool = False
 
     def __init__(self, projectId: str, tags: List[str]):
@@ -52,30 +72,24 @@ class ModelHandler:
         self.tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME)
         if(self.checkForModel()):
             self.model = AutoModelForSequenceClassification.from_pretrained(
-                f'{SAVE_DIR}/{projectId}', num_labels=len(self.tags))
+                f'{SAVE_DIR}/{projectId}')
         else:
             self.model = AutoModelForSequenceClassification.from_pretrained(
-                MODEL_NAME, num_labels=len(self.tags))
+                MODEL_NAME, num_labels=len(self.tags),
+                id2label={int(v): k for v, k in enumerate(self.tags)},
+                label2id={k: int(v) for v, k in enumerate(self.tags)})
+        deviceId = -1
+        if(torch.cuda.is_available()):
+            deviceId = torch.cuda.current_device()
+        self.pipe = pipeline('text-classification', self.model,
+                             tokenizer=self.tokenizer, device=deviceId)
 
     def checkForModel(self) -> bool:
         return os.path.isdir(f'{SAVE_DIR}/{self.projectId}')
 
-    def preprocessText(self, data):
-        return self.tokenizer(data,
-                              padding=True,
-                              truncation=True,
-                              max_length=TOKENIZER_MAX_LENGTH,
-                              return_tensors="pt")
-
-    def classifyText(self, text: str) -> Dict[str,float]:
-        classification = self.model(**self.preprocessText(text))
-        classified_tags = classification.logits.detach().numpy()
-        d = {}
-        i = 0
-        for tag in self.tags:
-            d[tag] = classified_tags[0][i]
-            i = i+1
-        return d
+    def classifyText(self, text: str) -> List[Dict[str, float]]:
+        d = self.pipe(text, return_all_scores=True)
+        return d[0]
 
     def trainModel(self, dataset):
         torch.cuda.empty_cache()
@@ -83,10 +97,8 @@ class ModelHandler:
         texts = dataset["texts"]
         labels = dataset["labels"]
 
-        train_enc = self.tokenizer(texts, truncation=True, padding=True,
-                                   max_length=512,
-                                   return_tensors="pt")
-        data = TextDataset(train_enc, labels)
+        trainData, testData = createDatasets(
+            texts, labels, self.tokenizer, test_split=0)
 
         data_collator = DataCollatorWithPadding(tokenizer=self.tokenizer)
 
@@ -106,10 +118,13 @@ class ModelHandler:
             tokenizer=self.tokenizer,
             args=training_args,
             data_collator=data_collator,
-            train_dataset=data
+            train_dataset=trainData
         )
-        trainer.train()
+        trainOutput = trainer.train()
         self.model.save_pretrained(f'{SAVE_DIR}/{self.projectId}')
+        f = open(f'{SAVE_DIR}/{self.projectId}/metrics.json','w')
+        f.write(json.dumps(trainOutput))
+        f.close()
         try:
             shutil.rmtree(f'./result_{self.projectId}')
         except Exception as e:

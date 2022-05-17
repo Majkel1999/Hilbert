@@ -39,6 +39,13 @@ class TokenizerService:
         value = response.json()
         return value
 
+    def change_model_state(self, projectId:str, state:str):
+        response = requests.post(
+            f'{API_URL}/data/{projectId}/modelState',
+            json={"state":state}
+        )
+        return response.status_code
+
     async def get_project_handler(self, projectId: str) -> ModelHandler:
         if(projectId in self.handlers):
             handler = self.handlers[projectId]
@@ -57,7 +64,11 @@ class TokenizerService:
     async def classifyText(self, projectId: str, text: str) -> Dict[str, float]:
         handler = await self.get_project_handler(projectId)
         if(handler):
-            return handler.classifyText(text)
+            result = handler.classifyText(text)
+            classification = {}
+            for res in result:
+                classification[res['label']] = res['score']
+            return classification
         else:
             return {}
 
@@ -69,6 +80,7 @@ class TokenizerService:
         except Exception as e:
             print(e)
         finally:
+            self.change_model_state(projectId,"Trained")
             del self.handlers[projectId]
 
     def cleanup_unused(self):

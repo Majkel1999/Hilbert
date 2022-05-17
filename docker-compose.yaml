@@ -32,7 +32,7 @@ services:
       - traefik.http.routers.backend.middlewares=backend-stripprefix
       - traefik.http.middlewares.backend-stripprefix.stripprefix.prefixes=/api/v1
     volumes:
-      - mldata:/var/results
+      - 'mldata:/var/results'
     environment:
       - 'PYTHONUNBUFFERED=TRUE'
       - 'DB_CONN_STRING=mongodb://${DB_USER}:${DB_PASS}@mongodb:27017'
@@ -43,8 +43,8 @@ services:
     image: hilbert_mlservice
     restart: always
     volumes:
-      - mldata:/var/results
-      - mlcache:/root/.cache/huggingface
+      - 'mldata:/var/results'
+      - 'mlcache:/root/.cache/huggingface'
     environment:
       - 'PYTHONUNBUFFERED=TRUE'
       - 'RABBITMQ_CONN_STRING=ampq://${RABBITMQ_USER}:${RABBITMQ_PASS}@rabbitmq:5672'
@@ -53,20 +53,19 @@ services:
         reservations:
           devices:
             - capabilities:
-                - "gpu"
-
+                - gpu
   mongodb:
     image: 'mongo:5.0.6'
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+      MONGO_INITDB_ROOT_USERNAME: '${DB_USER}'
+      MONGO_INITDB_ROOT_PASSWORD: '${DB_PASS}'
     volumes:
       - 'mongodbdata:/data/db'
       - 'mongodbconfig:/data/configdb'
     command: mongod --quiet --logpath /dev/null
     ports:
-      - "27017:27017"
+      - '27017:27017'
   rabbitmq:
     image: 'rabbitmq:3-management'
     restart: always

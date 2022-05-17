@@ -1,4 +1,5 @@
 import io
+import json
 import os
 import zipfile
 import csv
@@ -39,6 +40,21 @@ async def project_websocket(projectId: str, websocket: WebSocket):
         wsManager.disconnect(connection)
 
 
+@router.get("/{project_id}/metrics")
+async def get_project_metrics(project: Project = Depends(check_for_project_ownership)):
+    folderpath = f'/var/results/{str(project.id)}'
+    if(os.path.isdir(folderpath)):
+        f = open(f'{folderpath}/config.json')
+        configData = json.load(f)
+        f.close()
+        f = open(f'{folderpath}/metrics.json')
+        trainData = json.load(f)
+        f.close()
+        return {"config": configData, "trainData": trainData}
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Project model not initialized")
+
+
 @router.post("/{project_id}/clear")
 async def clear_tags(project: Project = Depends(check_for_project_ownership)):
     await project.fetch_all_links()
@@ -51,6 +67,8 @@ async def clear_tags(project: Project = Depends(check_for_project_ownership)):
 @router.post("/{project_id}/train")
 async def queue_model_training(project: Project = Depends(check_for_project_ownership)):
     projectId = str(project.id)
+    project.model_state = "Training"
+    await project.save()
     await wsManager.send_by_projectId(Action.ModelTrainig, projectId)
     return await rabbitBroker.sendMessage(projectId)
 
@@ -86,9 +104,10 @@ async def get_files(project: Project = Depends(check_for_project_ownership)):
     await project.fetch_all_links()
     stream = io.StringIO()
     csvFile = csv.writer(stream, delimiter=';')
-    csvFile.writerow(["name","text","tag"])
+    csvFile.writerow(["name", "text", "tag"])
     for text in project.texts:
-        csvFile.writerow([text.name,text.value,", ".join(tag for tag in text.tags)])
+        csvFile.writerow(
+            [text.name, text.value, ", ".join(tag for tag in text.tags)])
     return Response(stream.getvalue(), media_type="text/csv")
 
 

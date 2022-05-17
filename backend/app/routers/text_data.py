@@ -1,13 +1,13 @@
 from typing import List
 
 from app.models.project_models import Project
-from app.models.request_models import DatasetResponse
+from app.models.request_models import DatasetResponse, ModelStateRequest
 from bson.objectid import ObjectId
 from fastapi import APIRouter, HTTPException, status
 
 router = APIRouter(
     prefix="/data",
-    tags=["Text data"],
+    tags=["Model service endpoints"],
 )
 
 
@@ -57,6 +57,20 @@ async def get_dataset(project_id: str):
                 labels.append(
                     list(map(lambda x: project.data.tags.index(x), text.tags)))
         return DatasetResponse(texts=texts, labels=labels)
+    except Exception as e:
+        print(e)
+        raise exception
+
+@router.post("/{project_id}/modelState")
+async def set_model_state(project_id:str, state : ModelStateRequest):
+    exception = HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Project not found"
+    )
+    try:
+        project = await Project.find_one(Project.id == ObjectId(project_id))
+        project.model_state = state.state
+        await project.save()
     except Exception as e:
         print(e)
         raise exception

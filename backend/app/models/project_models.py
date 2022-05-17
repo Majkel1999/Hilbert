@@ -29,7 +29,7 @@ class ProjectOut(BaseModel):
 
 class Project(Document, ProjectOut):
     owner: str
-
+    model_state: str = 'Uninitialized'
 
 class ProjectCreationData(BaseModel):
     name: str
