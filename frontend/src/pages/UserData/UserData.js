@@ -2,12 +2,23 @@
 import './UserData.scss';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { getUserDetails, deleteUser } from '../../store/user/user-actions';
+import * as routes from '../../constants/routes';
 import Button from '../../components/UI/Button/Button';
 
 export default function UserData() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userData = useSelector((state) => state.user);
+
+  const removeCurrentUser = () => {
+    const responsePromise = dispatch(deleteUser());
+
+    responsePromise.then((response) => {
+      if (response.status === 200) navigate(routes.LOGIN, { replace: true });
+    });
+  };
 
   useEffect(() => {
     dispatch(getUserDetails());
@@ -21,18 +32,18 @@ export default function UserData() {
       <div className="userDataContainer">
         <div className="userDataItem">
           <label>Username:</label>
-          <spam>{userData.username || 'Unknown'}</spam>
+          <span>{userData.username || 'Unknown'}</span>
         </div>
         <div className="userDataItem">
           <label>Full name:</label>
-          <spam>{userData.fullName || 'Unknown'}</spam>
+          <span>{userData.fullName || 'Unknown'}</span>
         </div>
         <div className="userDataItem">
           <label>Email:</label>
-          <spam>{userData.email || 'Unknown'}</spam>
+          <span>{userData.email || 'Unknown'}</span>
         </div>
       </div>
-      <Button text="Delete user" onClickHandler={deleteUser} />
+      <Button text="Delete user" onClickHandler={removeCurrentUser} />
     </div>
   );
 }

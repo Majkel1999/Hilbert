@@ -1,8 +1,9 @@
 /* eslint-disable camelcase */
-/* eslint-disable import/prefer-default-export */
 import axios from '../../api/axios';
 import { USER_URL } from '../../constants/apiUrls';
 import { userActions } from './user-slice';
+import { authActions } from '../auth/auth-slice';
+
 import { snackBarActions } from '../snackBar/snackBar-slice';
 import { STATUS } from '../../constants/snackBarStatus';
 
@@ -37,7 +38,9 @@ export const deleteUser = () => async (dispatch) => {
 
     if (response.status === 200) {
       dispatch(userActions.removeUserData());
+      dispatch(authActions.logout());
     }
+    return response;
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
@@ -46,5 +49,6 @@ export const deleteUser = () => async (dispatch) => {
         message,
       }),
     );
+    return error;
   }
 };
