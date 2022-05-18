@@ -1,7 +1,7 @@
 <!-- _navbar.md -->
 
 * [Home](/)
-* [Overview](/docs/overwiev)
+* [Overview](/docs/overview)
 * [Frontend](/docs/frontend)
 * [Backend](/docs/backend)
 * [Bert Model](/docs/bert)
