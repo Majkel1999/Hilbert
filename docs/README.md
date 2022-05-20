@@ -1,35 +1,19 @@
+# Overview
 
-# Hilbert - application for text classification
+## Przedmiot i cel pracy
+  Celem projektu jest stworzenie systemu do automatycznej klasyfikacji tekstu. System ma za zadanie klasyfikować teksty i przydzielać im tagi na podstawie wcześniej wyuczonego modelu.
 
+## Analiza potrzeb użytkownika
+  Użytkownikiem aplikacji jest osoba, która posiada zbiór tekstów i potrzebuje narzędzia, które będzie je klasyfikowało używając do tego etykiet. Teksty na początku są nieotagowane, a ręczna klasyfikacja jest kosztowna, ponieważ trzeba zatrudnić osobę/by do wykonania tego zadania. Dzięki aplikacji, użytkownik może na początku samodzielnie lub za pomocą kilku osób etykietować teksty, aby w późniejszej fazie model(BERT) samodzielnie mógł wykonywać te czynności.
 
-Hilbert is a web application, designated for text classification. It implements a BERT model, trained via Human-in-the-Loop tactics.
+Ze zbioru dokumentów tekstowych wybierany jest tekst, któremu użytkownik/osoba etykietyzująca przydzieli określoną etykietę. Po otagowaniu pewnej ilości tekstów, możemy przejść do uczenia modelu. Po wstępnym nauczeniu modelu, osoba odpowiedzialna za etykietyzację będzie otrzymywać podpowiedzi, która etykieta jest odpowiednia dla danego tekstu. Dzięki temu, kolejne etapy etykietyzacji wykonywane przez użytkownika, będą przebiegać sprawniej, a model będzie jeszcze sprawniej etykietował teksty.
+W konsekwencji otrzymujemy system, który za nas klasyfikuje teksty na podstawie wyuczonych modelów.
 
-[![CodeQL](https://github.com/Majkel1999/Hilbert/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Majkel1999/Hilbert)
----
-## Deploying
-
----
-
-Creating your own instance of the application is as easy as this:
-
-```
-git clone https://github.com/Majkel1999/Hilbert/
-cd Hilbert
-docker-compose up 
-```
-
-In order to change configuration, edit **.env** file in root directory. By default it hosts all services at **localhost:8000**. 
-
-For more information, consult [official docker-compose documentation](https://docs.docker.com/compose/).
-
-Current endpoints are:
-- / - frontend
-- /api/v1 - Api service
-- /api/v1/docs - Swagger documentation
-- /prometheus - Prometheus dashboard
-- /rabbitmq - RabbitMQ Management plugin
-- /grafana - Grafana with 2 dashboards for monitoring
-
-For more information, consult official [Traefik routing documentation](https://doc.traefik.io/traefik/routing/overview/).
-
----
+Możliwości jakie powinna dawać użytkownikom aplikacja:
+- tworzenie konta administratora, który zarządza pokojami
+- tworzenie osobnych pokoi, w których będą odbywały się odrębne klasyfikacje tekstów i trenowanie modeli
+- możliwość wprowadzenia plików tekstowych do systemu posiadających różne rozszerzenia
+- klasyfikacja tekstów przez użytkownika/osobę etykietyzującą 
+- możliwość zapisu modelu do pliku, wraz z wagami oraz punktami kontrolnymi
+- nauczenie modelu rozpoznawania tekstów i przydzielania im etykiet
+- podgląd na statystyki związane z poprawnością działania modelu
