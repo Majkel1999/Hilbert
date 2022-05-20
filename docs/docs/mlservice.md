@@ -1,1 +1,1 @@
-# Learning and Classyfing
+# Klasyfikacja i kolejkowanie nauki
