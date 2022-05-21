@@ -1,4 +1,10 @@
-# Overview
+# HilBERT - Aplikacja do klasyfikacji tekstów
+
+HilBERT to aplikacja webowa służąca do trenowania modeli typu BERT przy użyciu taktyki Human-In-the-Loop.
+
+[![CodeQL](https://github.com/Majkel1999/Hilbert/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Majkel1999/Hilbert)
+
+---
 
 ## Przedmiot i cel pracy
   Celem projektu jest stworzenie systemu do automatycznej klasyfikacji tekstu. System ma za zadanie klasyfikować teksty i przydzielać im tagi na podstawie wcześniej wyuczonego modelu.

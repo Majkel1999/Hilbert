@@ -1,5 +1,7 @@
 # Model BERT i tokenizator
 
+---
+
 Modele i tokenizatory użyte w projekcie pochodzą ze strony [HuggingFace](https://huggingface.co/models). 
 Domyślnie użytym modelem jest [distilbert-base-uncased](https://huggingface.co/distilbert-base-uncased).
 
