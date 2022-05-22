@@ -43,7 +43,6 @@ async def get_random_text(response: Response, tagging_id: Union[str, None] = Coo
         texts = [x for x in project.texts if len(x.tags) == 0]
         document: TextDocument = random.choice(texts)
     except Exception as e:
-        print(e)
         raise HTTPException(
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="All texts have been tagged"
