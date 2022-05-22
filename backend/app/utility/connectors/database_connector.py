@@ -4,7 +4,7 @@ from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from app.models.project_models import Project, TextDocument
-from app.models.user_models import User
+from app.models.user_models import Tagger, User
 
 
 class Database:
@@ -22,7 +22,7 @@ db = Database()
 async def init_db():
     print("Initializing database connection")
     db.client = AsyncIOMotorClient(DB_CONN_STRING)
-    await init_beanie(db.client.test, document_models=[User, Project, TextDocument])
+    await init_beanie(db.client.test, document_models=[User, Project, TextDocument, Tagger])
     print("Database connection initialized")
 
 
