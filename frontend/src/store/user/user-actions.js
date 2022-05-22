@@ -5,7 +5,7 @@ import { userActions } from './user-slice';
 import { authActions } from '../auth/auth-slice';
 
 import { snackBarActions } from '../snackBar/snackBar-slice';
-import { STATUS } from '../../constants/snackBarStatus';
+import { SNACKBAR_STATUS } from '../../constants/snackBarStatus';
 
 export const getUserDetails = () => async (dispatch) => {
   try {
@@ -25,7 +25,7 @@ export const getUserDetails = () => async (dispatch) => {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
@@ -45,7 +45,7 @@ export const deleteUser = () => async (dispatch) => {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );

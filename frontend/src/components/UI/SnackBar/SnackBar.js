@@ -2,17 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './SnackBar.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { STATUS } from '../../../constants/snackBarStatus';
+import { SNACKBAR_STATUS } from '../../../constants/snackBarStatus';
 
 const SnackBar = ({ type, show, message }) => {
   const snackBarContainers = {
-    [STATUS.SUCCESS]: (
+    [SNACKBAR_STATUS.SUCCESS]: (
       <FontAwesomeIcon icon="fa-solid fa-check" color="white" />
     ),
-    [STATUS.ERROR]: (
+    [SNACKBAR_STATUS.ERROR]: (
       <FontAwesomeIcon icon="fa-solid fa-circle-exclamation" color="white" />
     ),
-    [STATUS.INFO]: (
+    [SNACKBAR_STATUS.INFO]: (
       <FontAwesomeIcon icon="fa-solid fa-circle-info" color="white" />
     ),
   };

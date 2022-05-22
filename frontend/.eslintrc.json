@@ -19,6 +19,7 @@
     "react/react-in-jsx-scope": "off",
     "no-shadow": "off",
     "jsx-a11y/label-has-associated-control": "off",
-    "no-plusplus": "off"
+    "no-plusplus": "off",
+    "no-unused-expressions": [2, { "allowTernary": true }]
   }
 }

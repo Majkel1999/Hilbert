@@ -5,7 +5,7 @@ import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button';
 import { uploadFilesToProject } from '../../store/projects/project-actions';
 import { snackBarActions } from '../../store/snackBar/snackBar-slice';
-import { STATUS } from '../../constants/snackBarStatus';
+import { SNACKBAR_STATUS } from '../../constants/snackBarStatus';
 import './FileUploader.scss';
 
 export default function FileUploader({ openedProjectId }) {
@@ -23,7 +23,7 @@ export default function FileUploader({ openedProjectId }) {
     ) {
       dispatch(
         snackBarActions.setSnackBarData({
-          type: STATUS.ERROR,
+          type: SNACKBAR_STATUS.ERROR,
           message: `File ${event.target.value.replace(
             /^.*[\\/]/,
             '',
