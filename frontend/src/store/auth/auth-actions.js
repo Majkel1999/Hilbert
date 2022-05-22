@@ -2,7 +2,7 @@ import { LOGIN_URL, REGISTER_URL } from '../../constants/apiUrls';
 import axios from '../../api/axios';
 import { authActions } from './auth-slice';
 import { snackBarActions } from '../snackBar/snackBar-slice';
-import { SNACKBAR_STATUS } from '../../constants/snackBarStatus';
+import { SNACKBAR_STATUS } from '../../constants/stateStatuses';
 
 export const login = (loginData) => async (dispatch) => {
   try {

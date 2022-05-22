@@ -5,7 +5,7 @@ import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button';
 import { uploadFilesToProject } from '../../store/projects/project-actions';
 import { snackBarActions } from '../../store/snackBar/snackBar-slice';
-import { SNACKBAR_STATUS } from '../../constants/snackBarStatus';
+import { SNACKBAR_STATUS } from '../../constants/stateStatuses';
 import './FileUploader.scss';
 
 export default function FileUploader({ openedProjectId }) {

@@ -11,7 +11,7 @@ import {
   trainModel,
 } from '../../store/projects/project-actions';
 import { snackBarActions } from '../../store/snackBar/snackBar-slice';
-import { SNACKBAR_STATUS, MODEL_STATE } from '../../constants/snackBarStatus';
+import { SNACKBAR_STATUS, MODEL_STATE } from '../../constants/stateStatuses';
 import './OpenedProject.scss';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { ROLES } from '../../constants/roles';

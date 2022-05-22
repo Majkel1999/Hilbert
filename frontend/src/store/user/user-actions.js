@@ -5,7 +5,7 @@ import { userActions } from './user-slice';
 import { authActions } from '../auth/auth-slice';
 
 import { snackBarActions } from '../snackBar/snackBar-slice';
-import { SNACKBAR_STATUS } from '../../constants/snackBarStatus';
+import { SNACKBAR_STATUS } from '../../constants/stateStatuses';
 
 export const getUserDetails = () => async (dispatch) => {
   try {

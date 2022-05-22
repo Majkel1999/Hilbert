@@ -1,7 +1,7 @@
 import axios from '../../api/axios';
 import { projectsActions } from './projects-slice';
 import { snackBarActions } from '../snackBar/snackBar-slice';
-import { SNACKBAR_STATUS, MODEL_STATE } from '../../constants/snackBarStatus';
+import { SNACKBAR_STATUS, MODEL_STATE } from '../../constants/stateStatuses';
 import {
   PROJECT_URL,
   PROJECT_DATA_URL,

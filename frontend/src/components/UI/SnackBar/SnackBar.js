@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './SnackBar.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SNACKBAR_STATUS } from '../../../constants/snackBarStatus';
+import { SNACKBAR_STATUS } from '../../../constants/stateStatuses';
 
 const SnackBar = ({ type, show, message }) => {
   const snackBarContainers = {
