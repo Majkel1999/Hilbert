@@ -2,6 +2,7 @@ FROM node:17-alpine as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json package-lock.json ./
+RUN npm install -g npm@latest
 RUN npm ci --silent && npm install react-scripts@3.4.1 -g --silent
 COPY . ./
 ENV REACT_APP_SERVER_URL=http://localhost:8000/api/v1/
