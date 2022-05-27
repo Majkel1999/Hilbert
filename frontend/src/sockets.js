@@ -18,9 +18,7 @@ export const WebSocketActions = {
   PROJECT_DELETED: 'Project deleted',
 };
 
-export default ({ children }) => {
-  let socket;
-
+export default ({ children, projectId }) => {
   let ws;
 
   const dispatch = useDispatch();
@@ -37,21 +35,19 @@ export default ({ children }) => {
   //     dispatch(updateChatLog(payload));
   //   };
 
-  if (!socket) {
-    socket = io.connect(WS_URL);
+  const socket = io.connect(WS_URL(projectId));
 
-    socket.on('event://get-message', (msg) => {
-      const payload = JSON.parse(msg);
+  socket.on('event://get-message', (msg) => {
+    const payload = JSON.parse(msg);
 
-      // dispatch(updateChatLog(payload));
-    });
+    // dispatch(updateChatLog(payload));
+  });
 
-    ws = {
-      socket,
+  ws = {
+    socket,
 
-      // sendMessage,
-    };
-  }
+    // sendMessage,
+  };
 
   return (
     <WebSocketContext.Provider value={ws}>{children}</WebSocketContext.Provider>
