@@ -25,24 +25,35 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalConfig = error.config;
+    const refreshToken = localStorage.getItem('refresh_token');
 
-    if (originalConfig.url !== LOGIN_URL && error.response) {
-      if (error.response.status === 401 && !originalConfig['_retry']) {
-        originalConfig['_retry'] = true;
+    if (error.response.status === 401 && error.response && refreshToken) {
+      const resp = await instance.post(REFRESH_URL, {
+        refreshToken,
+      });
 
-        try {
-          const resp = await instance.post(REFRESH_URL, {
-            refreshToken: localStorage.getItem('refresh_token'),
+      const { access_token } = resp.data;
+      localStorage.setItem('token', JSON.stringify(access_token));
+
+      return () =>
+        instance
+          .post(REFRESH_URL, {
+            refreshToken,
+          })
+          .then((result) => {
+            const { access_token } = result.data;
+            localStorage.setItem('token', JSON.stringify(access_token));
+            localStorage.setItem('refresh_token', refreshToken);
+          })
+          .catch((error) => {
+            const originalconfig = error.config;
+            if (originalconfig.url !== LOGIN_URL) {
+              localStorage.removeItem('token');
+              localStorage.removeItem('refresh_token');
+            }
+            if (error) return Promise.reject(error);
+            return null;
           });
-
-          const { access_token } = resp.data;
-          localStorage.setItem('token', JSON.stringify(access_token));
-          return instance(originalConfig);
-        } catch (error) {
-          return Promise.reject(error);
-        }
-      }
     }
     return Promise.reject(error);
   },
