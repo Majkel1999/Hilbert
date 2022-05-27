@@ -12,6 +12,7 @@ import {
 } from '../../store/projects/project-actions';
 import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
+import SOCKETS from '../../sockets';
 
 export default function AnnotatorOpenedProject() {
   const [fetchedData, setFetchedData] = useState(false);
@@ -65,6 +66,7 @@ export default function AnnotatorOpenedProject() {
       textResponsePromise.then((response) => {
         if (response.status === 200) setEnableButton(true);
       });
+      SOCKETS.initialize(params.id);
     }
 
     setFetchedData(true);
