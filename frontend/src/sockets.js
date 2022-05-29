@@ -1,10 +1,7 @@
 /* eslint-disable prefer-promise-reject-errors */
-/* eslint-disable react/prop-types */
 import { createContext } from 'react';
-// import io from 'socket.io-client';
 import { uuid } from './utils/utils';
 
-// import { useDispatch } from 'react-redux';
 import { WS_URL } from './constants/apiUrls';
 
 const WebSocketContext = createContext(null);
@@ -64,42 +61,6 @@ const SOCKETS = {
 Object.freeze(SOCKETS);
 
 export default SOCKETS;
-
-// export default ({ children, projectId }) => {
-//   let ws;
-
-//   const dispatch = useDispatch();
-
-//   //   const sendMessage = (roomId, message) => {
-//   //     const payload = {
-//   //       roomId: roomId,
-
-//   //       data: message,
-//   //     };
-
-//   //     socket.emit('event://send-message', JSON.stringify(payload));
-
-//   //     dispatch(updateChatLog(payload));
-//   //   };
-
-//   const socket = io.connect(WS_URL(projectId));
-
-//   socket.on('event://get-message', (msg) => {
-//     const payload = JSON.parse(msg);
-
-//     // dispatch(updateChatLog(payload));
-//   });
-
-//   ws = {
-//     socket,
-
-//     // sendMessage,
-//   };
-
-//   return (
-//     <WebSocketContext.Provider value={ws}>{children}</WebSocketContext.Provider>
-//   );
-// };
 
 // USAGE
 // nazwaFunkcjiZUnsubsribe(){
