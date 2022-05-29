@@ -24,7 +24,7 @@ router = APIRouter(
 )
 
 
-@router.get("/{invite_url}", response_model=ProjectOut)
+@router.get("/{invite_url}", response_model=Project)
 async def get_project_info(project: Project = Depends(check_invite_url)):
     return project
 
