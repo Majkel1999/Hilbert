@@ -14,17 +14,16 @@ let subscribers = [];
 let connection;
 
 function initialize(projectId) {
-  console.log(connection);
   if (connection) return;
 
   connection = new WebSocket(`${process.env.REACT_APP_WS}${WS_URL(projectId)}`);
 
   connection.onmessage = (e) => {
-    const message = JSON.parse(e.data);
-    console.log(message);
+    const message = JSON.parse(JSON.parse(e.data));
+
     subscribers
-      .filter((subscriber) => subscriber.action === message.action)
-      .forEach((subscriber) => subscriber.callback(message.payload));
+      .filter((subscriber) => subscriber.action === message.event)
+      .forEach((subscriber) => subscriber.callback(message.projectId));
   };
 
   // For Debugging

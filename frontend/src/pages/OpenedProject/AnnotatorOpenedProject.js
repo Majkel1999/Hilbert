@@ -69,7 +69,6 @@ export default function AnnotatorOpenedProject() {
       textResponsePromise.then((response) => {
         if (response.status === 200) setEnableButton(true);
       });
-      SOCKETS.initialize('625af528a46519b355912ebf');
     }
     if (currentProjectData.id) SOCKETS.initialize(currentProjectData.id);
 
@@ -94,7 +93,7 @@ export default function AnnotatorOpenedProject() {
     if (currentProjectData.isMultiLabel) setIsMultiLabel(true);
   }, [currentProjectData]);
 
-  const deleteProjectSubsriber = (payload) => {
+  const deleteProjectSubscriber = (payload) => {
     if (payload.id === currentProjectData.id)
       console.log('project has beeen deeleted');
     SOCKETS.unsubscribe(socketsSubscribtions.PROJECT_DELETED);
@@ -104,7 +103,7 @@ export default function AnnotatorOpenedProject() {
     setSocketsSubscribtions({
       PROJECT_DELETED: SOCKETS.subscribe({
         action: WebSocketActions.PROJECT_DELETED,
-        callback: deleteProjectSubsriber,
+        callback: deleteProjectSubscriber,
       }),
     });
   }, []);
