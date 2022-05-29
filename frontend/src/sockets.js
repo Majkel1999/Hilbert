@@ -1,31 +1,27 @@
 /* eslint-disable prefer-promise-reject-errors */
-import { createContext } from 'react';
 import { uuid } from './utils/utils';
 
 import { WS_URL } from './constants/apiUrls';
 
-const WebSocketContext = createContext(null);
-
-export { WebSocketContext };
-
 export const WebSocketActions = {
-  FILE_ADDED: 'File added',
-  FILE_REMOVED: 'File removed',
-  MODEL_TRAINING: 'Model training',
-  PROJECT_DELETED: 'Project deleted',
+  FILE_ADDED: 'FileAdded',
+  FILE_REMOVED: 'FileRemoved',
+  MODEL_TRAINING: 'ModelTraining',
+  PROJECT_DELETED: 'ProjectDeleted',
 };
 
 let subscribers = [];
 let connection;
 
 function initialize(projectId) {
+  console.log(connection);
   if (connection) return;
 
   connection = new WebSocket(`${process.env.REACT_APP_WS}${WS_URL(projectId)}`);
 
   connection.onmessage = (e) => {
     const message = JSON.parse(e.data);
-
+    console.log(message);
     subscribers
       .filter((subscriber) => subscriber.action === message.action)
       .forEach((subscriber) => subscriber.callback(message.payload));

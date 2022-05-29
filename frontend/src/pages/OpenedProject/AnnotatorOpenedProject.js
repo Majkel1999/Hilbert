@@ -12,7 +12,7 @@ import {
 } from '../../store/projects/project-actions';
 import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
-import SOCKETS from '../../sockets';
+import SOCKETS, { WebSocketActions } from '../../sockets';
 
 export default function AnnotatorOpenedProject() {
   const [fetchedData, setFetchedData] = useState(false);
@@ -21,6 +21,9 @@ export default function AnnotatorOpenedProject() {
   const [selectedTags, setSelectedTags] = useState([]);
   const [isMultiLabel, setIsMultiLabel] = useState(false);
   const [enableButton, setEnableButton] = useState(false);
+  const [socketsSubscribtions, setSocketsSubscribtions] = useState({
+    PROJECT_DELETED: undefined,
+  });
   const dispatch = useDispatch();
   const params = useParams();
   const currentProjectData = useSelector(
@@ -90,6 +93,21 @@ export default function AnnotatorOpenedProject() {
     }
     if (currentProjectData.isMultiLabel) setIsMultiLabel(true);
   }, [currentProjectData]);
+
+  const deleteProjectSubsriber = (payload) => {
+    if (payload.id === currentProjectData.id)
+      console.log('project has beeen deeleted');
+    SOCKETS.unsubscribe(socketsSubscribtions.PROJECT_DELETED);
+  };
+
+  useEffect(() => {
+    setSocketsSubscribtions({
+      PROJECT_DELETED: SOCKETS.subscribe({
+        action: WebSocketActions.PROJECT_DELETED,
+        callback: deleteProjectSubsriber,
+      }),
+    });
+  }, []);
 
   return (
     <div className="openedProjectContainer">
