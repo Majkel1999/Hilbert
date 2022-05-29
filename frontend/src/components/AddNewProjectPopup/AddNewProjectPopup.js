@@ -45,6 +45,7 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
   const closePopup = () => {
     setCheckBoxChecked('');
     setEnteredTags([]);
+    setProjectName('');
     onCloseHandler();
   };
 
