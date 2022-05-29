@@ -1,3 +1,4 @@
+/* eslint-disable dot-notation */
 import axios from '../../api/axios';
 import { projectsActions } from './projects-slice';
 import { snackBarActions } from '../snackBar/snackBar-slice';
@@ -18,7 +19,6 @@ export const fetchProjectsData = () => async (dispatch) => {
           items:
             projectsData.data.map((item) => ({
               name: item.name,
-              // eslint-disable-next-line dot-notation
               id: item['_id'],
               tags: item.data.tags,
               inviteUrl: item.data.invite_url_postfix,
@@ -44,7 +44,6 @@ export const sendProjectsData = (project) => async (dispatch) => {
 
     if (response.status === 200) {
       dispatch(
-        // eslint-disable-next-line dot-notation
         projectsActions.createNewProject({ id: response.data['_id'], name }),
       );
       dispatch(
@@ -270,8 +269,10 @@ export const clearTags = (projectId) => async (dispatch) => {
 export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
   try {
     const response = await axios.get(TAG_URL(inviteUrl));
+
     dispatch(
       projectsActions.setCurrentProjectData({
+        id: response.data['_id'],
         name: response.data.name,
         tags: response.data.data.tags,
         texts: response.data.texts,
