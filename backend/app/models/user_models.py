@@ -1,7 +1,17 @@
-from typing import Optional
+from typing import List, Optional
 
 from beanie import Document
 from pydantic import BaseModel, EmailStr
+
+
+class TaggedText(BaseModel):
+    text_id: str
+    tags: List[str]
+
+
+class Tagger(Document):
+    identifier: str
+    tagged: List[TaggedText] = list()
 
 
 class UserOut(BaseModel):

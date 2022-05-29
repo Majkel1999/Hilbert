@@ -10,6 +10,8 @@ from app.utility.websocket_manager import wsManager
 from fastapi import APIRouter, Depends, HTTPException, status
 from passlib.hash import sha256_crypt
 
+from app.models.projection_models import SimpleProjectInfo
+
 router = APIRouter(
     prefix="/project",
     tags=["Projects"],
@@ -22,10 +24,12 @@ router = APIRouter(
 @router.get("/", response_model=List[Project])
 async def get_user_projects(user: User = Depends(get_current_active_user)):
     userprojects = await Project.find(Project.owner == str(user.id), fetch_links=True).to_list()
+    for project in userprojects:
+        delattr(project,"texts")
     return userprojects
 
 
-@router.get("/{project_id}", response_model=Project, responses={
+@router.get("/{project_id}", response_model=SimpleProjectInfo, responses={
     status.HTTP_403_FORBIDDEN: {
         "description": "User not authorized for specific project"}
 })
