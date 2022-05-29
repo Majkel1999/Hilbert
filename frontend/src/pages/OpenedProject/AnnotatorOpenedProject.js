@@ -1,5 +1,5 @@
 import './OpenedProject.scss';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,9 +12,13 @@ import {
 } from '../../store/projects/project-actions';
 import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
+import { snackBarActions } from '../../store/snackBar/snackBar-slice';
+import { SNACKBAR_STATUS } from '../../constants/stateStatuses';
 import SOCKETS, { WebSocketActions } from '../../sockets';
+import * as routes from '../../constants/routes';
 
 export default function AnnotatorOpenedProject() {
+  const navigate = useNavigate();
   const [fetchedData, setFetchedData] = useState(false);
   const [projectTexts, setProjectTexts] = useState([]);
   const [tagsWithAddedProps, setTagsWithAddedProps] = useState([]);
@@ -95,7 +99,16 @@ export default function AnnotatorOpenedProject() {
 
   const deleteProjectSubscriber = (payload) => {
     if (payload.id === currentProjectData.id)
-      console.log('project has beeen deeleted');
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: SNACKBAR_STATUS.INFO,
+          message: `Currently opened project has been deleted. After 2 second you will be redirected to home page`,
+        }),
+      );
+    setTimeout(() => {
+      navigate(routes.HOME, { replace: true });
+    }, 2000);
+
     SOCKETS.unsubscribe(socketsSubscribtions.PROJECT_DELETED);
   };
 
