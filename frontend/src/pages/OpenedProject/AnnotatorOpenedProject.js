@@ -66,7 +66,8 @@ export default function AnnotatorOpenedProject() {
       textResponsePromise.then((response) => {
         if (response.status === 200) setEnableButton(true);
       });
-      SOCKETS.initialize(params.id);
+
+      SOCKETS.initialize('625af528a46519b355912ebf');
     }
 
     setFetchedData(true);

@@ -23,7 +23,9 @@ let connection;
 
 function initialize(projectId) {
   if (connection) return;
-  connection = new WebSocket(WS_URL(projectId));
+
+  connection = new WebSocket(`${process.env.REACT_APP_WS}${WS_URL(projectId)}`);
+
   connection.onmessage = (e) => {
     const message = JSON.parse(e.data);
 
@@ -32,6 +34,7 @@ function initialize(projectId) {
       .forEach((subscriber) => subscriber.callback(message.payload));
   };
 
+  // For Debugging
   connection.onopen = (e) => console.log('Opened WS connection ...', e);
   connection.onclose = (e) => console.log('Closed WS connection ...', e);
   connection.onerror = (e) => console.log('Error in WS connection ...', e);
