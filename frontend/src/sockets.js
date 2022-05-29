@@ -27,9 +27,9 @@ function initialize(projectId) {
   };
 
   // For Debugging
-  connection.onopen = (e) => console.log('Opened WS connection ...', e);
-  connection.onclose = (e) => console.log('Closed WS connection ...', e);
-  connection.onerror = (e) => console.log('Error in WS connection ...', e);
+  // connection.onopen = (e) => console.log('Opened WS connection ...', e);
+  // connection.onclose = (e) => console.log('Closed WS connection ...', e);
+  // connection.onerror = (e) => console.log('Error in WS connection ...', e);
 }
 
 const SOCKETS = {
