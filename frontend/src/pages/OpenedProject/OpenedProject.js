@@ -10,7 +10,8 @@ import {
   fetchSingleProjectData,
   trainModel,
 } from '../../store/projects/project-actions';
-
+import { snackBarActions } from '../../store/snackBar/snackBar-slice';
+import { SNACKBAR_STATUS, MODEL_STATE } from '../../constants/stateStatuses';
 import './OpenedProject.scss';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { ROLES } from '../../constants/roles';
@@ -27,7 +28,15 @@ export default function OpenedProject() {
 
   const trainModelHandler = () => {
     const projectId = params.id;
-    dispatch(trainModel(projectId));
+
+    currentProjectData.modelState === MODEL_STATE.TRAINING
+      ? dispatch(
+          snackBarActions.setSnackBarData({
+            type: SNACKBAR_STATUS.ERROR,
+            message: 'Model is already in training',
+          }),
+        )
+      : dispatch(trainModel(projectId));
   };
 
   const clearTagsHandler = () => {
