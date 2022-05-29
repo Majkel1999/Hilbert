@@ -30,6 +30,7 @@ export default function AnnotatorOpenedProject() {
     PROJECT_DELETED: undefined,
     FILE_ADDED: undefined,
     FILE_REMOVED: undefined,
+    MODEL_TRAINING: undefined,
   });
   const dispatch = useDispatch();
   const params = useParams();
@@ -97,6 +98,7 @@ export default function AnnotatorOpenedProject() {
     }
     SOCKETS.unsubscribe(socketsSubscribtions.FILE_ADDED);
   };
+
   const removeFileSubscriber = (payload) => {
     if (payload.id === currentProjectData.id) {
       dispatch(
@@ -109,6 +111,18 @@ export default function AnnotatorOpenedProject() {
       setFetchedData(false);
     }
     SOCKETS.unsubscribe(socketsSubscribtions.FILE_REMOVED);
+  };
+
+  const modelTrainingSubscriber = (payload) => {
+    if (payload.id === currentProjectData.id) {
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: SNACKBAR_STATUS.INFO,
+          message: 'Model training has been started',
+        }),
+      );
+    }
+    SOCKETS.unsubscribe(socketsSubscribtions.MODEL_TRAINING);
   };
 
   const setOpenedProjectData = () => {
@@ -153,6 +167,10 @@ export default function AnnotatorOpenedProject() {
         FILE_REMOVED: SOCKETS.subscribe({
           action: WebSocketActions.FILE_REMOVED,
           callback: removeFileSubscriber,
+        }),
+        MODEL_TRAINING: SOCKETS.subscribe({
+          action: WebSocketActions.MODEL_TRAINING,
+          callback: modelTrainingSubscriber,
         }),
       });
     }
