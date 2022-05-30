@@ -46,6 +46,13 @@ export default function AnnotatorOpenedProject() {
     setSelectedTags(updatedTags.filter((item) => item.selected));
     setTagsWithAddedProps(updatedTags);
   };
+  const resetSelectedTags = () => {
+    const updatedTags = tagsWithAddedProps.map((tag) => ({
+      ...tag,
+      selected: false,
+    }));
+    setTagsWithAddedProps(updatedTags);
+  };
 
   const tagTextHandler = () => {
     dispatch(
@@ -55,6 +62,7 @@ export default function AnnotatorOpenedProject() {
         textId: fetchedTextData.id,
       }),
     );
+    resetSelectedTags();
   };
 
   useEffect(() => {
