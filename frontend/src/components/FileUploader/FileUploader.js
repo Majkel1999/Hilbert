@@ -47,6 +47,7 @@ export default function FileUploader({ openedProjectId }) {
       formData.append('files', filesToUpload[i]);
     }
     dispatch(uploadFilesToProject(openedProjectId, formData));
+    setFilesToUpload([]);
     setLoadedFiles([]);
   };
 
