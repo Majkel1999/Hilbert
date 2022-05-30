@@ -4,14 +4,13 @@ import shutil
 from typing import Dict, List
 
 import torch
-from torch import tensor
-from torch.utils.data import Dataset
 from transformers import (AutoModelForSequenceClassification, AutoTokenizer,
-                          DataCollatorWithPadding, EvalPrediction, Trainer, TrainingArguments, pipeline)
+                          DataCollatorWithPadding, Trainer, TrainingArguments, pipeline)
+
+from model.datasets import TextDataset
 
 # Model Arguments
 
-TOKENIZER_NAME = "distilbert-base-uncased"
 MODEL_NAME = "distilbert-base-uncased"
 SAVE_DIR = "/var/results"
 
@@ -22,40 +21,6 @@ PER_DEVICE_TRAIN_BATCH_SIZE = 1
 PER_DEVICE_EVAL_BATCH_SIZE = 1
 EPOCHS = 5
 WEIGHT_DECAY = 0.01
-TOKENIZER_MAX_LENGTH = 256
-
-
-def createDatasets(tokens, labels, tokenizer, test_split: float = 0.25):
-    length = len(tokens)
-    div = int(length*(1-test_split))
-
-    trainTokens = tokens[:div]
-    trainLabels = labels[:div]
-    testTokens = tokens[div:]
-    testLabels = labels[div:]
-
-    trainDataset = TextDataset(tokenizer(trainTokens, truncation=True, padding=True,
-                                         max_length=TOKENIZER_MAX_LENGTH,
-                                         return_tensors="pt"), trainLabels)
-    testDataset = TextDataset(tokenizer(testTokens, truncation=True, padding=True,
-                                        max_length=TOKENIZER_MAX_LENGTH,
-                                        return_tensors="pt"), testLabels)
-    return trainDataset, testDataset
-
-
-class TextDataset(Dataset):
-    def __init__(self, tokens, labels):
-        self.tokens = tokens
-        self.labels = labels
-
-    def __getitem__(self, idx):
-        item = {key: val[idx].clone().detach()
-                for key, val in self.tokens.items()}
-        item['labels'] = tensor(self.labels[idx])
-        return item
-
-    def __len__(self):
-        return len(self.labels)
 
 
 class ModelHandler:
@@ -69,7 +34,7 @@ class ModelHandler:
     def __init__(self, projectId: str, tags: List[str]):
         self.projectId = projectId
         self.tags = tags
-        self.tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME)
+        self.tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
         if(self.checkForModel()):
             self.model = AutoModelForSequenceClassification.from_pretrained(
                 f'{SAVE_DIR}/{projectId}')
@@ -97,8 +62,9 @@ class ModelHandler:
         texts = dataset["texts"]
         labels = dataset["labels"]
 
-        trainData, testData = createDatasets(
-            texts, labels, self.tokenizer, test_split=0)
+        trainDataset = TextDataset(self.tokenizer(texts, truncation=True, padding=True,
+                                                  max_length=512,
+                                                  return_tensors="pt"), labels)
 
         data_collator = DataCollatorWithPadding(tokenizer=self.tokenizer)
 
@@ -118,11 +84,11 @@ class ModelHandler:
             tokenizer=self.tokenizer,
             args=training_args,
             data_collator=data_collator,
-            train_dataset=trainData
+            train_dataset=trainDataset
         )
         trainOutput = trainer.train()
         self.model.save_pretrained(f'{SAVE_DIR}/{self.projectId}')
-        f = open(f'{SAVE_DIR}/{self.projectId}/metrics.json','w')
+        f = open(f'{SAVE_DIR}/{self.projectId}/metrics.json', 'w')
         f.write(json.dumps(trainOutput))
         f.close()
         try:
