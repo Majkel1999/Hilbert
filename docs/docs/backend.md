@@ -2,7 +2,7 @@
 ---
 Back End został stworzony przy użyciu frameworka [FastAPI.](https://fastapi.tiangolo.com/)
 
-Autoryzacja i uwierzytelnianie użytkowników odbywa się przy pomocy schematu OAuth 2.0 z użyciem JWT.
+Autoryzacja i uwierzytelnianie użytkowników odbywa się przy pomocy schematu OAuth 2.0 z użyciem JWT. W tym celu została wykorzystana biblioteka **fastapi_jwt_auth**.
 > Dane o sesjach **nie** są przechowywane w bazie danych!
 
 Dokumentacja endpointów jest dostępna pod adresem **/api/v1/docs** po uruchomieniu aplikacji.
@@ -22,6 +22,8 @@ Aplikacja posiada jeden endpoint będący WebSocketem, na którym wysyłane są 
 > * FileDeleted
 > * ModelTraining
 > * ProjectDeleted
+
+Komunikacja odbywa się na 2 sposoby: poprzez REST API oraz poprzez RabbitMQ.
 
 ## Architektura aplikacji
 ![App Architecture](../images/architecture.svg)

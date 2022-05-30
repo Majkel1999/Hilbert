@@ -36,6 +36,15 @@ RABBITMQ_USER=guest             - domyślna nazwa użytkownika w RabbitMQ
 RABBITMQ_PASS=guest             - domyślne hasło w RabbitMQ
 ```
 
+Jeśli zmieniony zostanie port **EXTERNAL_PORT** lub aplikacja ma być dostępna z internetu pod danym adresem URL należy zmienić konfigurację w pliku */frontend/Dockerfile* w następujący sposób:
+
+```
+...
+REACT_APP_SERVER_URL=https://{your_hostname}/api/v1/
+REACT_APP_WS=ws://{your_hostname}/api/v1
+...
+```
+
 W celu uzyskania większej ilości informacji, można zobaczyć [oficjalną dokumentację docker-compose.](https://docs.docker.com/compose/)
 
 Domyślna konfiguracja udostępnia następujące serwisy:
