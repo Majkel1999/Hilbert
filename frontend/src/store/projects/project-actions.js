@@ -1,7 +1,8 @@
+/* eslint-disable dot-notation */
 import axios from '../../api/axios';
 import { projectsActions } from './projects-slice';
 import { snackBarActions } from '../snackBar/snackBar-slice';
-import { STATUS } from '../../constants/snackBarStatus';
+import { SNACKBAR_STATUS, MODEL_STATE } from '../../constants/stateStatuses';
 import {
   PROJECT_URL,
   PROJECT_DATA_URL,
@@ -18,7 +19,6 @@ export const fetchProjectsData = () => async (dispatch) => {
           items:
             projectsData.data.map((item) => ({
               name: item.name,
-              // eslint-disable-next-line dot-notation
               id: item['_id'],
               tags: item.data.tags,
               inviteUrl: item.data.invite_url_postfix,
@@ -30,7 +30,7 @@ export const fetchProjectsData = () => async (dispatch) => {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
@@ -44,12 +44,11 @@ export const sendProjectsData = (project) => async (dispatch) => {
 
     if (response.status === 200) {
       dispatch(
-        // eslint-disable-next-line dot-notation
         projectsActions.createNewProject({ id: response.data['_id'], name }),
       );
       dispatch(
         snackBarActions.setSnackBarData({
-          type: STATUS.SUCCESS,
+          type: SNACKBAR_STATUS.SUCCESS,
           message: `Project ${name} has been created`,
         }),
       );
@@ -58,7 +57,7 @@ export const sendProjectsData = (project) => async (dispatch) => {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
@@ -72,7 +71,7 @@ export const deleteProject = (projectId) => async (dispatch) => {
       dispatch(projectsActions.removeProject(projectId));
       dispatch(
         snackBarActions.setSnackBarData({
-          type: STATUS.SUCCESS,
+          type: SNACKBAR_STATUS.SUCCESS,
           message: 'Project has been deleted',
         }),
       );
@@ -81,7 +80,7 @@ export const deleteProject = (projectId) => async (dispatch) => {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
@@ -99,13 +98,14 @@ export const fetchSingleProjectData = (projectId) => async (dispatch) => {
           texts: response.data.texts,
           inviteUrl: response.data.data.invite_url_postfix,
           isMultiLabel: response.data.is_multi_label,
+          modelState: response.data.model_state,
         }),
       );
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
@@ -121,7 +121,7 @@ export const addTagToProject = (projectId, tag) => async (dispatch) => {
         dispatch(fetchSingleProjectData(projectId));
         dispatch(
           snackBarActions.setSnackBarData({
-            type: STATUS.SUCCESS,
+            type: SNACKBAR_STATUS.SUCCESS,
             message: `Tag ${tag} has been added`,
           }),
         );
@@ -131,7 +131,7 @@ export const addTagToProject = (projectId, tag) => async (dispatch) => {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
@@ -148,7 +148,7 @@ export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
       if (response.status === 200)
         dispatch(
           snackBarActions.setSnackBarData({
-            type: STATUS.SUCCESS,
+            type: SNACKBAR_STATUS.SUCCESS,
             message: `Tag ${tag} has been removed`,
           }),
         );
@@ -157,7 +157,7 @@ export const removeTagFromProject = (projectId, tag) => async (dispatch) => {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
@@ -179,7 +179,7 @@ export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
       dispatch(fetchSingleProjectData(projectId));
       dispatch(
         snackBarActions.setSnackBarData({
-          type: STATUS.SUCCESS,
+          type: SNACKBAR_STATUS.SUCCESS,
           message: 'Upload finished successfully',
         }),
       );
@@ -188,7 +188,7 @@ export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
@@ -208,7 +208,7 @@ export const deleteFileFromProject =
         dispatch(fetchSingleProjectData(projectId));
         dispatch(
           snackBarActions.setSnackBarData({
-            type: STATUS.SUCCESS,
+            type: SNACKBAR_STATUS.SUCCESS,
             message: 'File has been deleted',
           }),
         );
@@ -217,7 +217,7 @@ export const deleteFileFromProject =
       const message = JSON.parse(error.request.response).detail;
       dispatch(
         snackBarActions.setSnackBarData({
-          type: STATUS.ERROR,
+          type: SNACKBAR_STATUS.ERROR,
           message,
         }),
       );
@@ -227,18 +227,24 @@ export const deleteFileFromProject =
 export const trainModel = (projectId) => async (dispatch) => {
   try {
     const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/train`);
-    if (response.status === 200)
+    if (response.status === 200) {
       dispatch(
         snackBarActions.setSnackBarData({
-          type: STATUS.INFO,
+          type: SNACKBAR_STATUS.INFO,
           message: 'Model training started',
         }),
       );
+      dispatch(
+        projectsActions.setCurrentProjectData({
+          modelState: MODEL_STATE.TRAINING,
+        }),
+      );
+    }
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
@@ -253,7 +259,7 @@ export const clearTags = (projectId) => async (dispatch) => {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
@@ -263,8 +269,10 @@ export const clearTags = (projectId) => async (dispatch) => {
 export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
   try {
     const response = await axios.get(TAG_URL(inviteUrl));
+
     dispatch(
       projectsActions.setCurrentProjectData({
+        id: response.data['_id'],
         name: response.data.name,
         tags: response.data.data.tags,
         texts: response.data.texts,
@@ -276,7 +284,7 @@ export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
@@ -305,7 +313,7 @@ export const fetchAnnotatorText =
       const message = JSON.parse(error.request.response).detail;
       dispatch(
         snackBarActions.setSnackBarData({
-          type: STATUS.ERROR,
+          type: SNACKBAR_STATUS.ERROR,
           message,
         }),
       );
@@ -328,7 +336,7 @@ export const tagText =
         dispatch(fetchAnnotatorText(inviteUrl));
         dispatch(
           snackBarActions.setSnackBarData({
-            type: STATUS.SUCCESS,
+            type: SNACKBAR_STATUS.SUCCESS,
             message: 'Tags have been submited',
           }),
         );
@@ -338,7 +346,7 @@ export const tagText =
 
       dispatch(
         snackBarActions.setSnackBarData({
-          type: STATUS.ERROR,
+          type: SNACKBAR_STATUS.ERROR,
           message,
         }),
       );
