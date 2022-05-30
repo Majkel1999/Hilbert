@@ -19,6 +19,7 @@ import { ROLES } from '../../constants/roles';
 export default function OpenedProject() {
   const [fetchedData, setFetchedData] = useState(false);
   const [projectTexts, setProjectTexts] = useState([]);
+  const [projectTags, setProjectTags] = useState([]);
   const [inviteUrl, setInviteUrl] = useState('');
 
   const dispatch = useDispatch();
@@ -59,6 +60,7 @@ export default function OpenedProject() {
       }));
       setProjectTexts(texts);
     }
+    if (currentProjectData.tags) setProjectTags(currentProjectData.tags);
     if (currentProjectData.inviteUrl)
       setInviteUrl(currentProjectData.inviteUrl);
   }, [currentProjectData]);
@@ -67,7 +69,7 @@ export default function OpenedProject() {
     <div className="openedProjectContainer">
       <div className="textOperationsWrapper">
         <TagList
-          tags={currentProjectData.tags}
+          tags={projectTags}
           openedProjectId={params.id}
           enableAddingTag={false}
           displayDeleteIcon={false}
