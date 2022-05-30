@@ -351,3 +351,35 @@ export const tagText =
       );
     }
   };
+
+export const downloadProjectFiles = (projectId) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/file`);
+    console.log(response);
+  } catch (error) {
+    const message = JSON.parse(error.request.response).detail;
+
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: SNACKBAR_STATUS.ERROR,
+        message,
+      }),
+    );
+  }
+};
+
+export const downloadMLModel = (projectId) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/model`);
+    console.log(response);
+  } catch (error) {
+    const message = JSON.parse(error.request.response).detail;
+
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: SNACKBAR_STATUS.ERROR,
+        message,
+      }),
+    );
+  }
+};
