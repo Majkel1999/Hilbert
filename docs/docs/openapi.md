@@ -2,7 +2,9 @@
 API for HilBERT application. Project description and source code is avalible at [GitHub](https://github.com/Majkel1999/Hilbert/)
 
 ## Version: 0.0.1
-
+---
+## User 
+---
 ### /user/
 
 #### GET
@@ -71,7 +73,9 @@ Register
 | 200 | Successful Response |
 | 409 | Username already exists |
 | 422 | Validation Error |
-
+---
+## Project
+---
 ### /project/
 
 #### GET
@@ -141,7 +145,9 @@ Delete Project
 | 401 | User not authenticated |
 | 403 | User not authorized for specific project |
 | 422 | Validation Error |
-
+---
+## Project Data
+---
 ### /project/{project_id}/metrics
 
 #### GET
@@ -293,7 +299,9 @@ Delete File
 | 401 | User not authenticated |
 | 403 | User not authorized for specific project |
 | 422 | Validation Error |
-
+---
+## Tagging
+---
 ### /tag/{invite_url}
 
 #### GET
@@ -365,7 +373,9 @@ Tag Text
 | 406 | Tag doesn't exist in project |
 | 409 | Text already tagged |
 | 422 | Validation Error |
-
+---
+## Model and text data
+---
 ### /data/{project_id}/tags
 
 #### GET
@@ -427,171 +437,3 @@ Set Model State
 | ---- | ----------- |
 | 200 | Successful Response |
 | 422 | Validation Error |
-
-### Models
-
-#### AccessToken
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| access_token | string |  | Yes |
-| token_type | string |  | Yes |
-
-#### Body_login_user_login_post
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| username | string |  | Yes |
-| password | string |  | Yes |
-
-#### Body_register_user_register_post
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| username | string |  | Yes |
-| password | string |  | Yes |
-
-#### Body_upload_file_project__project_id__file_post
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| files | [ binary ] |  | Yes |
-
-#### DatasetResponse
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| labels | [ [ integer ] ] |  | Yes |
-| texts | [ string ] |  | Yes |
-
-#### FileDeleteRequest
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| file_id | string |  | Yes |
-
-#### HTTPValidationError
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| detail | [ object ] |  | No |
-
-#### ModelStateRequest
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| state | string |  | Yes |
-
-#### Project
-
-Document Mapping class.
-
-Fields:
-
-- `id` - MongoDB document ObjectID "_id" field.
-Mapped to the PydanticObjectId class
-
-Inherited from:
-
-- Pydantic BaseModel
-- [UpdateMethods](https://roman-right.github.io/beanie/api/interfaces/#aggregatemethods)
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| name | string |  | Yes |
-| texts | [ object ] |  | No |
-| data | object |  | No |
-| is_multi_label | boolean |  | No |
-| _id | string |  | No |
-| owner | string |  | Yes |
-| model_state | string |  | No |
-
-#### ProjectCreationData
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| name | string |  | Yes |
-| tags | [ string ] |  | No |
-| is_multi_label | boolean |  | No |
-
-#### ProjectData
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| tags | [ string ] |  | No |
-| invite_url_postfix | string |  | No |
-
-#### TagRequest
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| text_id | string |  | Yes |
-| tags | [ string ] |  | Yes |
-
-#### TextDocument
-
-Document Mapping class.
-
-Fields:
-
-- `id` - MongoDB document ObjectID "_id" field.
-Mapped to the PydanticObjectId class
-
-Inherited from:
-
-- Pydantic BaseModel
-- [UpdateMethods](https://roman-right.github.io/beanie/api/interfaces/#aggregatemethods)
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| _id | string |  | No |
-| name | string |  | Yes |
-| value | string |  | Yes |
-| tags | [ string ] |  | No |
-
-#### TextOut
-
-Document Mapping class.
-
-Fields:
-
-- `id` - MongoDB document ObjectID "_id" field.
-Mapped to the PydanticObjectId class
-
-Inherited from:
-
-- Pydantic BaseModel
-- [UpdateMethods](https://roman-right.github.io/beanie/api/interfaces/#aggregatemethods)
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| _id | string |  | No |
-| name | string |  | Yes |
-| value | string |  | Yes |
-| tags | [ string ] |  | No |
-| possible_tags | [ string ] |  | Yes |
-| preferredTag | object |  | No |
-
-#### TokensSet
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| access_token | string |  | Yes |
-| refresh_token | string |  | Yes |
-| token_type | string |  | Yes |
-
-#### UserOut
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| username | string |  | Yes |
-| email | string (email) |  | No |
-| full_name | string |  | No |
-
-#### ValidationError
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| loc | [  ] |  | Yes |
-| msg | string |  | Yes |
-| type | string |  | Yes |
