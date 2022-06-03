@@ -10,12 +10,17 @@ import './FileUploader.scss';
 
 export default function FileUploader({ openedProjectId }) {
   const [filesToUpload, setFilesToUpload] = useState([]);
+  const [loadedFiles, setLoadedFiles] = useState([]);
   const dispatch = useDispatch();
 
   const onFileChange = (event) => {
     const selectedFiles = event.target.files;
     const allowedExtensions = /(\.txt|\.pdf|\.zip|\.csv)$/i;
 
+    const loadedFilesToDisplay = Object.values(event.target.files).map(
+      (file) => file.name,
+    );
+    setLoadedFiles(loadedFilesToDisplay);
     if (
       Object.values(selectedFiles).some(
         (item) => !allowedExtensions.exec(item.name),
@@ -42,6 +47,8 @@ export default function FileUploader({ openedProjectId }) {
       formData.append('files', filesToUpload[i]);
     }
     dispatch(uploadFilesToProject(openedProjectId, formData));
+    setFilesToUpload([]);
+    setLoadedFiles([]);
   };
 
   return (
@@ -53,6 +60,14 @@ export default function FileUploader({ openedProjectId }) {
         onChangeHandler={onFileChange}
         multiple
       />
+      {loadedFiles.length !== 0 && (
+        <div className="loadedFilesContainer">
+          <p>Loaded Files</p>
+          {loadedFiles.map((file, index) => (
+            <span key={index.toString() * 2.1}>{file}, </span>
+          ))}
+        </div>
+      )}
       <Button
         onClickHandler={onFileUpload}
         text="Upload file"
