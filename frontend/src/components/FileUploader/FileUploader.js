@@ -64,7 +64,9 @@ export default function FileUploader({ openedProjectId }) {
         <div className="loadedFilesContainer">
           <p>Loaded Files</p>
           {loadedFiles.map((file, index) => (
-            <span key={index.toString() * 2.1}>{file}, </span>
+            <span key={index.toString() * 2.1}>
+              {file} {index === loadedFiles.length - 1 ? '' : ','}
+            </span>
           ))}
         </div>
       )}
