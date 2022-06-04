@@ -23,3 +23,39 @@ Możliwości jakie powinna dawać użytkownikom aplikacja:
 - możliwość zapisu modelu do pliku, wraz z wagami oraz punktami kontrolnymi
 - nauczenie modelu rozpoznawania tekstów i przydzielania im etykiet
 - podgląd na statystyki związane z poprawnością działania modelu
+
+## Progress
+
+- Architektura:
+  - [x]  Swtorzenie modelu architektury
+  - [x]  Stworzenie pojedynczych obrazów kontenerów
+  - [x]  Stworzenie pliku docker-compose.yaml
+  - [x]  Kolejkowanie - RabbitMQ
+  - [x]  Load Balancing
+  - [x]  Baza Danych - MongoDB
+  - [x]  Monitoring - Grafana + Prometheus
+- Frontend:
+  - [x] Strona Główna
+  - [x] Rejestracja
+  - [x] Logowanie
+  - [x] Tworzenie projektów
+  - [x] Uploadowanie plików
+  - [x] Tagowanie
+  - [ ] Wyświetlanie predykcji
+  - [ ] Responsywność
+  - [ ] Wystylizowanie
+- Backend:
+  - [x] Uwierzytelnianie i Autoryzacja 
+  - [x] Tworzenie projektów
+  - [x] Uploadowanie plików
+  - [x] Generowanie zaproszeń 
+  - [x] Tagowanie
+  - [x] Kolejkowanie uczenia modeli
+  - [x] Anonimowe zapisywanie tagujących
+  - [ ] Proxy do pobierania plików
+- Model Service:
+  - [x] Pobieranie modeli z internetu
+  - [x] Uczenie modelu na danych użytkowników
+  - [x] Zwracanie predykcji
+  - [ ] Obsługa projektów multi-label
+  - [ ] Obsługa różnych modeli początkowych 
