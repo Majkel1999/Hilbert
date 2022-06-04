@@ -1,20 +1,20 @@
-import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import TagList from '../../components/Tags/TagList';
-import Button from '../../components/UI/Button/Button';
-import FileList from '../../components/FileList/FilesList';
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import TagList from "../../components/Tags/TagList";
+import Button from "../../components/UI/Button/Button";
+import FileList from "../../components/FileList/FilesList";
 import {
   clearTags,
   fetchSingleProjectData,
   trainModel,
-} from '../../store/projects/project-actions';
-import { snackBarActions } from '../../store/snackBar/snackBar-slice';
-import { SNACKBAR_STATUS, MODEL_STATE } from '../../constants/stateStatuses';
-import './OpenedProject.scss';
-import FileUploader from '../../components/FileUploader/FileUploader';
-import { ROLES } from '../../constants/roles';
+} from "../../store/projects/project-actions";
+import { snackBarActions } from "../../store/snackBar/snackBar-slice";
+import { SNACKBAR_STATUS, MODEL_STATE } from "../../constants/stateStatuses";
+import "./OpenedProject.scss";
+import FileUploader from "../../components/FileUploader/FileUploader";
+import { ROLES } from "../../constants/roles";
 
 export default function OpenedProject() {
   const [fetchedData, setFetchedData] = useState(false);
@@ -23,7 +23,7 @@ export default function OpenedProject() {
   const dispatch = useDispatch();
   const params = useParams();
   const currentProjectData = useSelector(
-    (state) => state.projects.currentProject,
+    (state) => state.projects.currentProject
   );
 
   const trainModelHandler = () => {
@@ -33,8 +33,8 @@ export default function OpenedProject() {
       ? dispatch(
           snackBarActions.setSnackBarData({
             type: SNACKBAR_STATUS.ERROR,
-            message: 'Model is already in training',
-          }),
+            message: "Model is already in training",
+          })
         )
       : dispatch(trainModel(projectId));
   };
@@ -53,7 +53,7 @@ export default function OpenedProject() {
     if (currentProjectData.texts) {
       const texts = currentProjectData.texts.map((element) => ({
         // eslint-disable-next-line dot-notation
-        id: element['_id'],
+        id: element["_id"],
         name: element.name,
       }));
       setProjectTexts(texts);
@@ -76,7 +76,7 @@ export default function OpenedProject() {
               icon="fa-solid fa-copy"
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `${window.location.host}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
+                  `${window.location.host}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`
                 );
               }}
               size="lg"
