@@ -1,0 +1,43 @@
+.tagStatisticsPopupContainer {
+  .tagStatisticsBodyContent {
+    padding-top: 20px;
+    h2 {
+      margin-bottom: 20px;
+      text-decoration: underline;
+    }
+    .tagListContainer {
+      padding: 0px 30px;
+
+      h5 {
+        font-size: 1.6rem;
+        text-align: center;
+        margin: 10px 0 20px 0;
+      }
+      div {
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        width: 40%;
+        margin: 0 auto;
+        .value {
+          font-weight: bold;
+          letter-spacing: 1px;
+          margin-right: 4px;
+          font-size: 1.1rem;
+          width: 60%;
+          text-align: start;
+        }
+        .percent {
+          width: 40%;
+          text-align: start;
+        }
+      }
+    }
+    P {
+      margin: 5px 20px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+}

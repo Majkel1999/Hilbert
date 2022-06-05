@@ -1,15 +1,17 @@
 import PropTypes from 'prop-types';
 import Popup from '../UI/Popup/Popup';
 import './TagsStatisticsPopup.scss';
+import { capitalizeFirstLetter } from '../../utils/utils';
 
-const mockedData = [
-  {
-    love: 0.8,
-  },
-  { sad: 0.54 },
-  { tak: 1 },
-  { nie: 0.11 },
-];
+// MOCKED DATA
+// const mockedData = [
+//   {
+//     love: 0.8,
+//   },
+//   { sad: 0.54 },
+//   { tak: 1 },
+//   { nie: 0.11 },
+// ];
 
 export default function TagsStatisticsPopup({
   open,
@@ -20,14 +22,18 @@ export default function TagsStatisticsPopup({
   const headerText = 'Tags statistics';
   const popupBodyContent = (
     <div className="tagStatisticsBodyContent">
-      {mockedData.length !== 0 ? (
+      {prefferedTagsList.length !== 0 ? (
         <>
           <h2> Tag statistics returned by model</h2>
           <div className="tagListContainer">
             <h5>Tag - Accuracy</h5>
-            {mockedData.map((item, index) => (
+            {prefferedTagsList.map((item, index) => (
               <div key={`${index.toString() * 9.7}`}>
-                {Object.keys(item)[0]}: {Object.values(item)[0] * 100} %
+                <span className="value">
+                  {`${capitalizeFirstLetter(Object.keys(item)[0])}:`}
+                </span>
+
+                <span className="percent">{Object.values(item)[0] * 100}%</span>
               </div>
             ))}
           </div>
@@ -45,7 +51,7 @@ export default function TagsStatisticsPopup({
   ];
 
   return (
-    <div className="addNewProjectPopupContainer">
+    <div className="tagStatisticsPopupContainer">
       <Popup
         open={open}
         onCloseHandler={() => onCloseHandler(false)}
