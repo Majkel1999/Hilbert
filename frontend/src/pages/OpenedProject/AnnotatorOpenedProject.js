@@ -9,6 +9,7 @@ import {
   fetchAnnotatorData,
   fetchAnnotatorText,
   tagText,
+  downloadProjectFiles,
 } from '../../store/projects/project-actions';
 import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
@@ -160,6 +161,10 @@ export default function AnnotatorOpenedProject() {
       setPrefferedTag(currentProjectData.preferredTag);
   };
 
+  const downloadFiles = () => {
+    dispatch(downloadProjectFiles(currentProjectData.id));
+  };
+
   useEffect(() => {
     if (!fetchedData) {
       const url = params.inviteUrl;
@@ -242,6 +247,11 @@ export default function AnnotatorOpenedProject() {
               files={projectTexts}
               openedProjectId={params.id}
               currentTextId={fetchedTextData.id}
+            />
+            <Button
+              customClass="downloadButton"
+              onClickHandler={downloadFiles}
+              text="Download uploaded files"
             />
           </div>
         </div>

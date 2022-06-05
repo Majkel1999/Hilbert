@@ -26,9 +26,15 @@
     h2 {
       margin-bottom: 24px;
     }
+    .downloadButton {
+      width: 50%;
+      padding: 12px 24px;
+      margin: 0 auto;
+    }
   }
+
   .annotator .filesListContainer {
-    height: 90%;
+    height: 85%;
   }
   .textContainer {
     order: 2;
