@@ -353,7 +353,6 @@ export const fetchAnnotatorText =
         `${TAG_URL(inviteUrl)}/text?predict=${predict}`,
       );
       const { name, _id, value, preferredTag } = response.data;
-
       dispatch(
         projectsActions.setFetchedTextData({
           name,
