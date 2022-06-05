@@ -79,6 +79,7 @@ export default function AnnotatorOpenedProject() {
       }),
     );
     resetSelectedTags();
+    setOpenPopup(true);
   };
 
   const deleteProjectSubscriber = (payload) => {
@@ -194,8 +195,6 @@ export default function AnnotatorOpenedProject() {
     setFetchedData(true);
     setSubscribeWsActions(true);
   }, [currentProjectData, fetchedData]);
-
-  console.log(preferredTag);
 
   return (
     <>

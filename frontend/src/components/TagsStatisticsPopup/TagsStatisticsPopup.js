@@ -2,19 +2,39 @@ import PropTypes from 'prop-types';
 import Popup from '../UI/Popup/Popup';
 import './TagsStatisticsPopup.scss';
 
+const mockedData = [
+  {
+    love: 0.8,
+  },
+  { sad: 0.54 },
+  { tak: 1 },
+  { nie: 0.11 },
+];
+
 export default function TagsStatisticsPopup({
   open,
   onCloseHandler,
+  // eslint-disable-next-line no-unused-vars
   prefferedTagsList,
 }) {
   const headerText = 'Tags statistics';
   const popupBodyContent = (
     <div className="tagStatisticsBodyContent">
-      <div className="tagListContainer">
-        {prefferedTagsList.map((item, index) => (
-          <div key={`${index.toString() * 9.7}`}>{item}</div>
-        ))}
-      </div>
+      {mockedData.length !== 0 ? (
+        <>
+          <h2> Tag statistics returned by model</h2>
+          <div className="tagListContainer">
+            <h5>Tag - Accuracy</h5>
+            {mockedData.map((item, index) => (
+              <div key={`${index.toString() * 9.7}`}>
+                {Object.keys(item)[0]}: {Object.values(item)[0] * 100} %
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <p>Currently there is no data about text tags</p>
+      )}
     </div>
   );
   const popupButtons = [
