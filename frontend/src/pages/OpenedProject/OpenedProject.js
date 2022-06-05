@@ -41,6 +41,18 @@ export default function OpenedProject() {
       : dispatch(trainModel(projectId));
   };
 
+  const copyIconClickHandler = () => {
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: SNACKBAR_STATUS.INFO,
+        message: 'Link copied to clipboard',
+      }),
+    );
+    navigator.clipboard.writeText(
+      `${window.location.host}/${ROLES.ANNOTATOR}/projects/${inviteUrl}`,
+    );
+  };
+
   const clearTagsHandler = () => {
     const projectId = params.id;
     dispatch(clearTags(projectId));
@@ -79,11 +91,7 @@ export default function OpenedProject() {
             <h2> {inviteUrl} </h2>
             <FontAwesomeIcon
               icon="fa-solid fa-copy"
-              onClick={() => {
-                navigator.clipboard.writeText(
-                  `${window.location.host}/${ROLES.ANNOTATOR}/projects/${inviteUrl}`,
-                );
-              }}
+              onClick={copyIconClickHandler}
               size="lg"
             />
           </div>
