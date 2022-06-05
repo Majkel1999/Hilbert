@@ -209,7 +209,6 @@ export const downloadProjectFiles = (projectId) => async (dispatch) => {
       .split(';')
       .filter((item) => item)
       .forEach((item, index) => {
-        console.log(item, index);
         if (item !== '') {
           if ((index === 0 || index % 2 === 0) && item !== '\r\n')
             fileObjectArray.push({
