@@ -9,6 +9,7 @@ import {
   fetchAnnotatorData,
   fetchAnnotatorText,
   tagText,
+  downloadProjectFiles,
 } from '../../store/projects/project-actions';
 import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
@@ -58,6 +59,13 @@ export default function AnnotatorOpenedProject() {
     setSelectedTags(updatedTags.filter((item) => item.selected));
     setTagsWithAddedProps(updatedTags);
   };
+  const resetSelectedTags = () => {
+    const updatedTags = tagsWithAddedProps.map((tag) => ({
+      ...tag,
+      selected: false,
+    }));
+    setTagsWithAddedProps(updatedTags);
+  };
 
   const tagTextHandler = () => {
     dispatch(
@@ -67,6 +75,7 @@ export default function AnnotatorOpenedProject() {
         textId: fetchedTextData.id,
       }),
     );
+    resetSelectedTags();
   };
 
   const deleteProjectSubscriber = (payload) => {
@@ -145,6 +154,10 @@ export default function AnnotatorOpenedProject() {
     if (currentProjectData.isMultiLabel) setIsMultiLabel(true);
   };
 
+  const downloadFiles = () => {
+    dispatch(downloadProjectFiles(currentProjectData.id));
+  };
+
   useEffect(() => {
     if (!fetchedData) {
       const url = params.inviteUrl;
@@ -217,7 +230,7 @@ export default function AnnotatorOpenedProject() {
           <Button
             text="Submit tags"
             onClickHandler={tagTextHandler}
-            isDisabled={!selectedTags.length > 0 && !enableButton}
+            isDisabled={selectedTags.length === 0 || !enableButton}
           />
         </div>
 
@@ -226,6 +239,11 @@ export default function AnnotatorOpenedProject() {
             files={projectTexts}
             openedProjectId={params.id}
             currentTextId={fetchedTextData.id}
+          />
+          <Button
+            customClass="downloadButton"
+            onClickHandler={downloadFiles}
+            text="Download uploaded files"
           />
         </div>
       </div>

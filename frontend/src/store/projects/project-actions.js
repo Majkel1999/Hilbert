@@ -195,6 +195,58 @@ export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
   }
 };
 
+export const downloadProjectFiles = (projectId) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/file`);
+    const fileObjectArray = [];
+
+    const filteredFileData = response.data
+      .replace('name;', '')
+      .replace('text;', '')
+      .replace('tag', '');
+
+    filteredFileData
+      .split(';')
+      .filter((item) => item)
+      .forEach((item, index) => {
+        if (item !== '') {
+          if ((index === 0 || index % 2 === 0) && item !== '\r\n')
+            fileObjectArray.push({
+              [item]: filteredFileData
+                .split(';')
+                [index + 1].replace('\r', '')
+                .replace('\n', '')
+                .replace('"', ''),
+            });
+        }
+      });
+
+    fileObjectArray.forEach((item) => {
+      const element = document.createElement('a');
+      element.setAttribute(
+        'href',
+        `data:text/plain;charset=utf-8,${encodeURIComponent(
+          Object.values(item)[0],
+        )}`,
+      );
+      element.setAttribute('download', Object.keys(item)[0]);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    });
+  } catch (error) {
+    const message = JSON.parse(error.request.response).detail;
+
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: SNACKBAR_STATUS.ERROR,
+        message,
+      }),
+    );
+  }
+};
+
 export const deleteFileFromProject =
   (projectId, fileId) => async (dispatch) => {
     try {
@@ -204,6 +256,7 @@ export const deleteFileFromProject =
           data: { file_id: fileId },
         },
       );
+
       if (response.status === 200) {
         dispatch(fetchSingleProjectData(projectId));
         dispatch(
@@ -227,6 +280,7 @@ export const deleteFileFromProject =
 export const trainModel = (projectId) => async (dispatch) => {
   try {
     const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/train`);
+
     if (response.status === 200) {
       dispatch(
         snackBarActions.setSnackBarData({
@@ -332,6 +386,7 @@ export const tagText =
         tags,
         text_id: textId,
       });
+
       if (response.status === 200) {
         dispatch(fetchAnnotatorText(inviteUrl));
         dispatch(
@@ -352,3 +407,19 @@ export const tagText =
       );
     }
   };
+
+export const downloadMLModel = (projectId) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/model`);
+    console.log(response);
+  } catch (error) {
+    const message = JSON.parse(error.request.response).detail;
+
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: SNACKBAR_STATUS.ERROR,
+        message,
+      }),
+    );
+  }
+};
