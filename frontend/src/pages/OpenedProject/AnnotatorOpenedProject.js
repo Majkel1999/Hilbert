@@ -14,16 +14,20 @@ import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
 import { snackBarActions } from '../../store/snackBar/snackBar-slice';
 import { SNACKBAR_STATUS } from '../../constants/stateStatuses';
+import TagsStatisticsPopup from '../../components/TagsStatisticsPopup/TagsStatisticsPopup';
 import SOCKETS, { WebSocketActions } from '../../sockets';
+
 import * as routes from '../../constants/routes';
 
 export default function AnnotatorOpenedProject() {
   const navigate = useNavigate();
+  const [openPopup, setOpenPopup] = useState();
   const [fetchedData, setFetchedData] = useState(false);
   const [subscribeWsActions, setSubscribeWsActions] = useState(false);
   const [projectTexts, setProjectTexts] = useState([]);
   const [tagsWithAddedProps, setTagsWithAddedProps] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [preferredTag, setPrefferedTag] = useState([]);
   const [isMultiLabel, setIsMultiLabel] = useState(false);
   const [enableButton, setEnableButton] = useState(false);
   const [socketsSubscribtions, setSocketsSubscribtions] = useState({
@@ -151,6 +155,8 @@ export default function AnnotatorOpenedProject() {
       setTagsWithAddedProps(tagArr);
     }
     if (currentProjectData.isMultiLabel) setIsMultiLabel(true);
+    if (currentProjectData.preferredTag)
+      setPrefferedTag(currentProjectData.preferredTag);
   };
 
   useEffect(() => {
@@ -189,54 +195,63 @@ export default function AnnotatorOpenedProject() {
     setSubscribeWsActions(true);
   }, [currentProjectData, fetchedData]);
 
+  console.log(preferredTag);
+
   return (
-    <div className="openedProjectContainer">
-      <div className="textOperationsWrapper">
-        {tagsWithAddedProps && (
-          <TagList
-            tags={tagsWithAddedProps}
-            enableAddingTag={false}
-            displayDeleteIcon={false}
-            onTagClickHandler={selectTag}
-          />
-        )}
-        <div className="textContainer">
-          <div className="inviteUrlWrapper">
-            <h2> {currentProjectData.inviteUrl} </h2>
-            <FontAwesomeIcon
-              icon="fa-solid fa-copy"
-              onClick={() => {
-                navigator.clipboard.writeText(
-                  `${window.location.host}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
-                );
-              }}
-              size="lg"
+    <>
+      <div className="openedProjectContainer">
+        <div className="textOperationsWrapper">
+          {tagsWithAddedProps && (
+            <TagList
+              tags={tagsWithAddedProps}
+              enableAddingTag={false}
+              displayDeleteIcon={false}
+              onTagClickHandler={selectTag}
+            />
+          )}
+          <div className="textContainer">
+            <div className="inviteUrlWrapper">
+              <h2> {currentProjectData.inviteUrl} </h2>
+              <FontAwesomeIcon
+                icon="fa-solid fa-copy"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `${window.location.host}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
+                  );
+                }}
+                size="lg"
+              />
+            </div>
+
+            <div className="textWrapper">
+              <div className="header">
+                <span> {fetchedTextData.name}</span>{' '}
+              </div>
+              <div className="textValue">
+                <p>{fetchedTextData.value}</p>
+              </div>
+            </div>
+            <Button
+              text="Submit tags"
+              onClickHandler={tagTextHandler}
+              isDisabled={!selectedTags.length > 0 && !enableButton}
             />
           </div>
 
-          <div className="textWrapper">
-            <div className="header">
-              <span> {fetchedTextData.name}</span>{' '}
-            </div>
-            <div className="textValue">
-              <p>{fetchedTextData.value}</p>
-            </div>
+          <div className="filesWrapper annotator">
+            <FileList
+              files={projectTexts}
+              openedProjectId={params.id}
+              currentTextId={fetchedTextData.id}
+            />
           </div>
-          <Button
-            text="Submit tags"
-            onClickHandler={tagTextHandler}
-            isDisabled={!selectedTags.length > 0 && !enableButton}
-          />
-        </div>
-
-        <div className="filesWrapper annotator">
-          <FileList
-            files={projectTexts}
-            openedProjectId={params.id}
-            currentTextId={fetchedTextData.id}
-          />
         </div>
       </div>
-    </div>
+      <TagsStatisticsPopup
+        open={openPopup}
+        onCloseHandler={() => setOpenPopup(false)}
+        prefferedTagsList={preferredTag}
+      />
+    </>
   );
 }
