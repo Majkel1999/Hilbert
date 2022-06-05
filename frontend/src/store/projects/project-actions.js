@@ -256,7 +256,6 @@ export const deleteFileFromProject =
           data: { file_id: fileId },
         },
       );
-      dispatch(downloadProjectFiles(projectId));
 
       if (response.status === 200) {
         dispatch(fetchSingleProjectData(projectId));
