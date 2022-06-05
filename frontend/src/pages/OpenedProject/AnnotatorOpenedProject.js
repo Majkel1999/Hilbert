@@ -31,6 +31,7 @@ export default function AnnotatorOpenedProject() {
   const [preferredTag, setPrefferedTag] = useState([]);
   const [isMultiLabel, setIsMultiLabel] = useState(false);
   const [enableButton, setEnableButton] = useState(false);
+
   const [socketsSubscribtions, setSocketsSubscribtions] = useState({
     PROJECT_DELETED: undefined,
     FILE_ADDED: undefined,
@@ -232,7 +233,11 @@ export default function AnnotatorOpenedProject() {
                 <span> {fetchedTextData.name}</span>{' '}
               </div>
               <div className="textValue">
-                <p>{fetchedTextData.value}</p>
+                {!fetchedTextData.value ? (
+                  <p>Fetching Text ... </p>
+                ) : (
+                  <p>{fetchedTextData.value}</p>
+                )}
               </div>
             </div>
             <Button
