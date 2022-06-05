@@ -1,5 +1,5 @@
 @supports (-webkit-appearance: none) or (-moz-appearance: none) {
-  input[type='checkbox'] {
+  input[type="checkbox"] {
     --active: #275efe;
     --active-inner: #fff;
     --focus: 2px rgba(39, 94, 254, 0.3);
@@ -21,7 +21,7 @@
     background: var(--b, var(--background));
     transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
     &:after {
-      content: '';
+      content: "";
       display: block;
       left: 0;
       top: 0;
@@ -69,7 +69,7 @@
     }
   }
 
-  input[type='checkbox'] {
+  input[type="checkbox"] {
     &:not(.switch) {
       border-radius: 7px;
       &:after {

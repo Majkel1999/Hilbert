@@ -1,10 +1,9 @@
 .formContainer {
   width: 20vw;
+  padding: 40px 0px;
   border-radius: 5px;
-  background: none;
-  // opacity: 0.6;
-  //box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
-  z-index: 1;
+  background: #07668c;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
 
   .formContent {
     width: 80%;
