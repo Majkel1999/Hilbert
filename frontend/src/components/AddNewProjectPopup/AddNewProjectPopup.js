@@ -115,7 +115,7 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
     },
     {
       text: 'Close',
-      onClickHandler: () => onCloseHandler(false),
+      onClickHandler: closePopup,
     },
   ];
 
@@ -125,7 +125,7 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
     <div className="addNewProjectPopupContainer">
       <Popup
         open={open}
-        onCloseHandler={() => onCloseHandler(false)}
+        onCloseHandler={closePopup}
         showCloseIcon
         bodyContent={popupBodyContent}
         headerText={headerText}
