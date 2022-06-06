@@ -8,8 +8,7 @@ import FileList from '../../components/FileList/FilesList';
 import {
   fetchAnnotatorData,
   fetchAnnotatorText,
-  tagText,
-  downloadProjectFiles,
+  tagText
 } from '../../store/projects/project-actions';
 import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
@@ -158,13 +157,12 @@ export default function AnnotatorOpenedProject() {
       setTagsWithAddedProps(tagArr);
     }
     if (currentProjectData.isMultiLabel) setIsMultiLabel(true);
-    if (currentProjectData.preferredTag)
-      setPrefferedTag(currentProjectData.preferredTag);
   };
 
-  const downloadFiles = () => {
-    dispatch(downloadProjectFiles(currentProjectData.id));
-  };
+  useEffect(() => {
+    if (fetchedTextData.preferredTag)
+      setPrefferedTag(fetchedTextData.preferredTag);
+  }, [fetchedTextData])
 
   useEffect(() => {
     if (!fetchedData) {
@@ -235,19 +233,23 @@ export default function AnnotatorOpenedProject() {
                 size="lg"
               />
             </div>
-
-            <div className="textWrapper">
-              <div className="header">
-                <span> {fetchedTextData.name}</span>{' '}
-              </div>
-              <div className="textValue">
-                {!fetchedTextData.value ? (
-                  <p>Fetching Text ... </p>
-                ) : (
+            {!fetchedTextData.value ? (
+              <FontAwesomeIcon
+                icon="fa-solid fa-spinner fa-spin"
+                size="6x"
+                spin
+              />
+            ) : (
+              <div className="textWrapper">
+                <div className="header">
+                  <span> {fetchedTextData.name}</span>{' '}
+                </div>
+                <div className="textValue">
                   <p>{fetchedTextData.value}</p>
-                )}
+                </div>
               </div>
-            </div>
+            )}
+
             <Button
               text="Submit tags"
               onClickHandler={tagTextHandler}
@@ -260,11 +262,6 @@ export default function AnnotatorOpenedProject() {
               files={projectTexts}
               openedProjectId={params.id}
               currentTextId={fetchedTextData.id}
-            />
-            <Button
-              customClass="downloadButton"
-              onClickHandler={downloadFiles}
-              text="Download uploaded files"
             />
           </div>
         </div>

@@ -4,14 +4,14 @@ import './TagsStatisticsPopup.scss';
 import { capitalizeFirstLetter } from '../../utils/utils';
 
 // MOCKED DATA
-// const mockedData = [
+// const mockedData = 
 //   {
-//     love: 0.8,
-//   },
-//   { sad: 0.54 },
-//   { tak: 1 },
-//   { nie: 0.11 },
-// ];
+//    love: 0.8,
+//    sad: 0.54,
+//    tak: 1,
+//    nie: 0.11
+//   }
+// 
 
 export default function TagsStatisticsPopup({
   open,
@@ -27,13 +27,13 @@ export default function TagsStatisticsPopup({
           <h2> Tag statistics returned by model</h2>
           <div className="tagListContainer">
             <h5>Tag - Accuracy</h5>
-            {prefferedTagsList.map((item, index) => (
+            {Object.keys(prefferedTagsList).map((item, index) => (
               <div key={`${index.toString() * 9.7}`}>
                 <span className="value">
-                  {`${capitalizeFirstLetter(Object.keys(item)[0])}:`}
+                  {`${capitalizeFirstLetter(item)}:`}
                 </span>
-
-                <span className="percent">{Object.values(item)[0] * 100}%</span>
+                
+                <span className="percent">{(prefferedTagsList[item] * 100).toFixed(2)}%</span>
               </div>
             ))}
           </div>
@@ -73,6 +73,6 @@ TagsStatisticsPopup.propTypes = {
 
 TagsStatisticsPopup.defaultProps = {
   open: false,
-  onCloseHandler: () => {},
+  onCloseHandler: () => { },
   prefferedTagsList: [],
 };

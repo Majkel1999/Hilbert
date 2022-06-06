@@ -5,6 +5,7 @@ import {
   faCopy,
   faMinus,
   faPlusCircle,
+  faSpinner,
   faTrashAlt,
   faUserCircle,
   faXmark,
@@ -25,4 +26,5 @@ library.add(
   faCircleExclamation,
   faCircleInfo,
   faUserCircle,
+  faSpinner,
 );
