@@ -73,6 +73,9 @@ odpowiedzi od serwera wykorzystywane są funkcje wspomniane w pierwszym pliku.
 
 **Redux Store - Schemat**
 
+![schematRedux](https://user-images.githubusercontent.com/65126274/172253725-1c7f590d-c03e-41f1-a18f-534614dc9a0d.svg)
+
+
 ### Architektura frontend'u
 
 ![schematFrontend](https://user-images.githubusercontent.com/65126274/172253048-1cc23c4d-0372-4f6e-bdc0-7025da356fa1.svg)
