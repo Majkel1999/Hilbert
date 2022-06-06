@@ -26,3 +26,6 @@ Stronę główną możemy podzielić na stronę gdy uzytkownik jest zalogowany o
 >przejścia do strony autoryzaji za pomocą przycisków: 'Create account', 'Login' znajdujących się w nagłówku strony.
 >
 * Użytkownik nie zalogowany:
+>Gdy użytkownik jest zalogowany strona główna staje się panelem admina. W panelu zostaje wyświetlona lista stworzonych 
+>przez admina projektów. Ponadto w tym właśnie widoku mamy możliwość stworzenia nowego projektu.
+	
