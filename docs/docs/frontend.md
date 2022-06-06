@@ -43,4 +43,9 @@ Stronę główną możemy podzielić na stronę gdy uzytkownik jest zalogowany o
 >zobaczenia nazwy plików, które są wgrane w projekcie oraz który obecnie jest jej wyświetlany. Osoba ta, widząc zawartość danego 
 >pliku ma możliwość wybrania jednego lub kilku tagów - w zależności od ustawień projektu, tym samym go tagując za pomocą przycisku 
 >znajdującego się na stronie. Po otagowaniu tekstu, zostają wyświetlone statystyki przedstawiające poprawność wybranych tagów w procentach. 
->Gdy okno ze statystykami zostanie zamknięte, załadowana zostaje zawartość kolejnego pliku, który nie został jeszcze otagowany. 
+>Gdy okno ze statystykami zostanie zamknięte, załadowana zostaje zawartość kolejnego pliku, który nie został jeszcze otagowany.
+
+**Strona z danymi konta**
+
+Widok ten jest dostępny jedynie dla użytkownika konta. Na tej stronie ma on możliwość sprawdzenia danych konta oraz jego usunięcie.
+
