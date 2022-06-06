@@ -69,4 +69,10 @@ odpowiedzi od serwera wykorzystywane są funkcje wspomniane w pierwszym pliku.
 >informacja o tym czy komunikat powinien być widoczny. 
 
 * User
->Cześć odpowiedzialna za pozyskiwanie oraz ustawianie informacji o użytkowniku konta. 
+>Część odpowiedzialna za pozyskiwanie oraz ustawianie informacji o użytkowniku konta. 
+
+**Redux Store - Schemat**
+
+### Architektura frontend'u
+
+![schematFrontend](https://user-images.githubusercontent.com/65126274/172252864-94702447-5911-4713-84ee-c062ca0e91dd.png)
