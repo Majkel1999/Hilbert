@@ -204,7 +204,7 @@ export const downloadProjectModel = (projectId) => async (dispatch) => {
     const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/model`, {
       responseType: 'arraybuffer',
     });
-    console.log(response.data);
+
     const blobUrl = window.URL.createObjectURL(
       new Blob([response.data], { type: 'application/zip' }),
     );
@@ -217,7 +217,6 @@ export const downloadProjectModel = (projectId) => async (dispatch) => {
     element.click();
     document.body.removeChild(element);
   } catch (error) {
-    console.log(error);
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
@@ -255,13 +254,16 @@ export const downloadProjectFiles = (projectId) => async (dispatch) => {
 export const fetchProjectMetrics = (projectId) => async (dispatch) => {
   try {
     const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/metrics`);
+
     dispatch(
       projectsActions.setProjectData({
         type: 'metrics',
-        data: response.data,
+        data: {
+          trainData: response.data.trainData,
+          configData: response.data.config,
+        },
       }),
     );
-    console.log(response.data);
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
@@ -337,7 +339,14 @@ export const trainModel = (projectId) => async (dispatch) => {
 export const clearTags = (projectId) => async (dispatch) => {
   try {
     const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/clear`);
-    console.log(response);
+
+    if (response.status === 200)
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: SNACKBAR_STATUS.SUCCESS,
+          message: 'Tags has been cleared',
+        }),
+      );
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(

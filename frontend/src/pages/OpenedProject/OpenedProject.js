@@ -31,6 +31,7 @@ export default function OpenedProject() {
   const currentProjectData = useSelector(
     (state) => state.projects.currentProject,
   );
+  const projectMetrics = useSelector((state) => state.projects.metrics);
 
   const trainModelHandler = () => {
     const projectId = params.id;
@@ -68,7 +69,6 @@ export default function OpenedProject() {
 
   const getMetrics = () => {
     setOpenPopup(true);
-    dispatch(fetchProjectMetrics(params.id));
   };
 
   const getModel = () => {
@@ -77,7 +77,10 @@ export default function OpenedProject() {
 
   useEffect(() => {
     const projectId = params.id;
-    if (!fetchedData) dispatch(fetchSingleProjectData(projectId));
+    if (!fetchedData) {
+      dispatch(fetchSingleProjectData(projectId));
+      dispatch(fetchProjectMetrics(params.id));
+    }
 
     setFetchedData(true);
 
@@ -93,8 +96,6 @@ export default function OpenedProject() {
     if (currentProjectData.inviteUrl)
       setInviteUrl(currentProjectData.inviteUrl);
   }, [currentProjectData]);
-
-  console.log(currentProjectData.metrics);
 
   return (
     <div className="openedProjectContainer">
@@ -134,10 +135,14 @@ export default function OpenedProject() {
           <FileList files={projectTexts} openedProjectId={params.id} />
         </div>
       </div>
-      <DisplayMetricsPopup
-        open={openPopup}
-        onCloseHandler={() => setOpenPopup(false)}
-      />
+
+      {projectMetrics && (
+        <DisplayMetricsPopup
+          open={openPopup}
+          onCloseHandler={() => setOpenPopup(false)}
+          metricsData={projectMetrics}
+        />
+      )}
     </div>
   );
 }
