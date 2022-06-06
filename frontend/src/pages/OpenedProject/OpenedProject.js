@@ -11,7 +11,7 @@ import {
   trainModel,
   downloadProjectFiles,
   fetchProjectMetrics,
-  downloadProjectModel
+  downloadProjectModel,
 } from '../../store/projects/project-actions';
 import { snackBarActions } from '../../store/snackBar/snackBar-slice';
 import { SNACKBAR_STATUS, MODEL_STATE } from '../../constants/stateStatuses';
@@ -36,11 +36,11 @@ export default function OpenedProject() {
 
     currentProjectData.modelState === MODEL_STATE.TRAINING
       ? dispatch(
-        snackBarActions.setSnackBarData({
-          type: SNACKBAR_STATUS.ERROR,
-          message: 'Model is already in training',
-        }),
-      )
+          snackBarActions.setSnackBarData({
+            type: SNACKBAR_STATUS.ERROR,
+            message: 'Model is already in training',
+          }),
+        )
       : dispatch(trainModel(projectId));
   };
 
@@ -70,8 +70,8 @@ export default function OpenedProject() {
   };
 
   const getModel = () => {
-    dispatch(downloadProjectModel(params.id))
-  }
+    dispatch(downloadProjectModel(params.id));
+  };
 
   useEffect(() => {
     const projectId = params.id;
@@ -111,12 +111,12 @@ export default function OpenedProject() {
             />
           </div>
 
-          <div className="textWrapper" />
+          <div className="textWrapper ">
+            <h2 className="projectTitle">{currentProjectData.name}</h2>
+          </div>
           <div className="buttonWrapper">
-            <Button text="Metrics"
-              onClickHandler={getMetrics} />
-            <Button text="Model"
-              onClickHandler={getModel} />
+            <Button text="Metrics" onClickHandler={getMetrics} />
+            <Button text="Model" onClickHandler={getModel} />
             <Button
               customClass="downloadButton"
               onClickHandler={downloadFiles}
