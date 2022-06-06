@@ -4,6 +4,7 @@ const initialProjectsState = {
   items: [],
   currentProject: {},
   fetchedTextData: {},
+  metrics: {},
 };
 
 const projectsSlice = createSlice({
@@ -36,6 +37,19 @@ const projectsSlice = createSlice({
     },
     setFetchedTextData(state, action) {
       state.fetchedTextData = action.payload;
+    },
+    setProjectMetrics(state, action) {
+      state.projectMetrics = action.payload;
+    },
+    setProjectData(state, action) {
+      const payloadType = {
+        metrics: 'metrics',
+        text: 'fetchedTextData',
+        project: 'currentProject',
+        items: 'items',
+      };
+
+      state[payloadType.action.payload.type] = action.payload.data;
     },
   },
 });

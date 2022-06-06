@@ -94,6 +94,8 @@ export default function OpenedProject() {
       setInviteUrl(currentProjectData.inviteUrl);
   }, [currentProjectData]);
 
+  console.log(currentProjectData.metrics);
+
   return (
     <div className="openedProjectContainer">
       <div className="textOperationsWrapper">
