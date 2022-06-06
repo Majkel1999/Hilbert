@@ -4,6 +4,7 @@ const initialProjectsState = {
   items: [],
   currentProject: {},
   fetchedTextData: {},
+  metrics: {},
 };
 
 const projectsSlice = createSlice({
@@ -28,14 +29,16 @@ const projectsSlice = createSlice({
         state.items.splice(projectToRemoveIndex, 1);
       }
     },
-    replaceProjectList(state, action) {
-      state.items = action.payload.items;
-    },
-    setCurrentProjectData(state, action) {
-      state.currentProject = action.payload;
-    },
-    setFetchedTextData(state, action) {
-      state.fetchedTextData = action.payload;
+
+    setProjectData(state, action) {
+      const payloadType = {
+        metrics: 'metrics',
+        text: 'fetchedTextData',
+        project: 'currentProject',
+        items: 'items',
+      };
+
+      state[payloadType[action.payload.type]] = action.payload.data;
     },
   },
 });
