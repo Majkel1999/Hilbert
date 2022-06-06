@@ -8,8 +8,7 @@ import FileList from '../../components/FileList/FilesList';
 import {
   fetchAnnotatorData,
   fetchAnnotatorText,
-  tagText,
-  downloadProjectFiles,
+  tagText
 } from '../../store/projects/project-actions';
 import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
@@ -160,10 +159,6 @@ export default function AnnotatorOpenedProject() {
     if (currentProjectData.isMultiLabel) setIsMultiLabel(true);
   };
 
-  const downloadFiles = () => {
-    dispatch(downloadProjectFiles(currentProjectData.id));
-  };
-
   useEffect(() => {
     if (fetchedTextData.preferredTag)
       setPrefferedTag(fetchedTextData.preferredTag);
@@ -267,11 +262,6 @@ export default function AnnotatorOpenedProject() {
               files={projectTexts}
               openedProjectId={params.id}
               currentTextId={fetchedTextData.id}
-            />
-            <Button
-              customClass="downloadButton"
-              onClickHandler={downloadFiles}
-              text="Download uploaded files"
             />
           </div>
         </div>
