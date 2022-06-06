@@ -158,13 +158,16 @@ export default function AnnotatorOpenedProject() {
       setTagsWithAddedProps(tagArr);
     }
     if (currentProjectData.isMultiLabel) setIsMultiLabel(true);
-    if (currentProjectData.preferredTag)
-      setPrefferedTag(currentProjectData.preferredTag);
   };
 
   const downloadFiles = () => {
     dispatch(downloadProjectFiles(currentProjectData.id));
   };
+
+  useEffect(() => {
+    if (fetchedTextData.preferredTag)
+      setPrefferedTag(fetchedTextData.preferredTag);
+  }, [fetchedTextData])
 
   useEffect(() => {
     if (!fetchedData) {
