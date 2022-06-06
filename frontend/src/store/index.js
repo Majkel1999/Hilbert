@@ -11,6 +11,10 @@ const store = configureStore({
     snackBar: snackBarReducer,
     user: userReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export default store;

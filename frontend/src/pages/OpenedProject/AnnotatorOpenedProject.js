@@ -8,7 +8,7 @@ import FileList from '../../components/FileList/FilesList';
 import {
   fetchAnnotatorData,
   fetchAnnotatorText,
-  tagText
+  tagText,
 } from '../../store/projects/project-actions';
 import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
@@ -21,7 +21,7 @@ import * as routes from '../../constants/routes';
 
 export default function AnnotatorOpenedProject() {
   const navigate = useNavigate();
-  const [openPopup, setOpenPopup] = useState();
+  const [openPopup, setOpenPopup] = useState(false);
   const [fetchedData, setFetchedData] = useState(false);
   const [subscribeWsActions, setSubscribeWsActions] = useState(false);
   const [projectTexts, setProjectTexts] = useState([]);
@@ -162,7 +162,7 @@ export default function AnnotatorOpenedProject() {
   useEffect(() => {
     if (fetchedTextData.preferredTag)
       setPrefferedTag(fetchedTextData.preferredTag);
-  }, [fetchedTextData])
+  }, [fetchedTextData]);
 
   useEffect(() => {
     if (!fetchedData) {
