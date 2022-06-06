@@ -15,8 +15,9 @@ export const fetchProjectsData = () => async (dispatch) => {
 
     if (projectsData.status === 200)
       dispatch(
-        projectsActions.replaceProjectList({
-          items:
+        projectsActions.setProjectData({
+          type: 'items',
+          data:
             projectsData.data.map((item) => ({
               name: item.name,
               id: item['_id'],
@@ -92,13 +93,16 @@ export const fetchSingleProjectData = (projectId) => async (dispatch) => {
     const response = await axios.get(PROJECT_DATA_URL(projectId));
     if (response.status === 200)
       dispatch(
-        projectsActions.setCurrentProjectData({
-          name: response.data.name,
-          tags: response.data.data.tags,
-          texts: response.data.texts,
-          inviteUrl: response.data.data.invite_url_postfix,
-          isMultiLabel: response.data.is_multi_label,
-          modelState: response.data.model_state,
+        projectsActions.setProjectData({
+          type: 'project',
+          data: {
+            name: response.data.name,
+            tags: response.data.data.tags,
+            texts: response.data.texts,
+            inviteUrl: response.data.data.invite_url_postfix,
+            isMultiLabel: response.data.is_multi_label,
+            modelState: response.data.model_state,
+          },
         }),
       );
   } catch (error) {
@@ -311,8 +315,11 @@ export const trainModel = (projectId) => async (dispatch) => {
         }),
       );
       dispatch(
-        projectsActions.setCurrentProjectData({
-          modelState: MODEL_STATE.TRAINING,
+        projectsActions.setProjectData({
+          type: 'project',
+          data: {
+            modelState: MODEL_STATE.TRAINING,
+          },
         }),
       );
     }
@@ -347,13 +354,16 @@ export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
     const response = await axios.get(TAG_URL(inviteUrl));
 
     dispatch(
-      projectsActions.setCurrentProjectData({
-        id: response.data['_id'],
-        name: response.data.name,
-        tags: response.data.data.tags,
-        texts: response.data.texts,
-        inviteUrl: response.data.data.invite_url_postfix,
-        isMultiLabel: response.data.is_multi_label,
+      projectsActions.setProjectData({
+        type: 'project',
+        data: {
+          id: response.data['_id'],
+          name: response.data.name,
+          tags: response.data.data.tags,
+          texts: response.data.texts,
+          inviteUrl: response.data.data.invite_url_postfix,
+          isMultiLabel: response.data.is_multi_label,
+        },
       }),
     );
   } catch (error) {
@@ -376,11 +386,14 @@ export const fetchAnnotatorText =
       );
       const { name, _id, value, preferredTag } = response.data;
       dispatch(
-        projectsActions.setFetchedTextData({
-          name,
-          id: _id,
-          value,
-          preferredTag,
+        projectsActions.setProjectData({
+          type: 'text',
+          data: {
+            name,
+            id: _id,
+            value,
+            preferredTag,
+          },
         }),
       );
       return response;
