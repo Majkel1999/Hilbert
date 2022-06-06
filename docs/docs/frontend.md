@@ -16,4 +16,13 @@ Stworzona aplikacja w zależności od tego czy użytkownik posiada konto (jest a
 
 wyświetla różne widoki. Osoba posiadająca konto jest odpowiedzialna za zarządzanie projektami oraz ich zawartością.
 
-*Strona główna:*
+**Strona główna:**
+
+Stronę główną możemy podzielić na stronę gdy uzytkownik jest zalogowany oraz w momencie gdy nie jest.
+
+* Użytkownik zalogowany:
+>Podczas gdy osoba wchodząca do aplikacji nie jest zalogowana, wyświetlona zostaje informacja wstępna opisująca 
+>do czego służy stworzona aplikacja. Z racji że strona ma charakter informacyjny to, jedynymi funkcjonalnościami są
+>przejścia do strony autoryzaji za pomocą przycisków: 'Create account', 'Login' znajdujących się w nagłówku strony.
+>
+* Użytkownik nie zalogowany:
