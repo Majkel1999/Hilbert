@@ -23,6 +23,9 @@
     background-color: #eee;
     border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    .chipContainer {
+      cursor: pointer;
+    }
   }
   .filesWrapper {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
@@ -82,6 +85,13 @@
           font-size: 1.3rem;
           padding: 20px 40px;
         }
+      }
+      .projectTitle {
+        margin-top: 5%;
+        font-size: 3rem;
+        text-align: center;
+        background-color: rgba(150, 200, 200, 0.8);
+        padding: 10px 0;
       }
     }
 

@@ -254,7 +254,6 @@ export const downloadProjectFiles = (projectId) => async (dispatch) => {
 export const fetchProjectMetrics = (projectId) => async (dispatch) => {
   try {
     const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/metrics`);
-
     dispatch(
       projectsActions.setProjectData({
         type: 'metrics',
@@ -431,7 +430,6 @@ export const tagText =
       });
 
       if (response.status === 200) {
-        dispatch(fetchAnnotatorText(inviteUrl));
         dispatch(
           snackBarActions.setSnackBarData({
             type: SNACKBAR_STATUS.SUCCESS,

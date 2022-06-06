@@ -3,20 +3,9 @@ import Popup from '../UI/Popup/Popup';
 import './TagsStatisticsPopup.scss';
 import { capitalizeFirstLetter } from '../../utils/utils';
 
-// MOCKED DATA
-// const mockedData = 
-//   {
-//    love: 0.8,
-//    sad: 0.54,
-//    tak: 1,
-//    nie: 0.11
-//   }
-// 
-
 export default function TagsStatisticsPopup({
   open,
   onCloseHandler,
-  // eslint-disable-next-line no-unused-vars
   prefferedTagsList,
 }) {
   const headerText = 'Tags statistics';
@@ -32,8 +21,10 @@ export default function TagsStatisticsPopup({
                 <span className="value">
                   {`${capitalizeFirstLetter(item)}:`}
                 </span>
-                
-                <span className="percent">{(prefferedTagsList[item] * 100).toFixed(2)}%</span>
+
+                <span className="percent">
+                  {(prefferedTagsList[item] * 100).toFixed(2)}%
+                </span>
               </div>
             ))}
           </div>
@@ -73,6 +64,6 @@ TagsStatisticsPopup.propTypes = {
 
 TagsStatisticsPopup.defaultProps = {
   open: false,
-  onCloseHandler: () => { },
+  onCloseHandler: () => {},
   prefferedTagsList: [],
 };
