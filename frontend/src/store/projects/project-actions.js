@@ -195,6 +195,33 @@ export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
   }
 };
 
+export const downloadProjectModel = (projectId) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/model`, {
+      responseType: 'arraybuffer'
+    });
+    console.log(response.data)
+    const blobUrl = window.URL.createObjectURL(new Blob([response.data], { type: "application/zip" }));
+    const element = document.createElement('a');
+
+    element.setAttribute('href', blobUrl);
+    element.setAttribute('download', 'model.zip');
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  } catch (error) {
+    console.log(error);
+    const message = JSON.parse(error.request.response).detail;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: SNACKBAR_STATUS.ERROR,
+        message,
+      }),
+    );
+  }
+}
+
 export const downloadProjectFiles = (projectId) => async (dispatch) => {
   try {
     const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/file`);
@@ -210,7 +237,6 @@ export const downloadProjectFiles = (projectId) => async (dispatch) => {
     element.click();
     document.body.removeChild(element);
   } catch (error) {
-    console.log(error)
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
@@ -220,6 +246,21 @@ export const downloadProjectFiles = (projectId) => async (dispatch) => {
     );
   }
 };
+
+export const fetchProjectMetrics = (projectId) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/metrics`);
+    console.log(response.data)
+  } catch (error) {
+    const message = JSON.parse(error.request.response).detail;
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: SNACKBAR_STATUS.ERROR,
+        message,
+      }),
+    );
+  }
+}
 
 export const deleteFileFromProject =
   (projectId, fileId) => async (dispatch) => {
@@ -380,19 +421,3 @@ export const tagText =
         );
       }
     };
-
-export const downloadMLModel = (projectId) => async (dispatch) => {
-  try {
-    const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/model`);
-    console.log(response);
-  } catch (error) {
-    const message = JSON.parse(error.request.response).detail;
-
-    dispatch(
-      snackBarActions.setSnackBarData({
-        type: SNACKBAR_STATUS.ERROR,
-        message,
-      }),
-    );
-  }
-};
