@@ -9,6 +9,9 @@ import {
   clearTags,
   fetchSingleProjectData,
   trainModel,
+  downloadProjectFiles,
+  fetchProjectMetrics,
+  downloadProjectModel
 } from '../../store/projects/project-actions';
 import { snackBarActions } from '../../store/snackBar/snackBar-slice';
 import { SNACKBAR_STATUS, MODEL_STATE } from '../../constants/stateStatuses';
@@ -19,6 +22,8 @@ import { ROLES } from '../../constants/roles';
 export default function OpenedProject() {
   const [fetchedData, setFetchedData] = useState(false);
   const [projectTexts, setProjectTexts] = useState([]);
+  const [projectTags, setProjectTags] = useState([]);
+  const [inviteUrl, setInviteUrl] = useState('');
 
   const dispatch = useDispatch();
   const params = useParams();
@@ -31,18 +36,42 @@ export default function OpenedProject() {
 
     currentProjectData.modelState === MODEL_STATE.TRAINING
       ? dispatch(
-          snackBarActions.setSnackBarData({
-            type: SNACKBAR_STATUS.ERROR,
-            message: 'Model is already in training',
-          }),
-        )
+        snackBarActions.setSnackBarData({
+          type: SNACKBAR_STATUS.ERROR,
+          message: 'Model is already in training',
+        }),
+      )
       : dispatch(trainModel(projectId));
+  };
+
+  const copyIconClickHandler = () => {
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: SNACKBAR_STATUS.INFO,
+        message: 'Link copied to clipboard',
+      }),
+    );
+    navigator.clipboard.writeText(
+      `${window.location.host}/${ROLES.ANNOTATOR}/projects/${inviteUrl}`,
+    );
   };
 
   const clearTagsHandler = () => {
     const projectId = params.id;
     dispatch(clearTags(projectId));
   };
+
+  const downloadFiles = () => {
+    dispatch(downloadProjectFiles(params.id));
+  };
+
+  const getMetrics = () => {
+    dispatch(fetchProjectMetrics(params.id));
+  };
+
+  const getModel = () => {
+    dispatch(downloadProjectModel(params.id))
+  }
 
   useEffect(() => {
     const projectId = params.id;
@@ -58,33 +87,41 @@ export default function OpenedProject() {
       }));
       setProjectTexts(texts);
     }
+    if (currentProjectData.tags) setProjectTags(currentProjectData.tags);
+    if (currentProjectData.inviteUrl)
+      setInviteUrl(currentProjectData.inviteUrl);
   }, [currentProjectData]);
 
   return (
     <div className="openedProjectContainer">
       <div className="textOperationsWrapper">
         <TagList
-          tags={currentProjectData.tags}
+          tags={projectTags}
           openedProjectId={params.id}
           enableAddingTag={false}
           displayDeleteIcon={false}
         />
         <div className="textContainer">
           <div className="inviteUrlWrapper">
-            <h2> {currentProjectData.inviteUrl} </h2>
+            <h2> {inviteUrl} </h2>
             <FontAwesomeIcon
               icon="fa-solid fa-copy"
-              onClick={() => {
-                navigator.clipboard.writeText(
-                  `${window.location.host}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
-                );
-              }}
+              onClick={copyIconClickHandler}
               size="lg"
             />
           </div>
 
           <div className="textWrapper" />
           <div className="buttonWrapper">
+            <Button text="Metrics"
+              onClickHandler={getMetrics} />
+            <Button text="Model"
+              onClickHandler={getModel} />
+            <Button
+              customClass="downloadButton"
+              onClickHandler={downloadFiles}
+              text="Download uploaded files"
+            />
             <Button text="Train model" onClickHandler={trainModelHandler} />
             <Button text="Clear tags data" onClickHandler={clearTagsHandler} />
           </div>

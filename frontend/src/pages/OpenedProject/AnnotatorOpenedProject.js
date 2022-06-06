@@ -8,24 +8,29 @@ import FileList from '../../components/FileList/FilesList';
 import {
   fetchAnnotatorData,
   fetchAnnotatorText,
-  tagText,
+  tagText
 } from '../../store/projects/project-actions';
 import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
 import { snackBarActions } from '../../store/snackBar/snackBar-slice';
 import { SNACKBAR_STATUS } from '../../constants/stateStatuses';
+import TagsStatisticsPopup from '../../components/TagsStatisticsPopup/TagsStatisticsPopup';
 import SOCKETS, { WebSocketActions } from '../../sockets';
+
 import * as routes from '../../constants/routes';
 
 export default function AnnotatorOpenedProject() {
   const navigate = useNavigate();
+  const [openPopup, setOpenPopup] = useState();
   const [fetchedData, setFetchedData] = useState(false);
   const [subscribeWsActions, setSubscribeWsActions] = useState(false);
   const [projectTexts, setProjectTexts] = useState([]);
   const [tagsWithAddedProps, setTagsWithAddedProps] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [preferredTag, setPrefferedTag] = useState([]);
   const [isMultiLabel, setIsMultiLabel] = useState(false);
   const [enableButton, setEnableButton] = useState(false);
+
   const [socketsSubscribtions, setSocketsSubscribtions] = useState({
     PROJECT_DELETED: undefined,
     FILE_ADDED: undefined,
@@ -58,6 +63,13 @@ export default function AnnotatorOpenedProject() {
     setSelectedTags(updatedTags.filter((item) => item.selected));
     setTagsWithAddedProps(updatedTags);
   };
+  const resetSelectedTags = () => {
+    const updatedTags = tagsWithAddedProps.map((tag) => ({
+      ...tag,
+      selected: false,
+    }));
+    setTagsWithAddedProps(updatedTags);
+  };
 
   const tagTextHandler = () => {
     dispatch(
@@ -67,6 +79,8 @@ export default function AnnotatorOpenedProject() {
         textId: fetchedTextData.id,
       }),
     );
+    resetSelectedTags();
+    setOpenPopup(true);
   };
 
   const deleteProjectSubscriber = (payload) => {
@@ -146,6 +160,11 @@ export default function AnnotatorOpenedProject() {
   };
 
   useEffect(() => {
+    if (fetchedTextData.preferredTag)
+      setPrefferedTag(fetchedTextData.preferredTag);
+  }, [fetchedTextData])
+
+  useEffect(() => {
     if (!fetchedData) {
       const url = params.inviteUrl;
       dispatch(fetchAnnotatorData(url));
@@ -181,54 +200,77 @@ export default function AnnotatorOpenedProject() {
     setSubscribeWsActions(true);
   }, [currentProjectData, fetchedData]);
 
+  const copyIconClickHandler = () => {
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: SNACKBAR_STATUS.INFO,
+        message: 'Link copied to clipboard',
+      }),
+    );
+    navigator.clipboard.writeText(
+      `${window.location.host}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
+    );
+  };
+
   return (
-    <div className="openedProjectContainer">
-      <div className="textOperationsWrapper">
-        {tagsWithAddedProps && (
-          <TagList
-            tags={tagsWithAddedProps}
-            enableAddingTag={false}
-            displayDeleteIcon={false}
-            onTagClickHandler={selectTag}
-          />
-        )}
-        <div className="textContainer">
-          <div className="inviteUrlWrapper">
-            <h2> {currentProjectData.inviteUrl} </h2>
-            <FontAwesomeIcon
-              icon="fa-solid fa-copy"
-              onClick={() => {
-                navigator.clipboard.writeText(
-                  `${window.location.host}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
-                );
-              }}
-              size="lg"
+    <>
+      <div className="openedProjectContainer">
+        <div className="textOperationsWrapper">
+          {tagsWithAddedProps && (
+            <TagList
+              tags={tagsWithAddedProps}
+              enableAddingTag={false}
+              displayDeleteIcon={false}
+              onTagClickHandler={selectTag}
+            />
+          )}
+          <div className="textContainer">
+            <div className="inviteUrlWrapper">
+              <h2> {currentProjectData.inviteUrl} </h2>
+              <FontAwesomeIcon
+                icon="fa-solid fa-copy"
+                onClick={copyIconClickHandler}
+                size="lg"
+              />
+            </div>
+            {!fetchedTextData.value ? (
+              <FontAwesomeIcon
+                icon="fa-solid fa-spinner fa-spin"
+                size="6x"
+                spin
+              />
+            ) : (
+              <div className="textWrapper">
+                <div className="header">
+                  <span> {fetchedTextData.name}</span>{' '}
+                </div>
+                <div className="textValue">
+                  <p>{fetchedTextData.value}</p>
+                </div>
+              </div>
+            )}
+
+            <Button
+              text="Submit tags"
+              onClickHandler={tagTextHandler}
+              isDisabled={selectedTags.length === 0 || !enableButton}
             />
           </div>
 
-          <div className="textWrapper">
-            <div className="header">
-              <span> {fetchedTextData.name}</span>{' '}
-            </div>
-            <div className="textValue">
-              <p>{fetchedTextData.value}</p>
-            </div>
+          <div className="filesWrapper annotator">
+            <FileList
+              files={projectTexts}
+              openedProjectId={params.id}
+              currentTextId={fetchedTextData.id}
+            />
           </div>
-          <Button
-            text="Submit tags"
-            onClickHandler={tagTextHandler}
-            isDisabled={!selectedTags.length > 0 && !enableButton}
-          />
-        </div>
-
-        <div className="filesWrapper annotator">
-          <FileList
-            files={projectTexts}
-            openedProjectId={params.id}
-            currentTextId={fetchedTextData.id}
-          />
         </div>
       </div>
-    </div>
+      <TagsStatisticsPopup
+        open={openPopup}
+        onCloseHandler={() => setOpenPopup(false)}
+        prefferedTagsList={preferredTag}
+      />
+    </>
   );
 }

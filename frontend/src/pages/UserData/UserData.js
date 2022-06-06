@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
-import './UserData.scss';
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { getUserDetails, deleteUser } from '../../store/user/user-actions';
-import * as routes from '../../constants/routes';
-import Button from '../../components/UI/Button/Button';
+import "./UserData.scss";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getUserDetails, deleteUser } from "../../store/user/user-actions";
+import * as routes from "../../constants/routes";
+import Button from "../../components/UI/Button/Button";
+import personalData from "../../img/personal_data.svg";
 
 export default function UserData() {
   const dispatch = useDispatch();
@@ -25,25 +26,32 @@ export default function UserData() {
   }, [dispatch]);
 
   return (
-    <div className="userInfoWrapper">
-      <div className="header">
-        <h3>User Data</h3>
+    <div className="userInfoContainer">
+      <div className="userInfoWrapper">
+        <div className="header">
+          <h3>User Data</h3>
+        </div>
+        <div className="userDataContainer">
+          <div className="userDataItem">
+            <label>Username:</label>
+            <span>{userData.username || "Unknown"}</span>
+          </div>
+          <div className="userDataItem">
+            <label>Full name:</label>
+            <span>{userData.fullName || "Unknown"}</span>
+          </div>
+          <div className="userDataItem">
+            <label>Email:</label>
+            <span>{userData.email || "Unknown"}</span>
+          </div>
+        </div>
+        <Button text="Delete user" onClickHandler={removeCurrentUser} />
       </div>
-      <div className="userDataContainer">
-        <div className="userDataItem">
-          <label>Username:</label>
-          <span>{userData.username || 'Unknown'}</span>
-        </div>
-        <div className="userDataItem">
-          <label>Full name:</label>
-          <span>{userData.fullName || 'Unknown'}</span>
-        </div>
-        <div className="userDataItem">
-          <label>Email:</label>
-          <span>{userData.email || 'Unknown'}</span>
-        </div>
-      </div>
-      <Button text="Delete user" onClickHandler={removeCurrentUser} />
+      <img
+        src={personalData}
+        alt="personalDataImage"
+        className="personalDataImage"
+      />
     </div>
   );
 }
