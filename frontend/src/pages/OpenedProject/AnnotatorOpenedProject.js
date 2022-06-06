@@ -8,7 +8,7 @@ import FileList from '../../components/FileList/FilesList';
 import {
   fetchAnnotatorData,
   fetchAnnotatorText,
-  tagText
+  tagText,
 } from '../../store/projects/project-actions';
 import Button from '../../components/UI/Button/Button';
 import { ROLES } from '../../constants/roles';
@@ -159,10 +159,15 @@ export default function AnnotatorOpenedProject() {
     if (currentProjectData.isMultiLabel) setIsMultiLabel(true);
   };
 
+  const closePopupHandler = () => {
+    dispatch(fetchAnnotatorText(currentProjectData.inviteUrl));
+    setOpenPopup(false);
+  };
+
   useEffect(() => {
     if (fetchedTextData.preferredTag)
       setPrefferedTag(fetchedTextData.preferredTag);
-  }, [fetchedTextData])
+  }, [fetchedTextData]);
 
   useEffect(() => {
     if (!fetchedData) {
@@ -268,7 +273,7 @@ export default function AnnotatorOpenedProject() {
       </div>
       <TagsStatisticsPopup
         open={openPopup}
-        onCloseHandler={() => setOpenPopup(false)}
+        onCloseHandler={closePopupHandler}
         prefferedTagsList={preferredTag}
       />
     </>
