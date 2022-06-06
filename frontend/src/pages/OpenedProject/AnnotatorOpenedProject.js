@@ -235,19 +235,23 @@ export default function AnnotatorOpenedProject() {
                 size="lg"
               />
             </div>
-
-            <div className="textWrapper">
-              <div className="header">
-                <span> {fetchedTextData.name}</span>{' '}
-              </div>
-              <div className="textValue">
-                {!fetchedTextData.value ? (
-                  <p>Fetching Text ... </p>
-                ) : (
+            {!fetchedTextData.value ? (
+              <FontAwesomeIcon
+                icon="fa-solid fa-spinner fa-spin"
+                size="6x"
+                spin
+              />
+            ) : (
+              <div className="textWrapper">
+                <div className="header">
+                  <span> {fetchedTextData.name}</span>{' '}
+                </div>
+                <div className="textValue">
                   <p>{fetchedTextData.value}</p>
-                )}
+                </div>
               </div>
-            </div>
+            )}
+
             <Button
               text="Submit tags"
               onClickHandler={tagTextHandler}
