@@ -198,46 +198,20 @@ export const uploadFilesToProject = (projectId, files) => async (dispatch) => {
 export const downloadProjectFiles = (projectId) => async (dispatch) => {
   try {
     const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/file`);
-    const fileObjectArray = [];
-
-    const filteredFileData = response.data
-      .replace('name;', '')
-      .replace('text;', '')
-      .replace('tag', '');
-
-    filteredFileData
-      .split(';')
-      .filter((item) => item)
-      .forEach((item, index) => {
-        if (item !== '') {
-          if ((index === 0 || index % 2 === 0) && item !== '\r\n')
-            fileObjectArray.push({
-              [item]: filteredFileData
-                .split(';')
-                [index + 1].replace('\r', '')
-                .replace('\n', '')
-                .replace('"', ''),
-            });
-        }
-      });
-
-    fileObjectArray.forEach((item) => {
-      const element = document.createElement('a');
-      element.setAttribute(
-        'href',
-        `data:text/plain;charset=utf-8,${encodeURIComponent(
-          Object.values(item)[0],
-        )}`,
-      );
-      element.setAttribute('download', Object.keys(item)[0]);
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    });
+    const element = document.createElement('a');
+    element.setAttribute(
+      'href',
+      `data:text/csv;charset=utf-8,${encodeURIComponent(response.data
+      )}`,
+    );
+    element.setAttribute('download', 'files.csv');
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   } catch (error) {
+    console.log(error)
     const message = JSON.parse(error.request.response).detail;
-
     dispatch(
       snackBarActions.setSnackBarData({
         type: SNACKBAR_STATUS.ERROR,
@@ -347,65 +321,65 @@ export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
 
 export const fetchAnnotatorText =
   (inviteUrl, predict = true) =>
-  async (dispatch) => {
-    try {
-      const response = await axios.get(
-        `${TAG_URL(inviteUrl)}/text?predict=${predict}`,
-      );
-      const { name, _id, value, preferredTag } = response.data;
-      dispatch(
-        projectsActions.setFetchedTextData({
-          name,
-          id: _id,
-          value,
-          preferredTag,
-        }),
-      );
-      return response;
-    } catch (error) {
-      const message = JSON.parse(error.request.response).detail;
-      dispatch(
-        snackBarActions.setSnackBarData({
-          type: SNACKBAR_STATUS.ERROR,
-          message,
-        }),
-      );
-      if (error.response.status === 400) {
-        dispatch(fetchAnnotatorText(inviteUrl, false));
-      }
-
-      return error;
-    }
-  };
-export const tagText =
-  ({ inviteUrl, tags, textId }) =>
-  async (dispatch) => {
-    try {
-      const response = await axios.post(`${TAG_URL(inviteUrl)}/tag`, {
-        tags,
-        text_id: textId,
-      });
-
-      if (response.status === 200) {
-        dispatch(fetchAnnotatorText(inviteUrl));
+    async (dispatch) => {
+      try {
+        const response = await axios.get(
+          `${TAG_URL(inviteUrl)}/text?predict=${predict}`,
+        );
+        const { name, _id, value, preferredTag } = response.data;
+        dispatch(
+          projectsActions.setFetchedTextData({
+            name,
+            id: _id,
+            value,
+            preferredTag,
+          }),
+        );
+        return response;
+      } catch (error) {
+        const message = JSON.parse(error.request.response).detail;
         dispatch(
           snackBarActions.setSnackBarData({
-            type: SNACKBAR_STATUS.SUCCESS,
-            message: 'Tags have been submited',
+            type: SNACKBAR_STATUS.ERROR,
+            message,
+          }),
+        );
+        if (error.response.status === 400) {
+          dispatch(fetchAnnotatorText(inviteUrl, false));
+        }
+
+        return error;
+      }
+    };
+export const tagText =
+  ({ inviteUrl, tags, textId }) =>
+    async (dispatch) => {
+      try {
+        const response = await axios.post(`${TAG_URL(inviteUrl)}/tag`, {
+          tags,
+          text_id: textId,
+        });
+
+        if (response.status === 200) {
+          dispatch(fetchAnnotatorText(inviteUrl));
+          dispatch(
+            snackBarActions.setSnackBarData({
+              type: SNACKBAR_STATUS.SUCCESS,
+              message: 'Tags have been submited',
+            }),
+          );
+        }
+      } catch (error) {
+        const message = JSON.parse(error.request.response).detail;
+
+        dispatch(
+          snackBarActions.setSnackBarData({
+            type: SNACKBAR_STATUS.ERROR,
+            message,
           }),
         );
       }
-    } catch (error) {
-      const message = JSON.parse(error.request.response).detail;
-
-      dispatch(
-        snackBarActions.setSnackBarData({
-          type: SNACKBAR_STATUS.ERROR,
-          message,
-        }),
-      );
-    }
-  };
+    };
 
 export const downloadMLModel = (projectId) => async (dispatch) => {
   try {

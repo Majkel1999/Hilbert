@@ -9,6 +9,7 @@ import {
   clearTags,
   fetchSingleProjectData,
   trainModel,
+  downloadProjectFiles
 } from '../../store/projects/project-actions';
 import { snackBarActions } from '../../store/snackBar/snackBar-slice';
 import { SNACKBAR_STATUS, MODEL_STATE } from '../../constants/stateStatuses';
@@ -58,6 +59,10 @@ export default function OpenedProject() {
     dispatch(clearTags(projectId));
   };
 
+  const downloadFiles = () => {
+    dispatch(downloadProjectFiles(params.id));
+  };
+
   useEffect(() => {
     const projectId = params.id;
     if (!fetchedData) dispatch(fetchSingleProjectData(projectId));
@@ -98,6 +103,11 @@ export default function OpenedProject() {
 
           <div className="textWrapper" />
           <div className="buttonWrapper">
+          <Button
+              customClass="downloadButton"
+              onClickHandler={downloadFiles}
+              text="Download uploaded files"
+            />
             <Button text="Train model" onClickHandler={trainModelHandler} />
             <Button text="Clear tags data" onClickHandler={clearTagsHandler} />
           </div>
