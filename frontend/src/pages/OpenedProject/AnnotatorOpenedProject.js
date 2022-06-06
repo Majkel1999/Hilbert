@@ -21,7 +21,7 @@ import * as routes from '../../constants/routes';
 
 export default function AnnotatorOpenedProject() {
   const navigate = useNavigate();
-  const [openPopup, setOpenPopup] = useState();
+  const [openPopup, setOpenPopup] = useState(false);
   const [fetchedData, setFetchedData] = useState(false);
   const [subscribeWsActions, setSubscribeWsActions] = useState(false);
   const [projectTexts, setProjectTexts] = useState([]);

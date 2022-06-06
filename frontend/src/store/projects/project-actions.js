@@ -15,8 +15,9 @@ export const fetchProjectsData = () => async (dispatch) => {
 
     if (projectsData.status === 200)
       dispatch(
-        projectsActions.replaceProjectList({
-          items:
+        projectsActions.setProjectData({
+          type: 'items',
+          data:
             projectsData.data.map((item) => ({
               name: item.name,
               id: item['_id'],
@@ -92,13 +93,16 @@ export const fetchSingleProjectData = (projectId) => async (dispatch) => {
     const response = await axios.get(PROJECT_DATA_URL(projectId));
     if (response.status === 200)
       dispatch(
-        projectsActions.setCurrentProjectData({
-          name: response.data.name,
-          tags: response.data.data.tags,
-          texts: response.data.texts,
-          inviteUrl: response.data.data.invite_url_postfix,
-          isMultiLabel: response.data.is_multi_label,
-          modelState: response.data.model_state,
+        projectsActions.setProjectData({
+          type: 'project',
+          data: {
+            name: response.data.name,
+            tags: response.data.data.tags,
+            texts: response.data.texts,
+            inviteUrl: response.data.data.invite_url_postfix,
+            isMultiLabel: response.data.is_multi_label,
+            modelState: response.data.model_state,
+          },
         }),
       );
   } catch (error) {
@@ -200,7 +204,7 @@ export const downloadProjectModel = (projectId) => async (dispatch) => {
     const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/model`, {
       responseType: 'arraybuffer',
     });
-    console.log(response.data);
+
     const blobUrl = window.URL.createObjectURL(
       new Blob([response.data], { type: 'application/zip' }),
     );
@@ -213,7 +217,6 @@ export const downloadProjectModel = (projectId) => async (dispatch) => {
     element.click();
     document.body.removeChild(element);
   } catch (error) {
-    console.log(error);
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
@@ -251,7 +254,15 @@ export const downloadProjectFiles = (projectId) => async (dispatch) => {
 export const fetchProjectMetrics = (projectId) => async (dispatch) => {
   try {
     const response = await axios.get(`${PROJECT_DATA_URL(projectId)}/metrics`);
-    console.log(response.data);
+    dispatch(
+      projectsActions.setProjectData({
+        type: 'metrics',
+        data: {
+          trainData: response.data.trainData,
+          configData: response.data.config,
+        },
+      }),
+    );
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
@@ -305,8 +316,11 @@ export const trainModel = (projectId) => async (dispatch) => {
         }),
       );
       dispatch(
-        projectsActions.setCurrentProjectData({
-          modelState: MODEL_STATE.TRAINING,
+        projectsActions.setProjectData({
+          type: 'project',
+          data: {
+            modelState: MODEL_STATE.TRAINING,
+          },
         }),
       );
     }
@@ -324,7 +338,14 @@ export const trainModel = (projectId) => async (dispatch) => {
 export const clearTags = (projectId) => async (dispatch) => {
   try {
     const response = await axios.post(`${PROJECT_DATA_URL(projectId)}/clear`);
-    console.log(response);
+
+    if (response.status === 200)
+      dispatch(
+        snackBarActions.setSnackBarData({
+          type: SNACKBAR_STATUS.SUCCESS,
+          message: 'Tags has been cleared',
+        }),
+      );
   } catch (error) {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
@@ -341,13 +362,16 @@ export const fetchAnnotatorData = (inviteUrl) => async (dispatch) => {
     const response = await axios.get(TAG_URL(inviteUrl));
 
     dispatch(
-      projectsActions.setCurrentProjectData({
-        id: response.data['_id'],
-        name: response.data.name,
-        tags: response.data.data.tags,
-        texts: response.data.texts,
-        inviteUrl: response.data.data.invite_url_postfix,
-        isMultiLabel: response.data.is_multi_label,
+      projectsActions.setProjectData({
+        type: 'project',
+        data: {
+          id: response.data['_id'],
+          name: response.data.name,
+          tags: response.data.data.tags,
+          texts: response.data.texts,
+          inviteUrl: response.data.data.invite_url_postfix,
+          isMultiLabel: response.data.is_multi_label,
+        },
       }),
     );
   } catch (error) {
@@ -370,11 +394,14 @@ export const fetchAnnotatorText =
       );
       const { name, _id, value, preferredTag } = response.data;
       dispatch(
-        projectsActions.setFetchedTextData({
-          name,
-          id: _id,
-          value,
-          preferredTag,
+        projectsActions.setProjectData({
+          type: 'text',
+          data: {
+            name,
+            id: _id,
+            value,
+            preferredTag,
+          },
         }),
       );
       return response;
