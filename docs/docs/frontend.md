@@ -75,4 +75,5 @@ odpowiedzi od serwera wykorzystywane są funkcje wspomniane w pierwszym pliku.
 
 ### Architektura frontend'u
 
-![schematFrontend](https://user-images.githubusercontent.com/65126274/172252864-94702447-5911-4713-84ee-c062ca0e91dd.png)
+![schematFrontend](https://user-images.githubusercontent.com/65126274/172253048-1cc23c4d-0372-4f6e-bdc0-7025da356fa1.svg)
+
