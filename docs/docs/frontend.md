@@ -49,3 +49,24 @@ Stronę główną możemy podzielić na stronę gdy uzytkownik jest zalogowany o
 
 Widok ten jest dostępny jedynie dla użytkownika konta. Na tej stronie ma on możliwość sprawdzenia danych konta oraz jego usunięcie.
 
+Dane zarządzanie przez redux. Każdy 'slice' który znajduje się w 'Redux store' składa się z dwóch plików: pliku w którym zarządzane
+są dane każdego slice'a oraz pliku, w którym wysyłane są wszystkie żadania powiązane z danym 'stackiem' - to właśnie w nim po otrzymaniu
+odpowiedzi od serwera wykorzystywane są funkcje wspomniane w pierwszym pliku.
+
+**Redux Store**
+
+* Auth
+>Funkcje odpowiedzialne za autoryzację użytkownika : rejestracja, logowanie, wylogowanie, odświeżanie tokenu autoryzacyjnego. 
+>Ponadto, w tym kawałku przechowywana jest informacja o tym czy użytkownik jest zalogowany czy też nie.
+
+* Projects
+>Funkcje odpowiedzialne za wszystko związane z projektem. Ten slice jest zdecydowanie największym ze wszystkich ponieważ w nim 
+>przechowywane są wszystkie informacje powiązane z projektem. W 'project-slice' odbywa się wszelkiego rodzaju zarządzanie projektem.
+
+* SnackBar
+>Głównym zadaniem tej części Redux store'a jest wyświetlanie komunikatów zwracanych przez serwer, które mówią użytkownikowi o 
+>powodzeniu bądź błędzie wykonanej operacji. Tutaj przechowywane są dane o wiadomości oraz typie wyświetlanego komunikatu oraz 
+>informacja o tym czy komunikat powinien być widoczny. 
+
+* User
+>Cześć odpowiedzialna za pozyskiwanie oraz ustawianie informacji o użytkowniku konta. 
