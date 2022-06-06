@@ -116,7 +116,9 @@ export default function OpenedProject() {
             />
           </div>
 
-          <div className="textWrapper" />
+          <div className="textWrapper ">
+            <h2 className="projectTitle">{currentProjectData.name}</h2>
+          </div>
           <div className="buttonWrapper">
             <Button text="Metrics" onClickHandler={getMetrics} />
             <Button text="Model" onClickHandler={getModel} />

@@ -159,6 +159,11 @@ export default function AnnotatorOpenedProject() {
     if (currentProjectData.isMultiLabel) setIsMultiLabel(true);
   };
 
+  const closePopupHandler = () => {
+    dispatch(fetchAnnotatorText(currentProjectData.inviteUrl));
+    setOpenPopup(false);
+  };
+
   useEffect(() => {
     if (fetchedTextData.preferredTag)
       setPrefferedTag(fetchedTextData.preferredTag);
@@ -268,7 +273,7 @@ export default function AnnotatorOpenedProject() {
       </div>
       <TagsStatisticsPopup
         open={openPopup}
-        onCloseHandler={() => setOpenPopup(false)}
+        onCloseHandler={closePopupHandler}
         prefferedTagsList={preferredTag}
       />
     </>
