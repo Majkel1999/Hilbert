@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { deleteFileFromProject } from '../../store/projects/project-actions';
-import './FilesList.scss';
+import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { deleteFileFromProject } from "../../store/projects/project-actions";
+import "./FilesList.scss";
 
 export default function FilesList({ files, openedProjectId, currentTextId }) {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ export default function FilesList({ files, openedProjectId, currentTextId }) {
         {files.map((element, index) => (
           <li
             className={`listItem ${
-              element.id === currentTextId ? 'selected' : ''
+              element.id === currentTextId ? "selected" : ""
             }`}
             key={index.toString() + 2}
           >
@@ -29,6 +29,7 @@ export default function FilesList({ files, openedProjectId, currentTextId }) {
                   icon="fa-solid fa-xmark"
                   onClick={() => removeFile(element)}
                   size="lg"
+                  className="closingIcon"
                 />
               )}
             </div>
@@ -44,7 +45,7 @@ FilesList.propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
-    }),
+    })
   ),
   openedProjectId: PropTypes.string,
   currentTextId: PropTypes.string,
@@ -52,6 +53,6 @@ FilesList.propTypes = {
 
 FilesList.defaultProps = {
   files: [],
-  openedProjectId: '',
-  currentTextId: '',
+  openedProjectId: "",
+  currentTextId: "",
 };

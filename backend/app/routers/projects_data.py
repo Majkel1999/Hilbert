@@ -69,7 +69,7 @@ async def queue_model_training(project: Project = Depends(check_for_project_owne
     projectId = str(project.id)
     project.model_state = "Training"
     await project.save()
-    await wsManager.send_by_projectId(Action.ModelTrainig, projectId)
+    await wsManager.send_by_projectId(Action.ModelTraining, projectId)
     return await rabbitBroker.sendMessage(projectId)
 
 

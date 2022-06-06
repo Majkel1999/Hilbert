@@ -42,6 +42,13 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
     setEnteredTags(enteredTags.filter((item) => item !== tagName));
   };
 
+  const closePopup = () => {
+    setCheckBoxChecked('');
+    setEnteredTags([]);
+    setProjectName('');
+    onCloseHandler();
+  };
+
   const createProject = () => {
     const isMultiLabel = checked === checkBoxes[0].id;
 
@@ -54,7 +61,7 @@ export default function AddNewProjectPopup({ open, onCloseHandler }) {
         }),
       );
     }
-    onCloseHandler();
+    closePopup();
   };
 
   const checkboxHandler = (name) => {

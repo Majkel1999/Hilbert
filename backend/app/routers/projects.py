@@ -22,6 +22,8 @@ router = APIRouter(
 @router.get("/", response_model=List[Project])
 async def get_user_projects(user: User = Depends(get_current_active_user)):
     userprojects = await Project.find(Project.owner == str(user.id), fetch_links=True).to_list()
+    for project in userprojects:
+        delattr(project,"texts")
     return userprojects
 
 

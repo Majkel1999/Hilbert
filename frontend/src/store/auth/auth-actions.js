@@ -2,7 +2,7 @@ import { LOGIN_URL, REGISTER_URL } from '../../constants/apiUrls';
 import axios from '../../api/axios';
 import { authActions } from './auth-slice';
 import { snackBarActions } from '../snackBar/snackBar-slice';
-import { STATUS } from '../../constants/snackBarStatus';
+import { SNACKBAR_STATUS } from '../../constants/stateStatuses';
 
 export const login = (loginData) => async (dispatch) => {
   try {
@@ -16,7 +16,7 @@ export const login = (loginData) => async (dispatch) => {
       );
       dispatch(
         snackBarActions.setSnackBarData({
-          type: STATUS.SUCCESS,
+          type: SNACKBAR_STATUS.SUCCESS,
           message: 'User logged in',
         }),
       );
@@ -25,7 +25,7 @@ export const login = (loginData) => async (dispatch) => {
     const message = JSON.parse(error.request.response).detail;
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
@@ -38,7 +38,7 @@ export const register = (registerData) => async (dispatch) => {
     if (response.status === 200)
       dispatch(
         snackBarActions.setSnackBarData({
-          type: STATUS.SUCCESS,
+          type: SNACKBAR_STATUS.SUCCESS,
           message: 'User has been created succesfully',
         }),
       );
@@ -48,7 +48,7 @@ export const register = (registerData) => async (dispatch) => {
 
     dispatch(
       snackBarActions.setSnackBarData({
-        type: STATUS.ERROR,
+        type: SNACKBAR_STATUS.ERROR,
         message,
       }),
     );
