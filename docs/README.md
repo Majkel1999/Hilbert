@@ -41,9 +41,9 @@ Możliwości jakie powinna dawać użytkownikom aplikacja:
   - [x] Tworzenie projektów
   - [x] Uploadowanie plików
   - [x] Tagowanie
-  - [ ] Wyświetlanie predykcji
+  - [x] Wyświetlanie predykcji
   - [ ] Responsywność
-  - [ ] Wystylizowanie
+  - [x] Wystylizowanie
 - Backend:
   - [x] Uwierzytelnianie i Autoryzacja 
   - [x] Tworzenie projektów

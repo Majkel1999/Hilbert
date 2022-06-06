@@ -40,8 +40,8 @@ Jeśli zmieniony zostanie port **EXTERNAL_PORT** lub aplikacja ma być dostępna
 
 ```
 ...
-REACT_APP_SERVER_URL=https://{your_hostname}/api/v1/
-REACT_APP_WS=ws://{your_hostname}/api/v1
+ENV REACT_APP_SERVER_URL=https://{your_hostname}/api/v1/
+ENV REACT_APP_WS=wss://{your_hostname}/api/v1
 ...
 ```
 
@@ -58,3 +58,17 @@ Domyślna konfiguracja udostępnia następujące serwisy:
 W celu zmiany endpointów warto przejrzeć [dokumentację routingu Traefik.](https://doc.traefik.io/traefik/routing/overview/)
 
 ---
+
+### Uruchomienie bez GPU
+
+Istnieje możliwość uruchomienia aplikacji na komputerze nie posiadającym dedykowanej karty grafinczej. W celu użycia takiej konfiguracji, wymagana jest zmiana w pliku **docker-compose.yaml**. Należy usunąć następujące linie z bloku **mlService**:
+
+```
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+```
+> Użycie tej konfiguracji znacząco zwiększy szybkość nauki modelu.
