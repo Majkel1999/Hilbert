@@ -1,0 +1,14 @@
+.displayMetricsPopupContainer {
+  .modal {
+    .modal-content {
+      width: 60vw;
+    }
+  }
+  .tagStatisticsBodyContent {
+    overflow: scroll;
+    margin: 20px 0;
+    p {
+      padding: 20px;
+    }
+  }
+}
