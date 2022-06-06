@@ -202,6 +202,18 @@ export default function AnnotatorOpenedProject() {
     setSubscribeWsActions(true);
   }, [currentProjectData, fetchedData]);
 
+  const copyIconClickHandler = () => {
+    dispatch(
+      snackBarActions.setSnackBarData({
+        type: SNACKBAR_STATUS.INFO,
+        message: 'Link copied to clipboard',
+      }),
+    );
+    navigator.clipboard.writeText(
+      `${window.location.host}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
+    );
+  };
+
   return (
     <>
       <div className="openedProjectContainer">
@@ -219,11 +231,7 @@ export default function AnnotatorOpenedProject() {
               <h2> {currentProjectData.inviteUrl} </h2>
               <FontAwesomeIcon
                 icon="fa-solid fa-copy"
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    `${window.location.host}/${ROLES.ANNOTATOR}/projects/${currentProjectData.inviteUrl}`,
-                  );
-                }}
+                onClick={copyIconClickHandler}
                 size="lg"
               />
             </div>
@@ -243,7 +251,7 @@ export default function AnnotatorOpenedProject() {
             <Button
               text="Submit tags"
               onClickHandler={tagTextHandler}
-              isDisabled={!selectedTags.length > 0 && !enableButton}
+              isDisabled={selectedTags.length === 0 || !enableButton}
             />
           </div>
 
