@@ -11,10 +11,11 @@ import {
   trainModel,
   downloadProjectFiles,
   fetchProjectMetrics,
-  downloadProjectModel
+  downloadProjectModel,
 } from '../../store/projects/project-actions';
 import { snackBarActions } from '../../store/snackBar/snackBar-slice';
 import { SNACKBAR_STATUS, MODEL_STATE } from '../../constants/stateStatuses';
+import DisplayMetricsPopup from '../../components/DisplayMetricsPopup/DisplayMetricsPopup';
 import './OpenedProject.scss';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { ROLES } from '../../constants/roles';
@@ -24,7 +25,7 @@ export default function OpenedProject() {
   const [projectTexts, setProjectTexts] = useState([]);
   const [projectTags, setProjectTags] = useState([]);
   const [inviteUrl, setInviteUrl] = useState('');
-
+  const [openPopup, setOpenPopup] = useState(false);
   const dispatch = useDispatch();
   const params = useParams();
   const currentProjectData = useSelector(
@@ -36,11 +37,11 @@ export default function OpenedProject() {
 
     currentProjectData.modelState === MODEL_STATE.TRAINING
       ? dispatch(
-        snackBarActions.setSnackBarData({
-          type: SNACKBAR_STATUS.ERROR,
-          message: 'Model is already in training',
-        }),
-      )
+          snackBarActions.setSnackBarData({
+            type: SNACKBAR_STATUS.ERROR,
+            message: 'Model is already in training',
+          }),
+        )
       : dispatch(trainModel(projectId));
   };
 
@@ -66,12 +67,13 @@ export default function OpenedProject() {
   };
 
   const getMetrics = () => {
+    setOpenPopup(true);
     dispatch(fetchProjectMetrics(params.id));
   };
 
   const getModel = () => {
-    dispatch(downloadProjectModel(params.id))
-  }
+    dispatch(downloadProjectModel(params.id));
+  };
 
   useEffect(() => {
     const projectId = params.id;
@@ -113,10 +115,8 @@ export default function OpenedProject() {
 
           <div className="textWrapper" />
           <div className="buttonWrapper">
-            <Button text="Metrics"
-              onClickHandler={getMetrics} />
-            <Button text="Model"
-              onClickHandler={getModel} />
+            <Button text="Metrics" onClickHandler={getMetrics} />
+            <Button text="Model" onClickHandler={getModel} />
             <Button
               customClass="downloadButton"
               onClickHandler={downloadFiles}
@@ -132,6 +132,10 @@ export default function OpenedProject() {
           <FileList files={projectTexts} openedProjectId={params.id} />
         </div>
       </div>
+      <DisplayMetricsPopup
+        open={openPopup}
+        onCloseHandler={() => setOpenPopup(false)}
+      />
     </div>
   );
 }
