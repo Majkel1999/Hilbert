@@ -4,17 +4,12 @@
 
 ### Technologie użyte przy tworzeniu warstwy klienta aplikacji
 
-Front End został stworzony za pomocą biblioteki React, dzięki której możliwe było tworzenie komponentów oraz widoków, z których 
-
-składa się aplikacja oraz z bliblioteki Redux, która służyła do zarządzania stanem aplikacji. Ponadto w projekcie wykorzystywana 
-
-jest biblioteka Redux Toolkit, która upraszcza logikę reduxa oraz ułatwia tworzenia globalnego stanu aplikacji.
+Front End został stworzony za pomocą biblioteki React, dzięki której możliwe było tworzenie komponentów oraz widoków, z których
+składa się aplikacja oraz z bliblioteki Redux, która służyła do zarządzania stanem aplikacji. Ponadto w projekcie wykorzystywana jest biblioteka Redux Toolkit, która upraszcza logikę reduxa oraz ułatwia tworzenia globalnego stanu aplikacji.
 
 ### Widoki aplikacji oraz funkcjonalności w nich zawarte
 
-Stworzona aplikacja w zależności od tego czy użytkownik posiada konto (jest adminem) czy też nie posiada konta, 
-
-wyświetla różne widoki. Osoba posiadająca konto jest odpowiedzialna za zarządzanie projektami oraz ich zawartością.
+Stworzona aplikacja w zależności od tego czy użytkownik posiada konto (jest adminem) czy też nie posiada konta, wyświetla różne widoki. Osoba posiadająca konto jest odpowiedzialna za zarządzanie projektami oraz ich zawartością.
 
 **Strona główna**
 
@@ -30,6 +25,7 @@ Stronę główną możemy podzielić na stronę gdy uzytkownik jest zalogowany o
 >przez admina projektów. Ponadto w tym właśnie widoku mamy możliwość stworzenia nowego projektu.
 	
 **Strona otwartego projektu**
+
 * Użytkownik zalogowany:
 >Gdy admin wejdzie w wybrany przez niego projekt, zostaje wyświetlony widok na którym użytkownik ma możliwość wgrywania, 
 >przeglądania wgranych oraz usuwania plików tekstowych. Strona projektu poza nazwą projektu, przedstawia również wybrane 
@@ -49,7 +45,8 @@ Stronę główną możemy podzielić na stronę gdy uzytkownik jest zalogowany o
 
 Widok ten jest dostępny jedynie dla użytkownika konta. Na tej stronie ma on możliwość sprawdzenia danych konta oraz jego usunięcie.
 
-Dane zarządzanie przez redux. Każdy 'slice' który znajduje się w 'Redux store' składa się z dwóch plików: pliku w którym zarządzane
+### Dane zarządzane przez Redux
+Każdy 'slice' który znajduje się w 'Redux store' składa się z dwóch plików: pliku w którym zarządzane
 są dane każdego slice'a oraz pliku, w którym wysyłane są wszystkie żadania powiązane z danym 'stackiem' - to właśnie w nim po otrzymaniu
 odpowiedzi od serwera wykorzystywane są funkcje wspomniane w pierwszym pliku.
 
